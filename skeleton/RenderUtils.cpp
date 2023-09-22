@@ -8,6 +8,9 @@
 
 using namespace physx;
 
+// ARCHIVO QUE SE ENCARGA DEL SISTEMA DE PINTADO
+// HAY UN OBJETO DE PINTADO ASOCIADO A CADA OBJETO
+
 extern void initPhysics(bool interactive);
 extern void stepPhysics(bool interactive, double t);	
 extern void cleanupPhysics(bool interactive);
@@ -15,6 +18,9 @@ extern void keyPress(unsigned char key, const PxTransform& camera);
 extern PxPhysics* gPhysics;
 extern PxMaterial* gMaterial;
 
+// vector con todos los objetos que quiere renderizar
+// cuando se quiera hacer una operación a ese objeto de pintado,
+// hay que utilizar esta lista
 std::vector<const RenderItem*> gRenderItems;
 
 double PCFreq = 0.0;
@@ -94,7 +100,7 @@ void renderCallback()
 #else
 	stepPhysics(true, t);
 #endif
-
+	// cámara, se comienza el renderizado
 	startRender(sCamera->getEye(), sCamera->getDir());
 
 	//fprintf(stderr, "Num Render Items: %d\n", static_cast<int>(gRenderItems.size()));

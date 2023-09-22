@@ -10,6 +10,9 @@
 
 #include <iostream>
 
+#include "Particle.h"
+
+// SE PUEDE ESCRIBIR TEXTO PINTADO
 std::string display_text = "This is a test";
 
 
@@ -30,6 +33,7 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
+Particle* ball = nullptr;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -40,36 +44,48 @@ void initPhysics(bool interactive)
 
 	gPvd = PxCreatePvd(*gFoundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-	gPvd->connect(*transport,PxPvdInstrumentationFlag::eALL);
-
-	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
-
+	gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
+	// método que crear la física del motor de físcia de Physics
+	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
+	// material que se utiliza para todo
+	// coeficientes de rozamineto
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
+	// gravedad definida en la escena
 	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
 	gDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = gDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
-	}
+
+	// crear objetos
+	ball = new Particle(Vector3(0, 0, 0), Vector3(0, 10, 0));
+}
 
 
 // Function to configure what happens in each step of physics
 // interactive: true if the game is rendering, false if it offline
 // t: time passed since last call in milliseconds
+
+// t es el deltatime
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
+	// update de los objetos
+	// se les pasa el tiempo
+	ball->integrate(t);
 }
 
 // Function to clean data
 // Add custom code to the begining of the function
+// liberación de todos los objetos que se han creado
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
@@ -78,15 +94,19 @@ void cleanupPhysics(bool interactive)
 	gScene->release();
 	gDispatcher->release();
 	// -----------------------------------------------------
-	gPhysics->release();	
+	gPhysics->release();
 	PxPvdTransport* transport = gPvd->getTransport();
 	gPvd->release();
 	transport->release();
-	
+
 	gFoundation->release();
-	}
+
+	// borrar memoria
+	delete ball;
+}
 
 // Function called when a key is pressed
+// input
 void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
