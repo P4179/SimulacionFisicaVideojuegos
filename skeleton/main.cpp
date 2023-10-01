@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include "Particle.h"
+#include "ShootManager.h"
 
 // SE PUEDE ESCRIBIR TEXTO PINTADO
 std::string display_text = "This is a test";
@@ -33,7 +33,7 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-Particle* ball = nullptr;
+ShootManager* shoot = nullptr;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -61,8 +61,8 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	// crear objetos
-	ball = new Particle(Vector3(0, 0, 0), Vector3(0, 10, 0));
+	// CREAR OBJETOS
+	shoot = new ShootManager();
 }
 
 
@@ -80,7 +80,7 @@ void stepPhysics(bool interactive, double t)
 
 	// update de los objetos
 	// se les pasa el tiempo
-	ball->integrate(t);
+	shoot->integrate(t);
 }
 
 // Function to clean data
@@ -102,19 +102,22 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 
 	// borrar memoria
-	delete ball;
+	delete shoot;
 }
 
 // Function called when a key is pressed
 // input
+// no funcionan todas las teclas
 void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	switch(toupper(key))
+	shoot->keyPressed(toupper(key));
+
+	switch (toupper(key))
 	{
-	//case 'B': break;
-	//case ' ':	break;
+		//case 'B': break;
+		//case ' ':	break;
 	case ' ':
 	{
 		break;
