@@ -23,7 +23,8 @@ private:
 		// posición de la cámara
 		Vector3 pos = camera->getEye();
 		auto vel = camera->getDir() * V_SIMULADA;
-		projectiles.push_back(new Particle(pos, vel, 0.8, MASA_REAL, V_REAL, V_SIMULADA));
+		auto acReal = Vector3(0, -10, 0);
+		projectiles.push_back(new Particle(pos, vel, acReal, 0.8, 200, MASA_REAL, V_REAL, V_SIMULADA));
 	}
 
 public:
@@ -62,7 +63,7 @@ public:
 		// por el siguiente y devuelve un iterador al final del "nuevo" vector
 		projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
 			[](Particle* particle) {
-				if (particle->getAlive()) {
+				if (particle->isAlive()) {
 					return false;
 				}
 				else {
