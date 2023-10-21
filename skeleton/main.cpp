@@ -11,9 +11,19 @@
 #include <iostream>
 
 #include "ShootManager.h"
+#include "ParticleSystem.h"
 
 // SE PUEDE ESCRIBIR TEXTO PINTADO
 std::string display_text = "This is a test";
+
+/*
+GENERADOR UNIFORME -> LLUVIA
+FUENTE -> PULSANDO TECLAS SE LE CAMBIA LA VELOCIDAD, ANCHURA Y VARIANZA
+GENEREADOR GAUSSIANO -> NIEBLA
+FUEGOS ARTIFICIALES -> HAY DE VARIOS TIPOS
+La distribución gaussiana queda definida por la media y la varianza (ancho de la curva).
+El generador te devuelve un número dentro de ese área.
+*/
 
 
 using namespace physx;
@@ -34,6 +44,7 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
 ShootManager* shoot = nullptr;
+ParticleSystem* particleSystem = nullptr;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -62,7 +73,8 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	// CREAR OBJETOS
-	shoot = new ShootManager();
+	//shoot = new ShootManager();
+	particleSystem = new ParticleSystem();
 }
 
 
@@ -80,7 +92,12 @@ void stepPhysics(bool interactive, double t)
 
 	// update de los objetos
 	// se les pasa el tiempo
-	shoot->integrate(t);
+	if (shoot != nullptr) {
+		shoot->integrate(t);
+	}
+	if (particleSystem != nullptr) {
+		particleSystem->integrate(t);
+	}
 }
 
 // Function to clean data
@@ -102,7 +119,12 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 
 	// borrar memoria
-	delete shoot;
+	if (shoot != nullptr) {
+		delete shoot;
+	}
+	if (particleSystem != nullptr) {
+		delete particleSystem;
+	}
 }
 
 // Function called when a key is pressed
@@ -112,7 +134,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	shoot->keyPressed(toupper(key));
+	if (shoot != nullptr) {
+		shoot->keyPressed(toupper(key));
+	}
 
 	switch (toupper(key))
 	{

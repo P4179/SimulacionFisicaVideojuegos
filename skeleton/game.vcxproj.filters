@@ -25,6 +25,7 @@
     <ClInclude Include="ShootManager.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticleGenerator.h" />
+    <ClInclude Include="UniformParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

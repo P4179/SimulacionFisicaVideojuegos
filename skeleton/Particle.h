@@ -1,72 +1,84 @@
 #pragma once
 #include "RenderUtils.hpp"
+#include <iostream>
+
+enum ParticleType { Gun };
 
 class Particle {
 private:
-	enum ParticleType { Gun };
-
 	// coeficiente damping -> se utiliza para solucionar errores de simulación
 	// se puede utilizar además para simular rozamiento
-	const double DAMPING;
-
-	// a simple vista no se aprecia porque tiene que recorrer mucho espacio para comenzar a caerse
-	//const float GRAVEDAD_REAL = 10;
-	const float LIFE_TIME;
+	double damping;
 
 	// vector velocidad, que indica la dirección del tiro
-	// tiene en cuenta la velocidad simulada
+	// luego, tiene en cuenta la velocidad simulada
 	Vector3 vel;
 	// a render item le pasaremos la dirección de este pose, para que se actualize automáticamente
 	physx::PxTransform pose;
 	RenderItem* renderItem;
 
 	float masaSimulada;
-	// se reduce la velocidad para que se pueda percibir la trayectoria de tiro de la bola
-	//float gravedadSimulada;
 	Vector3 acSimulada;
 
 	// tiempo de vida de la partícula
+	float lifeTime;
 	bool alive;
 	float elapsedTime;
 
+	// se utiliza para clonar la partícula
+	float vSimulada;
+	ParticleType type;
+	float radius;
+	Vector4 color;
+
+	// t está en segundos
 	void updateLifeTime(double t) {
 		elapsedTime += t;
-		if (elapsedTime > LIFE_TIME) {
+		if (elapsedTime > lifeTime) {
 			elapsedTime = 0;
 			alive = false;
 		}
 	}
 
+	void infoParticleType(ParticleType type, float& masaReal, float& vReal) {
+		switch (type) {
+		case Gun:
+			masaReal = 300, vReal = 500;
+			break;
+		}
+	}
+
 public:
-	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada = 25, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Gun) :
-		pose(pos.x, pos.y, pos.z), vel(vel), DAMPING(damping), LIFE_TIME(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0) {
+	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada = 25, float radius = 2.0, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Gun) :
+		pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0),
+		vSimulada(vSimulada), type(type), radius(radius), color(color) {
 		// se necesita un radio
 		physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
-		//  geometría, posición, color (R, G, B, alpha)
+		// geometría, posición, color (R, G, B, alpha)
+		// RGB va desde 0 hasta 1
 		renderItem = new RenderItem(shape, &pose, color);
 		RegisterRenderItem(renderItem);
 
 		float masaReal = 0, vReal = 0;
 		// dependiendo del tipo de bala se le asigna una masa real y una velocidad real diferentes
-		if (type == Gun) {
-			masaReal = 300;
-			vReal = 500;
-		}
-		vel = vel.getNormalized() * vSimulada;
+		infoParticleType(type, masaReal, vReal);
+
+		// velocidad
+		vel = vel.getNormalized();
+		this->vel = vel * vSimulada;
 
 		// como se ha reducido la velocidad, para conseguir que la energía cinética sea mayor,
 		// se utiliza una masa diferente a la real
 		// a mayor energía cinética, mayor es el impacto
 		masaSimulada = masaReal * (vReal / vSimulada) * (vReal / vSimulada);
-		// como se ha reducido la velocidad, se utiliza una gravedad simulada
-		// para que el lanzamiento no parezca el de un globo
-		// los únicos parámetros que se van a varíar para aumentar la velocidad del tiro
-		// son gravedad y aceleración
 
-		// se podría asignar la que queramos
-		// dependiendo del tipo de bala, se cambia la gravedad
-		acSimulada = acReal * (vSimulada / vReal) * (vSimulada / vReal);
-		// gravedadSimulada = GRAVEDAD_REAL * (vSimulada / vReal) * (vSimulada / vReal);
+		// como se ha reducido la velocidad, se utiliza una aceleracion (gravedad) simulada
+		// para que el proyectil no se caiga para abajo de repente
+		// sin embargo, se podría asignar la que queramos
+		// para los proyectiles se calcula la simulada a partir de la real
+		// pero para el sistema de partículas se utiliza la real
+
+		acSimulada = acReal; //* (vSimulada / vReal) * (vSimulada / vReal);
 	}
 
 	virtual ~Particle() {
@@ -79,9 +91,9 @@ public:
 		//pose.p += vel * t;
 
 		// MRUA
-		vel += acSimulada * t;//Vector3(0, -gravedadSimulada, 0) * t;
+		vel += acSimulada * t; //Vector3(0, -gravedadSimulada, 0) * t;
 		// rozamiento
-		vel *= pow(DAMPING, t);
+		vel *= pow(damping, t);
 		pose.p += vel * t;
 
 		updateLifeTime(t);
@@ -89,5 +101,29 @@ public:
 
 	bool isAlive() const {
 		return alive;
+	}
+
+	virtual Particle* clone() const {
+		// como se va a normalizar no pasa nada por pasar la velocidad multiplicada por vSimulada
+		// clone se utiliza para clonar las partículas que se van a meter en la lista de partículas
+		// por lo tanto, se borrarán en el update del sistema de partículas
+		Particle* newParticle = new Particle(pose.p, vel, acSimulada, damping, lifeTime, vSimulada, radius, color, type);
+		return newParticle;
+	}
+
+	inline Vector3 getPos() const {
+		return pose.p;
+	}
+
+	inline Vector3 setPos(Vector3 pos) {
+		pose.p = pos;
+	}
+
+	inline Vector3 getVel() const {
+		return vel;
+	}
+
+	inline void setLifeTime(float lifeTime) {
+		this->lifeTime = lifeTime;
 	}
 };
