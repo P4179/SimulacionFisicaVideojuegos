@@ -10,6 +10,15 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="src\ListParticles.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particles\Particle.cpp">
+      <Filter>SourceFiles\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generators\FireworkGenerator.cpp">
+      <Filter>SourceFiles\Generators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -21,29 +30,32 @@
     </ClInclude>
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="callbacks.hpp" />
-    <ClInclude Include="HeaderFiles\Generators\FireworkGenerator.h">
-      <Filter>HeaderFiles\Generators</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Generators\GaussianParticleGenerator.h">
-      <Filter>HeaderFiles\Generators</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Generators\ParticleGenerator.h">
-      <Filter>HeaderFiles\Generators</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Generators\UniformParticleGenerator.h">
-      <Filter>HeaderFiles\Generators</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Particles\Firework.h">
-      <Filter>HeaderFiles\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\Particles\Particle.h">
-      <Filter>HeaderFiles\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="HeaderFiles\ParticleSystem.h">
+    <ClInclude Include="src\ShootManager.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\ShootManager.h">
+    <ClInclude Include="src\ParticleSystem.h">
       <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\ParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particles\Particle.h">
+      <Filter>HeaderFiles\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ListParticles.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particles\Firework.h">
+      <Filter>HeaderFiles\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\UniformParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\GaussianParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\FireworkGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +73,12 @@
     </Filter>
     <Filter Include="HeaderFiles\Particles">
       <UniqueIdentifier>{3beafad4-b2b4-42ba-b803-afc8a9d35d5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourceFiles\Generators">
+      <UniqueIdentifier>{045dd182-553b-4545-ba1a-eafe48a4ab6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourceFiles\Particles">
+      <UniqueIdentifier>{c9eb577d-4610-4953-82c5-caa9096ae819}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

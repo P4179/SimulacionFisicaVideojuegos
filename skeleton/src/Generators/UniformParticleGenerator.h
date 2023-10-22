@@ -1,6 +1,6 @@
 #pragma once
 #include "ParticleGenerator.h"
-#include "../../RenderUtils.hpp"
+#include "../ListParticles.h"
 
 using namespace std;
 
@@ -10,17 +10,12 @@ private:
 	Vector3 pos_width;
 	uniform_real_distribution<double> dist;
 
-	double variation(double from, double to) {
-		uniform_real_distribution<double> dist = uniform_real_distribution<double>(from, to);
-		return dist(_mt);
-	}
-
 public:
-	UniformParticleGenerator(Vector3 velWidth, Vector3 posWidth, string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability = 1.0f, int num_particles = 3) :
+	UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth) :
 		ParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles),
 		vel_width(velWidth), pos_width(posWidth), dist(uniform_real_distribution<double>(-1, 1)) {}
 
-	virtual list<Particle*> generateParticles() {
+	list<Particle*> generateParticles() {
 		list<Particle*> particles;
 
 		double probability = _u(_mt);
@@ -46,9 +41,12 @@ public:
 		return particles;
 	}
 
-	virtual void update(list<Particle*>& particles) {
+	void update(ListParticles* particles) {
+		particles->add(generateParticles());
+		/*
 		for (auto particle : generateParticles()) {
 			particles.push_back(particle);
 		}
+		*/
 	}
 };

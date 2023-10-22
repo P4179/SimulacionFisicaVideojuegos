@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 #include "ParticleGenerator.h"
+#include "../ListParticles.h"
 
 using namespace std;
 
@@ -30,11 +32,11 @@ protected:
 	}
 
 public:
-	GaussianParticleGenerator(Vector3 stdDevVel, Vector3 stdDevPos, string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability = 1.0f, int num_particles = 3) :
+	GaussianParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos) :
 		ParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles),
 		std_dev_pos(stdDevPos), std_dev_vel(stdDevVel) {}
 
-	virtual list<Particle*> generateParticles() {
+	list<Particle*> generateParticles() {
 		list<Particle*> particles;
 
 		double probability = _u(_mt);
@@ -51,17 +53,25 @@ public:
 				pos.y += variation(std_dev_pos.y);
 				pos.z += variation(std_dev_pos.z);
 
-				particles.push_back(createParticle(vel, pos));
+				try {
+					particles.push_back(createParticle(vel, pos));
+				}
+				catch (exception e) {
+					cout << "0 particles were created: " << e.what() << "\n";
+				}
 			}
 		}
 
 		return particles;
 	}
 
-	virtual void update(list<Particle*>& particles) {
+	void update(ListParticles* particles) {
+		particles->add(generateParticles());
+		/*
 		for (auto particle : generateParticles()) {
 			particles.push_back(particle);
 		}
+		*/
 	}
 
 	inline void setStdDevVel(Vector3 newVel) {

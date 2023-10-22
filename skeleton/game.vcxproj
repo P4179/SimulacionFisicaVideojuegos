@@ -258,21 +258,25 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="src\Generators\FireworkGenerator.cpp" />
+    <ClCompile Include="src\ListParticles.cpp" />
+    <ClCompile Include="src\Particles\Particle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
-    <ClInclude Include="HeaderFiles\Generators\FireworkGenerator.h" />
-    <ClInclude Include="HeaderFiles\Generators\GaussianParticleGenerator.h" />
-    <ClInclude Include="HeaderFiles\Generators\ParticleGenerator.h" />
-    <ClInclude Include="HeaderFiles\Generators\UniformParticleGenerator.h" />
-    <ClInclude Include="HeaderFiles\ParticleSystem.h" />
-    <ClInclude Include="HeaderFiles\Particles\Firework.h" />
-    <ClInclude Include="HeaderFiles\Particles\Particle.h" />
-    <ClInclude Include="HeaderFiles\ShootManager.h" />
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="src\Generators\FireworkGenerator.h" />
+    <ClInclude Include="src\Generators\GaussianParticleGenerator.h" />
+    <ClInclude Include="src\Generators\ParticleGenerator.h" />
+    <ClInclude Include="src\Generators\UniformParticleGenerator.h" />
+    <ClInclude Include="src\ListParticles.h" />
+    <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\Particles\Firework.h" />
+    <ClInclude Include="src\Particles\Particle.h" />
+    <ClInclude Include="src\ShootManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

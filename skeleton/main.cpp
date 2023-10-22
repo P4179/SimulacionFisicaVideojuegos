@@ -10,8 +10,8 @@
 
 #include <iostream>
 
-#include "../skeleton/HeaderFiles/ShootManager.h"
-#include "../skeleton/HeaderFiles/ParticleSystem.h"
+#include "../skeleton/src/ShootManager.h"
+#include "../skeleton/src/ParticleSystem.h"
 
 // SE PUEDE ESCRIBIR TEXTO PINTADO
 std::string display_text = "This is a test";
@@ -151,15 +151,17 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 }
 
 
-int main(int, const char*const*)
+int main(int, const char* const*)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);	// Check Memory Leaks
+
 #ifndef OFFLINE_EXECUTION 
 	extern void renderLoop();
 	renderLoop();
 #else
 	static const PxU32 frameCount = 100;
 	initPhysics(false);
-	for(PxU32 i=0; i<frameCount; i++)
+	for (PxU32 i = 0; i < frameCount; i++)
 		stepPhysics(false);
 	cleanupPhysics(false);
 #endif

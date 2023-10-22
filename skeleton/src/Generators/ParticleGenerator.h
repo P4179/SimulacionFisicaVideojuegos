@@ -1,7 +1,9 @@
 #pragma once
-#include "../Particles/Particle.h"
 #include <list>
 #include <random>
+#include "../Particles/Particle.h"
+
+class ListParticles;
 
 using namespace std;
 
@@ -16,8 +18,9 @@ struct ParticleInfo {
 
 // CLASE ABSTRACTA
 class ParticleGenerator {
-
 protected:
+	const int NUM_MAX_PARTICLES = 100;
+
 	string name;
 	// posición inicial / origen (luego, se le suma una variabilidad)
 	Vector3 _mean_pos;
@@ -46,7 +49,7 @@ protected:
 	// cuando se utiliza, se modifican la posición y la velocidad
 	Particle* _model;
 
-	ParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles) :
+	ParticleGenerator::ParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles) :
 		name(name), _mean_pos(mean_pos), _mean_vel(mean_vel), _info(info), _generation_probability(generation_probability),
 		_num_particles(num_particles), _model(nullptr), _u(uniform_real_distribution<double>(0.0, 1.0)) {
 
@@ -64,7 +67,7 @@ public:
 	// devuelve una lista de partículas
 	virtual list<Particle*> generateParticles() = 0;
 
-	virtual void update(list<Particle*>& particles) = 0;
+	virtual void update(ListParticles* particles) = 0;
 
 	inline void increaseSimulatedV() {
 		++_info.vSimulada;
@@ -77,11 +80,16 @@ public:
 		}
 	}
 
-	// NO SE USA
 	// cambiar posición inicial
 	inline void setOrigin(const Vector3& p) {
 		_mean_pos = p;
 	}
+
+	inline void setProbability(float newProbability) {
+		this->_generation_probability = newProbability;
+	}
+
+	// NO SE USA
 	// cambiar posición velocidad inicial
 	inline void setMeanVelocity(const Vector3& v) {
 		_mean_vel = v;
@@ -90,13 +98,15 @@ public:
 		return _mean_vel;
 	}
 	// cambiar tiempo de vida de la partícula modelo
-	inline Vector3 setMeanDuration(double newDuration) {
+	// cambiar tiempo de vida de la partícula modelo
+	inline Vector3 ParticleGenerator::setMeanDuration(double newDuration) {
 		_model->setLifeTime(newDuration);
 	}
 
+	// NO SE USA
 	// nuevo modelo de partícula a partir de la dada
 	// la posicion y velocidad iniciales se obtienen a partir de la particula modelo
-	inline void setParticle(Particle* p, bool modify_pos_vel = true) {
+	inline void ParticleGenerator::setParticle(Particle* p, bool modify_pos_vel) {
 		if (_model != nullptr) {
 			delete _model;
 		}
