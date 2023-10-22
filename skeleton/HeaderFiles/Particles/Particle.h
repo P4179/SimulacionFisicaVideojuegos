@@ -1,8 +1,9 @@
 #pragma once
-#include "RenderUtils.hpp"
+#include "../../RenderUtils.hpp"
 #include <iostream>
+#include <list>
 
-enum ParticleType { Gun };
+enum ParticleType { Default };
 
 class Particle {
 private:
@@ -42,14 +43,14 @@ private:
 
 	void infoParticleType(ParticleType type, float& masaReal, float& vReal) {
 		switch (type) {
-		case Gun:
+		case Default:
 			masaReal = 300, vReal = 500;
 			break;
 		}
 	}
 
 public:
-	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada = 25, float radius = 2.0, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Gun) :
+	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Default) :
 		pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0),
 		vSimulada(vSimulada), type(type), radius(radius), color(color) {
 		// se necesita un radio
@@ -103,6 +104,13 @@ public:
 		return alive;
 	}
 
+	void setAlive(bool alive) {
+		this->alive = alive;
+	}
+
+	virtual void onDeath(std::list<Particle*>& particles) {};
+
+	// NO SE USA
 	virtual Particle* clone() const {
 		// como se va a normalizar no pasa nada por pasar la velocidad multiplicada por vSimulada
 		// clone se utiliza para clonar las partículas que se van a meter en la lista de partículas

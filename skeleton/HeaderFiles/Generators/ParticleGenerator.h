@@ -1,5 +1,5 @@
 #pragma once
-#include "Particle.h"
+#include "../Particles/Particle.h"
 #include <list>
 #include <random>
 
@@ -25,14 +25,11 @@ protected:
 	// por ejemplo si queremos que vayan para arriba, sería Vector3(0, -1, 0)
 	Vector3 _mean_vel;
 	// probabilidad de que se generen partículas o no
-	// se determina a partir de _generation_probability >= valor devuelto por la distribución _u
+	// se determina a partir de _generation_probability > valor devuelto por la distribución _u
 	double _generation_probability;
 	// número de partículas que se generan en cada llamada al sistema
 	// (podría ser un número aleatorio)
 	int _num_particles;
-	// partícula modelo que se utiliza para generar todas las partículas del sistema
-	// cuando se utiliza, se modifican la posicióny la velocidad
-	Particle* _model;
 	ParticleInfo _info;
 	// DISTRIBUCIÓN UNIFORME -> se genera un número entre a y b con la misa probabilidad
 	// todas las distribuciones dadas un valor x te devuelven un valor y
@@ -43,6 +40,11 @@ protected:
 	// sin embargo, puede devolver valores inesperados y depende del sistema en el que se ejecute
 	// Se va a utilizar para calcular una x aleatoria que pasarle a la distribución
 	std::mt19937 _mt;
+
+	// NO SE USA
+	// partícula modelo que se utiliza para generar todas las partículas del sistema
+	// cuando se utiliza, se modifican la posición y la velocidad
+	Particle* _model;
 
 	ParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles) :
 		name(name), _mean_pos(mean_pos), _mean_vel(mean_vel), _info(info), _generation_probability(generation_probability),
@@ -62,6 +64,20 @@ public:
 	// devuelve una lista de partículas
 	virtual list<Particle*> generateParticles() = 0;
 
+	virtual void update(list<Particle*>& particles) = 0;
+
+	inline void increaseSimulatedV() {
+		++_info.vSimulada;
+	}
+
+	inline void decreaseSimulatedV() {
+		--_info.vSimulada;
+		if (_info.vSimulada < 0) {
+			_info.vSimulada = 0;
+		}
+	}
+
+	// NO SE USA
 	// cambiar posición inicial
 	inline void setOrigin(const Vector3& p) {
 		_mean_pos = p;

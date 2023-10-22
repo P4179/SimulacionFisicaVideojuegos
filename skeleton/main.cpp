@@ -10,21 +10,11 @@
 
 #include <iostream>
 
-#include "ShootManager.h"
-#include "ParticleSystem.h"
+#include "../skeleton/HeaderFiles/ShootManager.h"
+#include "../skeleton/HeaderFiles/ParticleSystem.h"
 
 // SE PUEDE ESCRIBIR TEXTO PINTADO
 std::string display_text = "This is a test";
-
-/*
-GENERADOR UNIFORME -> LLUVIA
-FUENTE -> PULSANDO TECLAS SE LE CAMBIA LA VELOCIDAD, ANCHURA Y VARIANZA
-GENEREADOR GAUSSIANO -> NIEBLA
-FUEGOS ARTIFICIALES -> HAY DE VARIOS TIPOS
-La distribución gaussiana queda definida por la media y la varianza (ancho de la curva).
-El generador te devuelve un número dentro de ese área.
-*/
-
 
 using namespace physx;
 
@@ -136,6 +126,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	if (shoot != nullptr) {
 		shoot->keyPressed(toupper(key));
+	}
+	if (particleSystem != nullptr) {
+		particleSystem->keyPressed(toupper(key));
 	}
 
 	switch (toupper(key))

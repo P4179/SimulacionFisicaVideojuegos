@@ -21,15 +21,46 @@
     </ClInclude>
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="callbacks.hpp" />
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="ShootManager.h" />
-    <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="ParticleGenerator.h" />
-    <ClInclude Include="UniformParticleGenerator.h" />
+    <ClInclude Include="HeaderFiles\Generators\FireworkGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Generators\GaussianParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Generators\ParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Generators\UniformParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Particles\Firework.h">
+      <Filter>HeaderFiles\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Particles\Particle.h">
+      <Filter>HeaderFiles\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ParticleSystem.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ShootManager.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
       <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles">
+      <UniqueIdentifier>{9b999f25-06eb-4091-8543-6f6a58b4355e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourceFiles">
+      <UniqueIdentifier>{38051a2b-0e6b-48d1-bd28-2ab59b1f80d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\Generators">
+      <UniqueIdentifier>{ea280957-4ae5-483d-a01c-997c90b0b490}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\Particles">
+      <UniqueIdentifier>{3beafad4-b2b4-42ba-b803-afc8a9d35d5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

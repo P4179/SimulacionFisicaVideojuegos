@@ -1,5 +1,5 @@
 #pragma once
-#include "Particle.h"
+#include "./Particles/Particle.h"
 #include <vector>
 
 using namespace std;
