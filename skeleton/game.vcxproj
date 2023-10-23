@@ -259,7 +259,11 @@
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="src\Generators\FireworkGenerator.cpp" />
+    <ClCompile Include="src\Generators\GaussianParticleGenerator.cpp" />
+    <ClCompile Include="src\Generators\UniformParticleGenerator.cpp" />
     <ClCompile Include="src\ListParticles.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
+    <ClCompile Include="src\Particles\Firework.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
   </ItemGroup>
   <ItemGroup>

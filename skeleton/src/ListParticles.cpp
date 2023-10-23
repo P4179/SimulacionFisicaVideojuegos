@@ -1,6 +1,7 @@
 #include "Particles/Particle.h"
 #include "ListParticles.h"
 #include "checkML.h"
+#include <iostream>
 
 ListParticles::ListParticles(int maxParticles) : maxParticles(maxParticles) {}
 
@@ -47,6 +48,7 @@ void ListParticles::refresh() {
 				return true;
 			}
 		}), listP.end());
+	//std::cout << listP.size() << "\n";
 }
 
 void ListParticles::integrate(double t) {

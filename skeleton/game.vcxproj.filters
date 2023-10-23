@@ -19,6 +19,18 @@
     <ClCompile Include="src\Generators\FireworkGenerator.cpp">
       <Filter>SourceFiles\Generators</Filter>
     </ClCompile>
+    <ClCompile Include="src\Particles\Firework.cpp">
+      <Filter>SourceFiles\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generators\UniformParticleGenerator.cpp">
+      <Filter>SourceFiles\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generators\GaussianParticleGenerator.cpp">
+      <Filter>SourceFiles\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleSystem.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
