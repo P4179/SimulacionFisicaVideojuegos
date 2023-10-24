@@ -33,6 +33,8 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 	infoParticleType(type, masaReal, vReal);
 
 	// velocidad
+	// no está mal hacerlo de esta manera: vel indica la dir (como incrementan los ejes) y vSimulada la magnitud del vector
+	// también se puede hacer que vel sea el propio vector e incluya todo
 	vel = vel.getNormalized();
 	this->vel = vel * vSimulada;
 

@@ -3,7 +3,7 @@
 ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity), selectedGen(Fire1),
 particle_generators(vector<ParticleGenerator*>(Max)) {
 
-	particles = new ListParticles(100);
+	particles = new ListParticles(1000);
 
 	ParticleInfo info;
 	info.ac = gravity;
@@ -28,7 +28,8 @@ particle_generators(vector<ParticleGenerator*>(Max)) {
 	info.vSimulada = 35.0;
 	addParticleGenerator<UniformParticleGenerator>(LLuvia, Vector3(0, 65, 0), Vector3(0, -1, 0), info, 0.5, 3, Vector3(0, 0, 0), Vector3(20, 2, 20));
 
-	info.color = Vector4(0.165, 0.702, 0.91, 1);
+	// si el alpha de la bola es 1, la pantalla se pone negra
+	info.color = Vector4(0.596, 0.929, 0.855, 0.90);
 	info.lifeTime = 20;
 	info.radius = 0.8;
 	info.vSimulada = 45.0;
@@ -59,7 +60,7 @@ void ParticleSystem::generateFireworkSystem() {
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
 	auto fireGen = addParticleGenerator<FireworkGenerator>(Fire1, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 2, Vector3(0.1, 0.2, 0.1), Vector3(1, 1, 1));
 
-	info.color = Vector4(0.196, 0.871, 0.153, 1);
+	info.color = Vector4(0.196, 0.871, 0.153, 0.9);
 	info.lifeTime = 1.7;
 	info.radius = 0.9;
 	info.vSimulada = 20.0;
@@ -67,7 +68,7 @@ void ParticleSystem::generateFireworkSystem() {
 	fireGen = addParticleGenerator<FireworkGenerator>(Fire2, Vector3(0, 20, 0), Vector3(0, 1, 0), info, 4, Vector3(0.8, 0.1, 0.8), Vector3(1, 1, 1));
 	FireworkGenerator::addFireworkGen(fireGen);
 
-	info.color = Vector4(0.612, 0.216, 0.91, 1);
+	info.color = Vector4(0.612, 0.216, 0.91, 0.9);
 	info.lifeTime = 2.2;
 	info.radius = 1;
 	info.vSimulada = 25.0;
@@ -75,7 +76,7 @@ void ParticleSystem::generateFireworkSystem() {
 	fireGen = addParticleGenerator<FireworkGenerator>(Fire3, Vector3(0, 20, 0), Vector3(0.8, 0.8, 0), info, 2, Vector3(0.3, 0, 0.5), Vector3(1, 1, 1));
 	FireworkGenerator::addFireworkGen(fireGen);
 
-	info.color = Vector4(0.961, 0.118, 0.808, 1);
+	info.color = Vector4(0.961, 0.118, 0.808, 0.9);
 	info.lifeTime = 2.0;
 	info.radius = 0.8;
 	info.vSimulada = 30.0;
