@@ -2,8 +2,7 @@
 #include <list>
 #include <random>
 #include "../Particles/Particle.h"
-
-class ListParticles;
+#include "../ListParticles.h"
 
 using namespace std;
 
@@ -69,6 +68,11 @@ public:
 
 	virtual void update(ListParticles* particles) = 0;
 
+	// si interesara hacer un commit inicial de partículas
+	void init(ListParticles* particles) {
+		particles->add(generateParticles());
+	}
+
 	inline void increaseSimulatedV() {
 		++_info.vSimulada;
 	}
@@ -99,14 +103,13 @@ public:
 	}
 	// cambiar tiempo de vida de la partícula modelo
 	// cambiar tiempo de vida de la partícula modelo
-	inline Vector3 ParticleGenerator::setMeanDuration(double newDuration) {
+	inline Vector3 setMeanDuration(double newDuration) {
 		_model->setLifeTime(newDuration);
 	}
 
-	// NO SE USA
 	// nuevo modelo de partícula a partir de la dada
 	// la posicion y velocidad iniciales se obtienen a partir de la particula modelo
-	inline void ParticleGenerator::setParticle(Particle* p, bool modify_pos_vel) {
+	inline void setParticle(Particle* p, bool modify_pos_vel) {
 		if (_model != nullptr) {
 			delete _model;
 		}

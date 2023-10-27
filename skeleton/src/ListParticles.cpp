@@ -3,6 +3,16 @@
 #include "checkML.h"
 #include <iostream>
 
+void ListParticles::removeExcess() {
+	if (listP.size() > maxParticles) {
+		int num = listP.size() - maxParticles;
+		for (int i = 0; i < num; ++i) {
+			delete listP.front();
+			listP.pop_front();
+		}
+	}
+}
+
 ListParticles::ListParticles(int maxParticles) : maxParticles(maxParticles) {}
 
 ListParticles::~ListParticles() {
@@ -10,22 +20,10 @@ ListParticles::~ListParticles() {
 }
 
 void ListParticles::add(list<Particle*> newListP) {
-	if (listP.size() < maxParticles) {
-		for (auto particle : newListP) {
-			listP.push_back(particle);
-		}
+	for (auto particle : newListP) {
+		listP.push_back(particle);
 	}
-	else {
-		auto it = listP.begin();
-		for (int i = 0; i < newListP.size(); ++i) {
-			(*it)->setAlive(false);
-			++it;
-		}
-
-		for (auto it2 = newListP.begin(); it2 != newListP.end(); ++it2) {
-			listP.push_back(*it2);
-		}
-	}
+	//listP.front()->setPos(Vector3(1000.0f, 1000.0f, 1000.0f));
 }
 
 void ListParticles::kill() {
@@ -44,11 +42,19 @@ void ListParticles::refresh() {
 			}
 			else {
 				particle->onDeath(this);
-				delete particle;
+				if (particle != nullptr) {
+					delete particle;
+					particle = nullptr;
+				}
 				return true;
 			}
 		}), listP.end());
-	//std::cout << listP.size() << "\n";
+
+	// se hace después del refresh y no justamente al añadir las partículas
+	// porque si se trata de un firework se van a crear partículas cuando este se muere
+	// Entonces, puede que se exceda la cantidad máxima, se eliminen partículas
+	// y se rompa la lista pues se está recorriendo
+	removeExcess();
 }
 
 void ListParticles::integrate(double t) {

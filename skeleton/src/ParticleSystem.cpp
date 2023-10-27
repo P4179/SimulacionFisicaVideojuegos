@@ -1,9 +1,9 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity), selectedGen(Fire1),
+ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity), selectedGen(Circle),
 particle_generators(vector<ParticleGenerator*>(Max)) {
 
-	particles = new ListParticles(1000);
+	particles = new ListParticles(1000);;
 
 	ParticleInfo info;
 	info.ac = gravity;
@@ -61,7 +61,7 @@ void ParticleSystem::generateFireworkSystem() {
 	auto fireGen = addParticleGenerator<FireworkGenerator>(Fire1, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 2, Vector3(0.1, 0.2, 0.1), Vector3(1, 1, 1));
 
 	info.color = Vector4(0.196, 0.871, 0.153, 0.9);
-	info.lifeTime = 1.7;
+	info.lifeTime = 2.3;
 	info.radius = 0.9;
 	info.vSimulada = 20.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
@@ -69,7 +69,7 @@ void ParticleSystem::generateFireworkSystem() {
 	FireworkGenerator::addFireworkGen(fireGen);
 
 	info.color = Vector4(0.612, 0.216, 0.91, 0.9);
-	info.lifeTime = 2.2;
+	info.lifeTime = 2.9;
 	info.radius = 1;
 	info.vSimulada = 25.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
@@ -77,16 +77,29 @@ void ParticleSystem::generateFireworkSystem() {
 	FireworkGenerator::addFireworkGen(fireGen);
 
 	info.color = Vector4(0.961, 0.118, 0.808, 0.9);
-	info.lifeTime = 2.0;
+	info.lifeTime = 2.7;
 	info.radius = 0.8;
 	info.vSimulada = 30.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
 	fireGen = addParticleGenerator<FireworkGenerator>(Fire4, Vector3(0, 20, 0), Vector3(-0.7, 0.6, 0), info, 3, Vector3(0.4, 0.2, 0.1), Vector3(1, 1, 1));
 	FireworkGenerator::addFireworkGen(fireGen);
 
+	info.color = Vector4(0.922, 0.906, 0.18, 1);
+	info.lifeTime = 1.5;
+	info.radius = 1.5;
+	info.vSimulada = 35;
+	try {
+		// los dos últimos vectores, que definen el plano donde se crea el círculo deben ser perpendiculares y unitarios
+		addParticleGenerator<CircleGenerator>(Circle, Vector3(-10, 30, 0), info, 20, Vector3(0.1, 0.1, 0), Vector3(0, 1, 0), Vector3(1, 0, 0));
+	}
+	catch (exception e) {
+		cout << "It could not be created a plane for displaying the circle" << "\n";
+		exit(EXIT_FAILURE);
+	}
+
 	// idealmente se inicia con FireworkGen1, aunque se podría iniciar con cualquiera
 	if (selectedGen >= Fire1) {
-		particles->add(getParticleGenerator(selectedGen)->generateParticles());
+		getParticleGenerator(selectedGen)->init(particles);
 	}
 }
 
@@ -141,6 +154,13 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 		newGen = Niebla;
 		changeGen = true;
 		break;
+	case 'N':
+		newGen = Fire1;
+		changeGen = true;
+		break;
+	case 'M':
+		newGen = Circle;
+		changeGen = true;
 	case 'H':
 		if (selectedGen == MangueraGaussiana) {
 			getParticleGenerator(MangueraGaussiana)->decreaseSimulatedV();
@@ -173,5 +193,8 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 	if (changeGen && newGen != selectedGen) {
 		particles->kill();
 		selectedGen = newGen;
+		if (selectedGen >= Fire1) {
+			getParticleGenerator(selectedGen)->init(particles);
+		}
 	}
 }

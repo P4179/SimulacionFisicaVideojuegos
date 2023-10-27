@@ -258,6 +258,7 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
+    <ClCompile Include="src\Generators\CircleGenerator.cpp" />
     <ClCompile Include="src\Generators\FireworkGenerator.cpp" />
     <ClCompile Include="src\Generators\GaussianParticleGenerator.cpp" />
     <ClCompile Include="src\Generators\UniformParticleGenerator.cpp" />
@@ -272,6 +273,7 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="src\Generators\CircleGenerator.h" />
     <ClInclude Include="src\Generators\FireworkGenerator.h" />
     <ClInclude Include="src\Generators\GaussianParticleGenerator.h" />
     <ClInclude Include="src\Generators\ParticleGenerator.h" />

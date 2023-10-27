@@ -12,14 +12,14 @@ protected:
 
 	double variation(double standardDesviation);
 
-	virtual Particle* createParticle(Vector3 velVariation, Vector3 posVariation);
+	virtual Particle* createParticle(Vector3 vel, Vector3 pos);
 
 public:
 	GaussianParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos);
 
 	list<Particle*> generateParticles();
 
-	void update(ListParticles* particles);
+	virtual void update(ListParticles* particles);
 
 	inline void setStdDevVel(Vector3 newVel) {
 		this->std_dev_vel = newVel;

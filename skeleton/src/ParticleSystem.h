@@ -5,6 +5,7 @@
 #include "./Generators/GaussianParticleGenerator.h"
 #include "./Generators/FireworkGenerator.h"
 #include "./Generators/ParticleGenerator.h"
+#include "./Generators/CircleGenerator.h"
 #include "./ListParticles.h"
 
 using namespace std;
@@ -12,12 +13,12 @@ using namespace std;
 // el último valor sirve para saber cuantos generadores hay en total
 enum Generators {
 	Fuente, Manguera, LLuvia, MangueraGaussiana, Niebla,
-	Fire1, Fire2, Fire3, Fire4, Max
+	Fire1, Fire2, Fire3, Fire4, Circle, Max
 };
 
 const vector<string> generatorsNames {
 	"Fuente", "Manguera", "LLuvia", "MangueraGaussiana", "Niebla",
-		"Fire1", "Fire2", "Fire3", "Fire4"
+		"Fire1", "Fire2", "Fire3", "Fire4", "Circle"
 };
 
 class ParticleSystem {

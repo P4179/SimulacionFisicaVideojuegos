@@ -17,8 +17,8 @@ double GaussianParticleGenerator::variation(double standardDesviation) {
 	}
 }
 
-Particle* GaussianParticleGenerator::createParticle(Vector3 velVariation, Vector3 posVariation) {
-	return new Particle(posVariation, velVariation, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
+Particle* GaussianParticleGenerator::createParticle(Vector3 vel, Vector3 pos) {
+	return new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
 }
 
 GaussianParticleGenerator::GaussianParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos) :

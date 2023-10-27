@@ -15,5 +15,5 @@ public:
 
 	list<Particle*> generateParticles();
 
-	void update(ListParticles* particles);
+	virtual void update(ListParticles* particles);
 };

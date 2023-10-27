@@ -10,7 +10,8 @@ class FireworkGenerator : public GaussianParticleGenerator {
 private:
 	static vector<FireworkGenerator*> fireworks;
 
-	virtual Particle* createParticle(Vector3 velVariation, Vector3 posVariation);
+protected:
+	virtual Particle* createParticle(Vector3 vel, Vector3 pos);
 
 public:
 	FireworkGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos);

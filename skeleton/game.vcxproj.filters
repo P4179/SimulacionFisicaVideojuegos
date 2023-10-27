@@ -31,6 +31,9 @@
     <ClCompile Include="src\ParticleSystem.cpp">
       <Filter>SourceFiles</Filter>
     </ClCompile>
+    <ClCompile Include="src\Generators\CircleGenerator.cpp">
+      <Filter>SourceFiles\Generators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -67,6 +70,9 @@
       <Filter>HeaderFiles\Generators</Filter>
     </ClInclude>
     <ClInclude Include="src\Generators\FireworkGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\CircleGenerator.h">
       <Filter>HeaderFiles\Generators</Filter>
     </ClInclude>
   </ItemGroup>

@@ -53,6 +53,10 @@ public:
 		this->alive = alive;
 	}
 
+	inline bool getAlive() const {
+		return alive;
+	}
+
 	virtual void onDeath(ListParticles* particles) {};
 
 	// NO SE USA
@@ -68,7 +72,7 @@ public:
 		return pose.p;
 	}
 
-	inline Vector3 setPos(Vector3 pos) {
+	inline void setPos(Vector3 pos) {
 		pose.p = pos;
 	}
 
