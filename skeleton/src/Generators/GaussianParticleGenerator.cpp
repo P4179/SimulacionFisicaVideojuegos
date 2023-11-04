@@ -42,12 +42,7 @@ list<Particle*> GaussianParticleGenerator::generateParticles() {
 			pos.y += variation(std_dev_pos.y);
 			pos.z += variation(std_dev_pos.z);
 
-			try {
-				particles.push_back(createParticle(vel, pos));
-			}
-			catch (exception e) {
-				cout << "0 particles were created: " << e.what() << "\n";
-			}
+			particles.push_back(createParticle(vel, pos));
 		}
 	}
 

@@ -29,6 +29,17 @@ public:
 		return fireworks[index];
 	}
 
+	static FireworkGenerator* getRndGenerator() {
+		int random = rand() % fireworks.size();	// numero entero [0, fireworks.size())
+		try {
+			getGenerator(random);
+		}
+		catch (exception e) {
+			// se propaga la excepcion
+			throw exception(e.what());
+		}
+	}
+
 	// no sucede nada cuando se produce el update
 	virtual void update(ListParticles* particles) {}
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <unordered_map>
+#include <unordered_set>
 #include "./Generators/UniformParticleGenerator.h"
 #include "./Generators/GaussianParticleGenerator.h"
 #include "./Generators/FireworkGenerator.h"
@@ -12,13 +13,23 @@ using namespace std;
 
 // el último valor sirve para saber cuantos generadores hay en total
 enum Generators {
+	// generadores que se ejecutan cada vez
 	Fuente, Manguera, LLuvia, MangueraGaussiana, Niebla,
-	Fire1, Fire2, Fire3, Fire4, Circle, Max
+	// generadores que se lanzan al principio o solo sirven para propagar
+	Fire1, Fire2, Fire3, Fire4, Circle, MAX
 };
 
-const vector<string> generatorsNames {
-	"Fuente", "Manguera", "LLuvia", "MangueraGaussiana", "Niebla",
-		"Fire1", "Fire2", "Fire3", "Fire4", "Circle"
+const unordered_map<Generators, string> generatorsNames{
+	{Fuente, "Fuente"},
+	{Manguera, "Manguera"},
+	{LLuvia, "LLuvia"},
+	{MangueraGaussiana, "MangueraGaussiana"},
+	{Niebla, "Niebla"},
+	{Fire1, "Fire1"},
+	{Fire2,"Fire2"},
+	{Fire3,"Fire3"},
+	{Fire4,"Fire4"},
+	{Circle,"Circle"}
 };
 
 class ParticleSystem {
@@ -26,19 +37,63 @@ private:
 	const float DAMPING = 0.8;
 
 	ListParticles* particles;
-	vector<ParticleGenerator*> particle_generators;
+	// se utiliza para actualizar los generadores y para obtener cada generador
+	vector<std::pair<ParticleGenerator*, bool>> particle_generators;
 	unordered_map<string, ParticleGenerator*> particleGenFindByName;
 	Vector3 gravity;
-	Generators selectedGen;
 	GaussianParticleGenerator* mangueraGaussiana;
 
 	// generador normal
 	template<typename T, typename ...Ts>
-	T* addParticleGenerator(Generators gen, Ts&& ...args) {
-		T* generator = new T(generatorsNames[gen], forward<Ts>(args)...);
-		particle_generators[gen] = generator;
-		particleGenFindByName.insert({ generatorsNames[gen], generator });
+	T* addParticleGenerator(Generators gen, bool enable, Ts&& ...args) {
+		// at funciona igual que [], pero con verificador de limites
+		T* generator = new T(generatorsNames.at(gen), forward<Ts>(args)...);
+		particle_generators[gen] = { generator, enable };
+		particleGenFindByName[generatorsNames.at(gen)] = generator;
 		return generator;
+	}
+
+	template<typename T, typename ...Ts>
+	FireworkGenerator* addFireworkGenerator(Generators gen, bool enable, bool included, Ts&& ...args) {
+		// en los fireworks la segunda componente se utiliza para saber si se ha iniciado con ese o no
+		FireworkGenerator* fireworkGenerator = addParticleGenerator<T>(gen, enable, forward<Ts>(args)...);
+		if (included) {
+			FireworkGenerator::addFireworkGen(fireworkGenerator);
+		}
+		if (enable) {
+			fireworkGenerator->init(particles);
+		}
+		return fireworkGenerator;
+	}
+
+	inline void disableAllGenerators() {
+		for (auto& generator : particle_generators) {
+			generator.second = false;
+		}
+	}
+
+	inline void changeActiveGen(Generators gen) {
+		particles->kill();
+		disableAllGenerators();
+		if (gen >= Fire1) {
+			getParticleGenerator(gen)->init(particles);
+		}
+		setParticleGenerator(gen, true);
+	}
+
+	inline unordered_set<ParticleGenerator*> getActiveGens() {
+		unordered_set<ParticleGenerator*> activeGens;
+		for (auto generator : particle_generators) {
+			if (generator.second) {
+				activeGens.insert(generator.first);
+			}
+		}
+		return activeGens;
+	}
+
+	inline bool isGenActive(Generators gen) {
+		auto activeGens = getActiveGens();
+		return activeGens.find(getParticleGenerator(gen)) != activeGens.end();
 	}
 
 public:
@@ -63,6 +118,10 @@ public:
 	}
 
 	inline ParticleGenerator* getParticleGenerator(Generators gen) const {
-		return particle_generators[gen];
+		return particle_generators[gen].first;
+	}
+
+	inline void setParticleGenerator(Generators gen, bool enable) {
+		particle_generators[gen].second = enable;
 	}
 };

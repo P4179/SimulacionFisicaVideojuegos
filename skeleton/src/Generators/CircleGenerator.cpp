@@ -27,12 +27,7 @@ list<Particle*> CircleGenerator::generateParticles() {
 			vel.y += variation(std_dev_vel.y);
 			vel.z += variation(std_dev_vel.z);
 
-			try {
-				particles.push_back(createParticle(vel, _mean_pos));
-			}
-			catch (exception e) {
-				cout << "0 particles were created: " << e.what() << "\n";
-			}
+			particles.push_back(createParticle(vel, _mean_pos));
 		}
 	}
 

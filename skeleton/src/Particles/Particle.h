@@ -26,17 +26,14 @@ protected:
 	bool alive;
 	float elapsedTime;
 
-	// NO SE USA
-	// se utiliza para clonar la partícula
-	float vSimulada;
-	ParticleType type;
-	float radius;
-	Vector4 color;
-
 	// t está en segundos
 	void updateLifeTime(double t);
 
 	void infoParticleType(ParticleType type, float& masaReal, float& vReal);
+
+	// PRACTICA 1
+	// type --> velocidad y masas reales
+	void calculateSimulatedPhysics(ParticleType type, Vector3 acReal, float vSimulada);
 
 public:
 	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Default);
@@ -58,29 +55,4 @@ public:
 	}
 
 	virtual void onDeath(ListParticles* particles) {};
-
-	// NO SE USA
-	inline virtual Particle* clone() const {
-		// como se va a normalizar no pasa nada por pasar la velocidad multiplicada por vSimulada
-		// clone se utiliza para clonar las partículas que se van a meter en la lista de partículas
-		// por lo tanto, se borrarán en el update del sistema de partículas
-		Particle* newParticle = new Particle(pose.p, vel, acSimulada, damping, lifeTime, vSimulada, radius, color, type);
-		return newParticle;
-	}
-
-	inline Vector3 getPos() const {
-		return pose.p;
-	}
-
-	inline void setPos(Vector3 pos) {
-		pose.p = pos;
-	}
-
-	inline Vector3 getVel() const {
-		return vel;
-	}
-
-	inline void setLifeTime(float lifeTime) {
-		this->lifeTime = lifeTime;
-	}
 };

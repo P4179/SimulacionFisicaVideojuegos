@@ -43,14 +43,9 @@ protected:
 	// Se va a utilizar para calcular una x aleatoria que pasarle a la distribución
 	std::mt19937 _mt;
 
-	// NO SE USA
-	// partícula modelo que se utiliza para generar todas las partículas del sistema
-	// cuando se utiliza, se modifican la posición y la velocidad
-	Particle* _model;
-
 	ParticleGenerator::ParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles) :
 		name(name), _mean_pos(mean_pos), _mean_vel(mean_vel), _info(info), _generation_probability(generation_probability),
-		_num_particles(num_particles), _model(nullptr), _u(uniform_real_distribution<double>(0.0, 1.0)) {
+		_num_particles(num_particles), _u(uniform_real_distribution<double>(0.0, 1.0)) {
 
 		// con random_device se genera un verdadero random, que se va a utilizar como 
 		// semilla para calcular luegos numeros pseudo aleatorios
@@ -66,6 +61,7 @@ public:
 	// devuelve una lista de partículas
 	virtual list<Particle*> generateParticles() = 0;
 
+	// solo lo usan los generadores que actualizan las particulas periodicamente
 	virtual void update(ListParticles* particles) = 0;
 
 	// si interesara hacer un commit inicial de partículas
@@ -91,39 +87,5 @@ public:
 
 	inline void setProbability(float newProbability) {
 		this->_generation_probability = newProbability;
-	}
-
-	// NO SE USA
-	// cambiar posición velocidad inicial
-	inline void setMeanVelocity(const Vector3& v) {
-		_mean_vel = v;
-	}
-	inline Vector3 getMeanVelocity() const {
-		return _mean_vel;
-	}
-	// cambiar tiempo de vida de la partícula modelo
-	// cambiar tiempo de vida de la partícula modelo
-	inline Vector3 setMeanDuration(double newDuration) {
-		_model->setLifeTime(newDuration);
-	}
-
-	// nuevo modelo de partícula a partir de la dada
-	// la posicion y velocidad iniciales se obtienen a partir de la particula modelo
-	inline void setParticle(Particle* p, bool modify_pos_vel) {
-		if (_model != nullptr) {
-			delete _model;
-		}
-		_model = p->clone();
-		if (modify_pos_vel) {
-			_mean_pos = p->getPos();
-			_mean_vel = p->getVel();
-		}
-		// posición inicial para darle una base
-		_model->setPos({ 1000.0f, 1000.0f, 1000.0f });
-	}
-
-	// número de partículas que 
-	inline void setNParticles(int n_p) {
-		_num_particles = n_p;
 	}
 };

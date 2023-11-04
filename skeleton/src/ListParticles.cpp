@@ -23,7 +23,6 @@ void ListParticles::add(list<Particle*> newListP) {
 	for (auto particle : newListP) {
 		listP.push_back(particle);
 	}
-	//listP.front()->setPos(Vector3(1000.0f, 1000.0f, 1000.0f));
 }
 
 void ListParticles::kill() {

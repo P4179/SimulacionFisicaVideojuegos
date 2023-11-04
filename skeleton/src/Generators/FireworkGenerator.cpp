@@ -6,20 +6,7 @@
 vector<FireworkGenerator*> FireworkGenerator::fireworks = vector<FireworkGenerator*>(0, nullptr);
 
 Particle* FireworkGenerator::createParticle(Vector3 vel, Vector3 pos) {
-	// número entre 0 y fireworks.size() - 1 con la misma probabilidad
-	// solo se genera números enteros
-	uniform_int_distribution<int> dist = uniform_int_distribution<int>(0, fireworks.size() - 1);
-	int rnd = dist(_mt);
-
-	try {
-		// podría llegar a no existir el generador
-		Firework* fire = new Firework(getGenerator(rnd), pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
-		return fire;
-	}
-	// se propaga la excepción
-	catch (exception e) {
-		throw exception(e.what());
-	}
+	return new Firework(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
 }
 
 FireworkGenerator::FireworkGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos) :

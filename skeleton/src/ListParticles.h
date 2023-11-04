@@ -19,7 +19,6 @@ public:
 
 	void add(list<Particle*> newListP);
 
-
 	void kill();
 
 	void refresh();
