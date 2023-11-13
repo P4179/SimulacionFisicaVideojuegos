@@ -8,6 +8,8 @@
 #include "./Generators/ParticleGenerator.h"
 #include "./Generators/CircleGenerator.h"
 #include "./ListParticles.h"
+#include "./ForceGenerators/GravityForceGenerator.h"
+#include "ParticleForceRegistry.h"
 
 using namespace std;
 
@@ -17,6 +19,10 @@ enum Generators {
 	Fuente, Manguera, LLuvia, MangueraGaussiana, Niebla,
 	// generadores que se lanzan al principio o solo sirven para propagar
 	Fire1, Fire2, Fire3, Fire4, Circle, MAX
+};
+
+enum ForceGens {
+	Gravedad, MAX_FORCES
 };
 
 const unordered_map<Generators, string> generatorsNames{
@@ -42,6 +48,9 @@ private:
 	unordered_map<string, ParticleGenerator*> particleGenFindByName;
 	Vector3 gravity;
 	GaussianParticleGenerator* mangueraGaussiana;
+
+	vector<ForceGenerator*> forceGenerators;
+	ParticleForceRegistry* registry;
 
 	// generador normal
 	template<typename T, typename ...Ts>
@@ -96,10 +105,14 @@ private:
 		return activeGens.find(getParticleGenerator(gen)) != activeGens.end();
 	}
 
-public:
-	ParticleSystem(Vector3 gravity = Vector3(0, -10, 0));
+	void generateForceGens();
+
+	void generateNormalGens();
 
 	void generateFireworkSystem();
+
+public:
+	ParticleSystem(Vector3 gravity = Vector3(0, -10, 0));
 
 	virtual ~ParticleSystem();
 

@@ -1,5 +1,5 @@
 #include "Particle.h"
-#include "../checkML.h"
+//#include "../checkML.h"
 
 // t está en segundos
 void Particle::updateLifeTime(double t) {
@@ -51,7 +51,7 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 
 	// VELOCIDAD
 	// no esta mal usar la velocidad simulada
-	// es decir, vel indciar la dir y vSimulada la magnitud del vector
+	// es decir, vel indica la dir y vSimulada la magnitud del vector
 	// sin embargo, estaria mejor hace que vel sea el propio vector e incluya todo
 	vel = vel.getNormalized();
 	this->vel = vel * vSimulada;
@@ -63,9 +63,25 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 	//calculateSimulatedPhysics(type, acReal, vSimulada);
 }
 
+Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius, Vector4 color) :
+	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), force(Vector3(0)) {
+	// se necesita un radio
+	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
+	// geometría, posición, color (R, G, B, alpha)
+	// RGB va desde 0 hasta 1
+	// el new ya hace el register
+	renderItem = new RenderItem(shape, &pose, color);
+
+	// VELOCIDAD
+	// no esta mal usar la velocidad simulada
+	// es decir, vel indica la dir y vSimulada la magnitud del vector
+	// sin embargo, estaria mejor hace que vel sea el propio vector e incluya todo
+	vel = vel.getNormalized();
+	this->vel = vel * vSimulada;
+}
+
 Particle::~Particle() {
 	DeregisterRenderItem(renderItem);
-	//delete renderItem;
 }
 
 void Particle::integrate(double t) {
@@ -74,10 +90,25 @@ void Particle::integrate(double t) {
 	//pose.p += vel * t;
 
 	// MRUA
-	vel += acSimulada * t; //Vector3(0, -gravedadSimulada, 0) * t;
+	// PRACTICA 1 --> vel += Vector3(0, -gravedadSimulada, 0) * t;
+	
+	// PRACTICA 2 --> vel += acSimulada * t;
+	
+	// PRACTICA 3
+	// Segunda Ley de Newton --> F=m*a
+	// Por lo tanto, a = F/m
+	// Para evitar errores de compilacion, es decir, que se aplique
+	// una fuerza a un objeto de masa 0 se utiliza directamente el
+	// inverso de la masa (a = F*invMasa)
+	Vector3 resultAc = force * invMasa;
+	vel += resultAc * t;
+
 	// rozamiento
 	vel *= pow(damping, t);
 	pose.p += vel * t;
 
 	updateLifeTime(t);
+
+	// eliminar las fuerzas
+	clearForce();
 }

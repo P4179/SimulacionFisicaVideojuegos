@@ -1,15 +1,29 @@
 #include "ParticleSystem.h"
 #include "checkML.h"
 
-ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity), //selectedGen(Circle),
-particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)) {
+ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity),
+particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)), forceGenerators(MAX_FORCES) {
 
 	// inicializar semilla de rand para que cada vez que se ejecute el programa
 	// no salgan los mismo números
 	srand(time(NULL));
 
-	particles = new ListParticles(1000);
+	registry = new ParticleForceRegistry();
+	particles = new ListParticles(1000, registry);
 
+	generateForceGens();
+
+	generateNormalGens();
+}
+
+void ParticleSystem::generateForceGens() {
+	forceGenerators[Gravedad] = new GravityForceGenerator("GravityGen", 1, gravity);
+
+	Particle* prueba = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), 0.02, DAMPING, 100, 30);
+	particles->add({ prueba }, forceGenerators[Gravedad]);
+}
+
+void ParticleSystem::generateNormalGens() {
 	ParticleInfo info;
 	info.ac = gravity;
 	info.damping = DAMPING;
@@ -63,7 +77,7 @@ void ParticleSystem::generateFireworkSystem() {
 	info.radius = 1.3;
 	info.vSimulada = 25.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
-	auto fireGen = addFireworkGenerator<FireworkGenerator>(Fire1, true, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 2, Vector3(0.1, 0.2, 0.1), Vector3(1, 1, 1));
+	auto fireGen = addFireworkGenerator<FireworkGenerator>(Fire1, false, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 2, Vector3(0.1, 0.2, 0.1), Vector3(1, 1, 1));
 
 	info.color = Vector4(0.196, 0.871, 0.153, 1);
 	info.lifeTime = 2.3;
@@ -101,10 +115,18 @@ void ParticleSystem::generateFireworkSystem() {
 
 ParticleSystem::~ParticleSystem() {
 	delete particles;
+
 	for (auto& gen : particle_generators) {
 		delete gen.first;
 	}
 	particle_generators.clear();
+
+	for (auto& forceGen : forceGenerators) {
+		delete forceGen;
+	}
+	forceGenerators.clear();
+
+	delete registry;
 }
 
 void ParticleSystem::integrate(double t) {
@@ -112,6 +134,11 @@ void ParticleSystem::integrate(double t) {
 
 	// update de cada partícula
 	particles->integrate(t);
+
+	// si se ha excedido el tiempo en el que actua la fuerza,
+	// se saca del registro
+	// esa fuerza se eliminara con todas
+	registry->updateTime(t);
 
 	// generar más partículas
 	for (auto generator : particle_generators) {

@@ -75,6 +75,15 @@
     <ClInclude Include="src\Generators\CircleGenerator.h">
       <Filter>HeaderFiles\Generators</Filter>
     </ClInclude>
+    <ClInclude Include="src\ParticleForceRegistry.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\ForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\GravityForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -97,6 +106,9 @@
     </Filter>
     <Filter Include="SourceFiles\Particles">
       <UniqueIdentifier>{c9eb577d-4610-4953-82c5-caa9096ae819}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\ForceGenerators">
+      <UniqueIdentifier>{48dc0aac-0b9f-4588-b868-34b368d42a3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

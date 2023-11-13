@@ -1,5 +1,6 @@
 #include "Particles/Particle.h"
 #include "ListParticles.h"
+#include "ParticleForceRegistry.h"
 #include "checkML.h"
 #include <iostream>
 
@@ -7,21 +8,30 @@ void ListParticles::removeExcess() {
 	if (listP.size() > maxParticles) {
 		int num = listP.size() - maxParticles;
 		for (int i = 0; i < num; ++i) {
+
+			registry->deleteParticleRegistry(listP.front());
+
 			delete listP.front();
 			listP.pop_front();
 		}
 	}
 }
 
-ListParticles::ListParticles(int maxParticles) : maxParticles(maxParticles) {}
+ListParticles::ListParticles(int maxParticles, ParticleForceRegistry* registry) :
+	maxParticles(maxParticles), registry(registry) {}
 
 ListParticles::~ListParticles() {
 	kill();
 }
 
-void ListParticles::add(list<Particle*> newListP) {
+void ListParticles::add(list<Particle*> newListP, ForceGenerator* fg) {
 	for (auto particle : newListP) {
 		listP.push_back(particle);
+
+		// hay fuerza que aplicarla
+		if (fg != nullptr) {
+			registry->addRegistry(fg, particle);
+		}
 	}
 }
 
@@ -41,10 +51,10 @@ void ListParticles::refresh() {
 			}
 			else {
 				particle->onDeath(this);
-				if (particle != nullptr) {
-					delete particle;
-					particle = nullptr;
-				}
+
+				registry->deleteParticleRegistry(particle);
+
+				delete particle;
 				return true;
 			}
 		}), listP.end());
@@ -57,6 +67,8 @@ void ListParticles::refresh() {
 }
 
 void ListParticles::integrate(double t) {
+	registry->updateForces(t);
+
 	// update de cada partícula
 	for (auto particle : listP) {
 		particle->integrate(t);

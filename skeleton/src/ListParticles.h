@@ -2,6 +2,8 @@
 #include <list>
 
 class Particle;
+class ParticleForceRegistry;
+class ForceGenerator;
 
 using namespace std;
 
@@ -9,15 +11,16 @@ class ListParticles {
 private:
 	int maxParticles;
 	std::list<Particle*> listP;
+	ParticleForceRegistry* registry;
 
 	void removeExcess();
 
 public:
-	ListParticles(int maxParticles);
+	ListParticles(int maxParticles, ParticleForceRegistry* registry);
 
 	virtual ~ListParticles();
 
-	void add(list<Particle*> newListP);
+	void add(list<Particle*> newListP, ForceGenerator* fg = nullptr);
 
 	void kill();
 

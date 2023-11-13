@@ -273,12 +273,15 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="src\ForceGenerators\ForceGenerator.h" />
+    <ClInclude Include="src\ForceGenerators\GravityForceGenerator.h" />
     <ClInclude Include="src\Generators\CircleGenerator.h" />
     <ClInclude Include="src\Generators\FireworkGenerator.h" />
     <ClInclude Include="src\Generators\GaussianParticleGenerator.h" />
     <ClInclude Include="src\Generators\ParticleGenerator.h" />
     <ClInclude Include="src\Generators\UniformParticleGenerator.h" />
     <ClInclude Include="src\ListParticles.h" />
+    <ClInclude Include="src\ParticleForceRegistry.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Particles\Firework.h" />
     <ClInclude Include="src\Particles\Particle.h" />
