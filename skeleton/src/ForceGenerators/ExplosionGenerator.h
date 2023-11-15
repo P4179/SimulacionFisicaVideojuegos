@@ -30,7 +30,7 @@ public:
 	ExplosionGenerator(string name, Vector3 centerInfluenceArea, float radiusInfluenceArea, float explosionIntensity, float explosionFadingTime, float duration = -1.0, bool show = false) :
 		ForceGenerator(name, duration),
 		center(centerInfluenceArea.x, centerInfluenceArea.y, centerInfluenceArea.z),
-		radius(radiusInfluenceArea), originalRadius(radiusInfluenceArea), explosionIntensity(explosionIntensity),
+		radius(0), originalRadius(radiusInfluenceArea), explosionIntensity(explosionIntensity),
 		explosionFadingTime(explosionFadingTime), elapsedTime(0), explode(false) {
 
 		if (show) {
@@ -49,7 +49,7 @@ public:
 	virtual void updateForce(Particle* particle, double t) {
 		if (explode) {
 			elapsedTime += t;
-			radius += SOUND_AIR_SPEED * t;
+			radius = originalRadius + SOUND_AIR_SPEED * t;
 			// la partícula se encuentra dentro del area de influencia
 			if (isInInfluenceArea(particle)) {
 				Vector3 dif = particle->getPos() - center.p;
