@@ -24,19 +24,25 @@ ListParticles::~ListParticles() {
 	kill();
 }
 
-void ListParticles::add(list<Particle*> newListP, ForceGenerator* fg) {
+void ListParticles::add(list<Particle*> newListP, const vector<ForceGenerator*>& forceGens) {
 	for (auto particle : newListP) {
 		listP.push_back(particle);
 
-		// hay fuerza que aplicarla
-		if (fg != nullptr) {
-			registry->addRegistry(fg, particle);
+		for (int i = 0; i < forceGens.size(); ++i) {
+			registry->addRegistry(forceGens[i], particle);
 		}
+	}
+}
+
+void ListParticles::add(list<Particle*> newListP) {
+	for (auto particle : newListP) {
+		listP.push_back(particle);
 	}
 }
 
 void ListParticles::kill() {
 	for (auto& particle : listP) {
+		registry->deleteParticleRegistry(particle);
 		delete particle;
 	}
 	listP.clear();

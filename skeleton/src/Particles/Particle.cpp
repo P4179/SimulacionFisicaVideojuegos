@@ -1,5 +1,5 @@
 #include "Particle.h"
-//#include "../checkML.h"
+#include <iostream>
 
 // t está en segundos
 void Particle::updateLifeTime(double t) {
@@ -41,7 +41,7 @@ void Particle::calculateSimulatedPhysics(ParticleType type, Vector3 acReal, floa
 }
 
 Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius, Vector4 color, ParticleType type) :
-	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0) {
+	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), radius(radius) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
 	// geometría, posición, color (R, G, B, alpha)
@@ -64,7 +64,8 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 }
 
 Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius, Vector4 color) :
-	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), force(Vector3(0)) {
+	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
+	elapsedTime(0), force(Vector3(0)), radius(radius) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
 	// geometría, posición, color (R, G, B, alpha)
@@ -100,12 +101,17 @@ void Particle::integrate(double t) {
 	// Para evitar errores de compilacion, es decir, que se aplique
 	// una fuerza a un objeto de masa 0 se utiliza directamente el
 	// inverso de la masa (a = F*invMasa)
-	Vector3 resultAc = force * invMasa;
-	vel += resultAc * t;
+	try {
+		Vector3 resultAc = force * getInvMasa();
+		vel += resultAc * t;
 
-	// rozamiento
-	vel *= pow(damping, t);
-	pose.p += vel * t;
+		// rozamiento
+		vel *= pow(damping, t);
+		pose.p += vel * t;
+	}
+	catch (std::exception e) {
+		std::cout << "Could not apply force to this particle: " << e.what() << "\n";
+	}
 
 	updateLifeTime(t);
 

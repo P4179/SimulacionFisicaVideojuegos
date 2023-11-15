@@ -1,5 +1,9 @@
 #include "UniformParticleGenerator.h"
 
+Particle* UniformParticleGenerator::createParticle(Vector3 pos, Vector3 vel) {
+	return new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
+}
+
 UniformParticleGenerator::UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth) :
 	ParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles),
 	vel_width(velWidth), pos_width(posWidth), dist(uniform_real_distribution<double>(-1, 1)) {}
@@ -22,7 +26,7 @@ list<Particle*> UniformParticleGenerator::generateParticles() {
 			pos.y += dist(_mt) * pos_width.y;
 			pos.z += dist(_mt) * pos_width.z;
 
-			Particle* particle = new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
+			Particle* particle = createParticle(pos, vel);//new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
 			particles.push_back(particle);
 		}
 	}

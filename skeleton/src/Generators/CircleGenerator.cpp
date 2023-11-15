@@ -21,7 +21,7 @@ list<Particle*> CircleGenerator::generateParticles() {
 
 		int sectionDegrees = 360 / _num_particles;
 		for (int i = 0; i < _num_particles; ++i) {
-			double sectionRadians = (sectionDegrees * i) * (_Pi / 180);
+			double sectionRadians = (sectionDegrees * i) * (M_PI / 180);
 			Vector3 vel = dirSin * sin(sectionRadians) + dirCos * cos(sectionRadians);
 			vel.x += variation(std_dev_vel.x);
 			vel.y += variation(std_dev_vel.y);

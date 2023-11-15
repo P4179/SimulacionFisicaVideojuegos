@@ -84,6 +84,18 @@
     <ClInclude Include="src\ForceGenerators\GravityForceGenerator.h">
       <Filter>HeaderFiles\ForceGenerators</Filter>
     </ClInclude>
+    <ClInclude Include="src\Generators\ForceParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\WindForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\WhirlwindForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\ExplosionGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

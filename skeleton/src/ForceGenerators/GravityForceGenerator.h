@@ -6,7 +6,7 @@ private:
 	Vector3 gravity;
 
 public:
-	GravityForceGenerator(string name, double duration, const Vector3& gravity) :
+	GravityForceGenerator(string name, const Vector3& gravity, double duration = -1.0) :
 		ForceGenerator(name, duration), gravity(gravity) {}
 
 	virtual void updateForce(Particle* particle, double t) {

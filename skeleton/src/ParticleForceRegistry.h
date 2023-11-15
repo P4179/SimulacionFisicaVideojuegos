@@ -88,4 +88,9 @@ public:
 			}
 		}
 	}
+
+	void clear() {
+		particleForce.clear();
+		forceParticle.clear();
+	}
 };

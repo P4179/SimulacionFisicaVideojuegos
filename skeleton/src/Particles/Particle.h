@@ -17,6 +17,7 @@ protected:
 	// a render item le pasaremos la dirección de este pose, para que se actualize automáticamente
 	physx::PxTransform pose;
 	RenderItem* renderItem;
+	float radius;
 
 	// vector que contiene todas las fuerzas que se le aplican a la partícula
 	// se combinan todas las fuerzas en una resultante utilizando el principio de superposición
@@ -92,6 +93,18 @@ public:
 			throw std::exception("Particle with infinite mass");
 		}
 		return 1 / invMasa;
+	}
+
+	inline Vector3 getVel() const {
+		return vel;
+	}
+
+	inline float getRadius() const {
+		return radius;
+	}
+
+	inline Vector3 getPos() const {
+		return pose.p;
 	}
 
 	virtual void onDeath(ListParticles* particles) {};

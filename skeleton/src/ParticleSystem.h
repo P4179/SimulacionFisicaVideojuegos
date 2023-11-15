@@ -10,6 +10,10 @@
 #include "./ListParticles.h"
 #include "./ForceGenerators/GravityForceGenerator.h"
 #include "ParticleForceRegistry.h"
+#include "./Generators/ForceParticleGenerator.h"
+#include "./ForceGenerators/WindForceGenerator.h"
+#include "./ForceGenerators/WhirlwindForceGenerator.h"
+#include "./ForceGenerators/ExplosionGenerator.h"
 
 using namespace std;
 
@@ -17,12 +21,13 @@ using namespace std;
 enum Generators {
 	// generadores que se ejecutan cada vez
 	Fuente, Manguera, LLuvia, MangueraGaussiana, Niebla,
+	Gravedad, Viento1, Viento2, Torbellino, Explosion,
 	// generadores que se lanzan al principio o solo sirven para propagar
-	Fire1, Fire2, Fire3, Fire4, Circle, MAX
+	Fire1, Fire2, Fire3, Fire4, Circle, MAX, NONE
 };
 
 enum ForceGens {
-	Gravedad, MAX_FORCES
+	GravityGen, WindGen, WhirlWindGen, ExplosionGen, MAX_FORCES
 };
 
 const unordered_map<Generators, string> generatorsNames{
@@ -31,6 +36,11 @@ const unordered_map<Generators, string> generatorsNames{
 	{LLuvia, "LLuvia"},
 	{MangueraGaussiana, "MangueraGaussiana"},
 	{Niebla, "Niebla"},
+	{Gravedad,"Gravedad"},
+	{Viento1, "Viento1"},
+	{Viento2, "Viento2"},
+	{Torbellino, "Torbellino"},
+	{Explosion, "Explosion"},
 	{Fire1, "Fire1"},
 	{Fire2,"Fire2"},
 	{Fire3,"Fire3"},
@@ -48,6 +58,8 @@ private:
 	unordered_map<string, ParticleGenerator*> particleGenFindByName;
 	Vector3 gravity;
 	GaussianParticleGenerator* mangueraGaussiana;
+	ExplosionGenerator* explosionGen;
+	Generators selectedGen;
 
 	vector<ForceGenerator*> forceGenerators;
 	ParticleForceRegistry* registry;
@@ -58,6 +70,9 @@ private:
 		// at funciona igual que [], pero con verificador de limites
 		T* generator = new T(generatorsNames.at(gen), forward<Ts>(args)...);
 		particle_generators[gen] = { generator, enable };
+		if (enable) {
+			selectedGen = gen;
+		}
 		particleGenFindByName[generatorsNames.at(gen)] = generator;
 		return generator;
 	}
@@ -70,6 +85,7 @@ private:
 			FireworkGenerator::addFireworkGen(fireworkGenerator);
 		}
 		if (enable) {
+			selectedGen = gen;
 			fireworkGenerator->init(particles);
 		}
 		return fireworkGenerator;
@@ -82,6 +98,7 @@ private:
 	}
 
 	inline void changeActiveGen(Generators gen) {
+		selectedGen = gen;
 		particles->kill();
 		disableAllGenerators();
 		if (gen >= Fire1) {
@@ -103,6 +120,20 @@ private:
 	inline bool isGenActive(Generators gen) {
 		auto activeGens = getActiveGens();
 		return activeGens.find(getParticleGenerator(gen)) != activeGens.end();
+	}
+
+	// se utiliza para generadores que no son los de los fuegos artificiales
+	inline bool selectNextGen(Generators ini, Generators fin) {
+		if (selectedGen >= ini && selectedGen <= fin) {
+			registry->clear();
+			selectedGen = Generators(selectedGen + 1);
+			if (selectedGen > fin) {
+				selectedGen = ini;
+			}
+			changeActiveGen(selectedGen);
+			return true;
+		}
+		return false;
 	}
 
 	void generateForceGens();

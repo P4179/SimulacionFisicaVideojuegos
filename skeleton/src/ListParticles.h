@@ -20,7 +20,9 @@ public:
 
 	virtual ~ListParticles();
 
-	void add(list<Particle*> newListP, ForceGenerator* fg = nullptr);
+	void add(list<Particle*> newListP, const vector<ForceGenerator*>& forceGens);
+
+	void add(list<Particle*> newListP);
 
 	void kill();
 

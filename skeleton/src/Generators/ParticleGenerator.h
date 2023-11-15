@@ -7,7 +7,8 @@
 using namespace std;
 
 struct ParticleInfo {
-	Vector3 ac;
+	float invMasa = 0.0;	// no se utiliza en la practica 2
+	Vector3 ac = Vector3(0);	// no se utiliza en la practica 3
 	float damping;
 	float lifeTime;
 	float vSimulada;

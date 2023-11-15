@@ -1,5 +1,7 @@
 #pragma once
 #include "FireworkGenerator.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 class CircleGenerator : public FireworkGenerator {
 private:

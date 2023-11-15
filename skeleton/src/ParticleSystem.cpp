@@ -2,7 +2,7 @@
 #include "checkML.h"
 
 ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity),
-particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)), forceGenerators(MAX_FORCES) {
+particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)), forceGenerators(MAX_FORCES), selectedGen(NONE) {
 
 	// inicializar semilla de rand para que cada vez que se ejecute el programa
 	// no salgan los mismo números
@@ -17,10 +17,61 @@ particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)), forceGene
 }
 
 void ParticleSystem::generateForceGens() {
-	forceGenerators[Gravedad] = new GravityForceGenerator("GravityGen", 1, gravity);
+	forceGenerators[GravityGen] = new GravityForceGenerator("GravityGen", gravity, -1);
+	forceGenerators[WindGen] = new WindForceGenerator("WindGen", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1);
+	forceGenerators[WhirlWindGen] = new WhirlwindForceGenerator("WhirlwindGen", Vector3(0, 0, 0), 800, 50, 50, 20, false);
+	explosionGen = new ExplosionGenerator("ExplosionGen", Vector3(0, 50, 0), 20, 3000, 15, -1, true);
+	forceGenerators[ExplosionGen] = explosionGen;
 
-	Particle* prueba = new Particle(Vector3(0, 0, 0), Vector3(0, 1, 0), 0.02, DAMPING, 100, 30);
-	particles->add({ prueba }, forceGenerators[Gravedad]);
+	ParticleInfo info;
+	info.damping = DAMPING;
+
+	info.invMasa = 0.02;
+	info.color = Vector4(0.337, 0.192, 0.8, 1);
+	info.lifeTime = 20;
+	info.radius = 1.4;
+	info.vSimulada = 45;
+	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
+	vector<ForceGenerator*> gens = { forceGenerators[GravityGen] };
+	addParticleGenerator<ForceParticleGenerator>(Gravedad, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+
+	info.invMasa = 0.035;
+	info.color = Vector4(0.871, 0.804, 0.157, 1);
+	info.lifeTime = 20;
+	info.radius = 1.2;
+	info.vSimulada = 45;
+	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
+	gens = { forceGenerators[WindGen] };
+	addParticleGenerator<ForceParticleGenerator>(Viento1, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+
+	info.invMasa = 0.015;
+	info.color = Vector4(0.871, 0.569, 0.157, 1);
+	info.lifeTime = 20;
+	info.radius = 1.2;
+	info.vSimulada = 45;
+	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
+	gens = { forceGenerators[WindGen] };
+	addParticleGenerator<ForceParticleGenerator>(Viento2, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+
+	info.invMasa = 0.03;
+	info.color = Vector4(0.51, 0.749, 0.584, 1);
+	info.lifeTime = 10;
+	info.radius = 1.3;
+	info.vSimulada = 40;
+	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
+	gens = { forceGenerators[WhirlWindGen] };
+	// LAS PARTÍCULAS NO SE MUEVEN, SINO QUE ES LA PROPIA FUERZA DEL TORBELLINO EL QUE HACE TODO EL MOVIMIENTO
+	// EL GENERADOR SOLO COLAS PARTÍCULAS EN UNA ZONA Y LUEGO, LAS FUERZAS LAS MUEVE
+	addParticleGenerator<ForceParticleGenerator>(Torbellino, false, Vector3(0, 0, 0), Vector3(0, 0, 0), info, 0.3, 1, Vector3(0, 0, 0), Vector3(10, 0, 10), gens);
+
+	info.invMasa = 0.02;
+	info.color = Vector4(0.851, 0.404, 0.282, 1);
+	info.lifeTime = 8;
+	info.radius = 1;
+	info.vSimulada = 30;
+	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
+	gens = { forceGenerators[ExplosionGen] };
+	addParticleGenerator<ForceParticleGenerator>(Explosion, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 }
 
 void ParticleSystem::generateNormalGens() {
@@ -129,6 +180,7 @@ ParticleSystem::~ParticleSystem() {
 	delete registry;
 }
 
+// t es el deltatime
 void ParticleSystem::integrate(double t) {
 	particles->refresh();
 
@@ -154,16 +206,21 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 		changeActiveGen(Fuente);
 		break;
 	case 'X':
-		changeActiveGen(LLuvia);
+		selectNextGen(Fuente, Niebla);
 		break;
 	case 'C':
-		changeActiveGen(Manguera);
+		registry->clear();
+		changeActiveGen(Gravedad);
 		break;
 	case 'V':
-		changeActiveGen(MangueraGaussiana);
+		if (selectNextGen(Gravedad, Explosion)) {
+			registry->clear();
+		}
 		break;
 	case 'B':
-		changeActiveGen(Niebla);
+		if (isGenActive(Explosion)) {
+			explosionGen->enableExplosion();
+		}
 		break;
 	case 'N':
 		changeActiveGen(Fire1);
