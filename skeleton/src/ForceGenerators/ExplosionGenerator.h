@@ -49,7 +49,7 @@ public:
 	virtual void updateForce(Particle* particle, double t) {
 		if (explode) {
 			elapsedTime += t;
-			radius = originalRadius + SOUND_AIR_SPEED * t;
+			radius = originalRadius + SOUND_AIR_SPEED * elapsedTime;
 			// la partícula se encuentra dentro del area de influencia
 			if (isInInfluenceArea(particle)) {
 				Vector3 dif = particle->getPos() - center.p;
