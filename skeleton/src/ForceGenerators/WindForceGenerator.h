@@ -56,7 +56,8 @@ public:
 			if (lastOption) {
 				// k verdaderamente depende del tamaño y de la forma del objeto y del ángulo de incidencia del viento
 				// se puede calcular como k=A*COEF_ROZ_AIRE*p
-				// A --> área de la sección transversal a la dirección de movimiento, que es PI*Diametro^2/4
+				// A --> área de la sección transversal a la dirección de movimiento (PI*Diametro^2/4)
+				// se aproxima a que es un cuarto del area de la esfera
 				// p --> densidad del aire (1.2)
 				float A = M_PI * (2 * particle->getRadius()) * (2 * particle->getRadius()) / 4;
 				k = A * COEF_ROZ_AIRE * DENSIDAD_AIRE;

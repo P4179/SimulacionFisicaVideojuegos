@@ -18,9 +18,9 @@ particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)), forceGene
 
 void ParticleSystem::generateForceGens() {
 	forceGenerators[GravityGen] = new GravityForceGenerator("GravityGen", gravity, -1);
-	forceGenerators[WindGen] = new WindForceGenerator("WindGen", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1);
-	forceGenerators[WhirlWindGen] = new WhirlwindForceGenerator("WhirlwindGen", Vector3(0, 0, 0), 800, 50, 50, 20, false);
-	explosionGen = new ExplosionGenerator("ExplosionGen", Vector3(0, 50, 0), 20, 3000, 15, -1, true);
+	forceGenerators[WindGen] = new WindForceGenerator("WindGen", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1, true, false);
+	forceGenerators[WhirlWindGen] = new WhirlwindForceGenerator("WhirlwindGen", Vector3(0, 0, 0), 800, 50, 50, 20, false, true);
+	explosionGen = new ExplosionGenerator("ExplosionGen", Vector3(0, 50, 0), 20, 3000, 15, -1, false);
 	forceGenerators[ExplosionGen] = explosionGen;
 
 	ParticleInfo info;
@@ -42,7 +42,7 @@ void ParticleSystem::generateForceGens() {
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	gens = { forceGenerators[WindGen] };
-	addParticleGenerator<ForceParticleGenerator>(Viento1, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	addParticleGenerator<ForceParticleGenerator>(Viento1, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
 	info.invMasa = 0.015;
 	info.color = Vector4(0.871, 0.569, 0.157, 1);
@@ -51,7 +51,7 @@ void ParticleSystem::generateForceGens() {
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	gens = { forceGenerators[WindGen] };
-	addParticleGenerator<ForceParticleGenerator>(Viento2, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	addParticleGenerator<ForceParticleGenerator>(Viento2, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
 	info.invMasa = 0.03;
 	info.color = Vector4(0.51, 0.749, 0.584, 1);
@@ -71,7 +71,7 @@ void ParticleSystem::generateForceGens() {
 	info.vSimulada = 30;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	gens = { forceGenerators[ExplosionGen] };
-	addParticleGenerator<ForceParticleGenerator>(Explosion, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	addParticleGenerator<ForceParticleGenerator>(Explosion, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 }
 
 void ParticleSystem::generateNormalGens() {
