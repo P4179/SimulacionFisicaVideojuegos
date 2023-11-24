@@ -21,7 +21,7 @@ using namespace std;
 enum Generators {
 	// generadores que se ejecutan cada vez
 	Fuente, Manguera, LLuvia, MangueraGaussiana, Niebla,
-	Gravedad, Viento1, Viento2, Torbellino, Explosion,
+	FuerzaDefecto, Viento1, Viento2, Torbellino, Explosion,
 	// generadores que se lanzan al principio o solo sirven para propagar
 	Fire1, Fire2, Fire3, Fire4, Circle, MAX, NONE
 };
@@ -36,7 +36,7 @@ const unordered_map<Generators, string> generatorsNames{
 	{LLuvia, "LLuvia"},
 	{MangueraGaussiana, "MangueraGaussiana"},
 	{Niebla, "Niebla"},
-	{Gravedad,"Gravedad"},
+	{FuerzaDefecto,"FuerzaDefecto"},
 	{Viento1, "Viento1"},
 	{Viento2, "Viento2"},
 	{Torbellino, "Torbellino"},
@@ -58,6 +58,7 @@ private:
 	unordered_map<string, ParticleGenerator*> particleGenFindByName;
 	Vector3 gravity;
 	GaussianParticleGenerator* mangueraGaussiana;
+	ForceParticleGenerator* fuerzaDefGenParticula;
 	ExplosionGenerator* explosionGen;
 	Generators selectedGen;
 
@@ -134,6 +135,17 @@ private:
 			return true;
 		}
 		return false;
+	}
+
+	inline void toggleForce(ForceParticleGenerator* gen, ForceGens force) {
+		if (gen->removeForce(forceGenerators[force])) {
+			cout << forceGenerators[force]->getName() << " eliminado" << "\n";
+			registry->deleteForceRegistry(forceGenerators[force]);
+		}
+		else {
+			cout << forceGenerators[force]->getName() << " incluido" << "\n";
+			gen->addForce(forceGenerators[force]);
+		}
 	}
 
 	void generateForceGens();

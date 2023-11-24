@@ -12,7 +12,7 @@ protected:
 	// de fuerzas es eterno
 	double duration;
 
-	ForceGenerator(string name, double duration = -1.0) : duration(duration), time(0.0) {}
+	ForceGenerator(string name, double duration = -1.0) : name(name), duration(duration), time(0.0) {}
 
 public:
 	virtual void updateForce(Particle* particle, double t) = 0;

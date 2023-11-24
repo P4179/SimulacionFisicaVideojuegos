@@ -28,12 +28,11 @@ void ParticleSystem::generateForceGens() {
 
 	info.invMasa = 0.02;
 	info.color = Vector4(0.337, 0.192, 0.8, 1);
-	info.lifeTime = 20;
+	info.lifeTime = 8;
 	info.radius = 1.4;
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	vector<ForceGenerator*> gens = { forceGenerators[GravityGen] };
-	addParticleGenerator<ForceParticleGenerator>(Gravedad, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	fuerzaDefGenParticula = addParticleGenerator<ForceParticleGenerator>(FuerzaDefecto, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
 
 	info.invMasa = 0.035;
 	info.color = Vector4(0.871, 0.804, 0.157, 1);
@@ -41,7 +40,7 @@ void ParticleSystem::generateForceGens() {
 	info.radius = 1.2;
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	gens = { forceGenerators[WindGen] };
+	auto gens = { forceGenerators[WindGen] };
 	addParticleGenerator<ForceParticleGenerator>(Viento1, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
 	info.invMasa = 0.015;
@@ -202,18 +201,12 @@ void ParticleSystem::integrate(double t) {
 
 void ParticleSystem::keyPressed(int __cdecl key) {
 	switch (key) {
-	case 'Z':
-		changeActiveGen(Fuente);
-		break;
-	case 'X':
-		selectNextGen(Fuente, Niebla);
-		break;
 	case 'C':
 		registry->clear();
-		changeActiveGen(Gravedad);
+		changeActiveGen(FuerzaDefecto);
 		break;
 	case 'V':
-		if (selectNextGen(Gravedad, Explosion)) {
+		if (selectNextGen(FuerzaDefecto, Explosion)) {
 			registry->clear();
 		}
 		break;
@@ -221,6 +214,27 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 		if (isGenActive(Explosion)) {
 			explosionGen->enableExplosion();
 		}
+	case 'I':
+		if (isGenActive(FuerzaDefecto)) {
+			this->toggleForce(fuerzaDefGenParticula, GravityGen);
+		}
+		break;
+	case 'O':
+		if (isGenActive(FuerzaDefecto)) {
+			this->toggleForce(fuerzaDefGenParticula, WindGen);
+		}
+		break;
+	case 'P':
+		if (isGenActive(FuerzaDefecto)) {
+			this->toggleForce(fuerzaDefGenParticula, WhirlWindGen);
+		}
+		break;
+	case 'Z':
+		changeActiveGen(Fuente);
+		break;
+	case 'X':
+		selectNextGen(Fuente, Niebla);
+		break;
 		break;
 	case 'N':
 		changeActiveGen(Fire1);
