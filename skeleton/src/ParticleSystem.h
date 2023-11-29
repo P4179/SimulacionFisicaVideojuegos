@@ -13,7 +13,7 @@
 #include "./Generators/ForceParticleGenerator.h"
 #include "./ForceGenerators/WindForceGenerator.h"
 #include "./ForceGenerators/WhirlwindForceGenerator.h"
-#include "./ForceGenerators/ExplosionGenerator.h"
+#include "./ForceGenerators/ExplosionForceGenerator.h"
 
 using namespace std;
 
@@ -59,7 +59,7 @@ private:
 	Vector3 gravity;
 	GaussianParticleGenerator* mangueraGaussiana;
 	ForceParticleGenerator* fuerzaDefGenParticula;
-	ExplosionGenerator* explosionGen;
+	ExplosionForceGenerator* explosionGen;
 	Generators selectedGen;
 
 	vector<ForceGenerator*> forceGenerators;
@@ -99,8 +99,12 @@ private:
 	}
 
 	inline void changeActiveGen(Generators gen) {
-		selectedGen = gen;
+		// se deregistrar particulas y fuerzas
+		registry->clear();
+		// se eliminan las particulas vivas en escena
 		particles->kill();
+
+		selectedGen = gen;
 		disableAllGenerators();
 		if (gen >= Fire1) {
 			getParticleGenerator(gen)->init(particles);
@@ -124,17 +128,14 @@ private:
 	}
 
 	// se utiliza para generadores que no son los de los fuegos artificiales
-	inline bool selectNextGen(Generators ini, Generators fin) {
+	inline void selectNextGen(Generators ini, Generators fin) {
 		if (selectedGen >= ini && selectedGen <= fin) {
-			registry->clear();
 			selectedGen = Generators(selectedGen + 1);
 			if (selectedGen > fin) {
 				selectedGen = ini;
 			}
 			changeActiveGen(selectedGen);
-			return true;
 		}
-		return false;
 	}
 
 	inline void toggleForce(ForceParticleGenerator* gen, ForceGens force) {
@@ -144,7 +145,7 @@ private:
 		}
 		else {
 			cout << forceGenerators[force]->getName() << " incluido" << "\n";
-			gen->addForce(forceGenerators[force]);
+			gen->addForce(forceGenerators[force], particles);
 		}
 	}
 

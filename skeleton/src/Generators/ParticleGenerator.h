@@ -66,7 +66,7 @@ public:
 	virtual void update(ListParticles* particles) = 0;
 
 	// si interesara hacer un commit inicial de partículas
-	void init(ListParticles* particles) {
+	virtual void init(ListParticles* particles) {
 		particles->add(generateParticles());
 	}
 

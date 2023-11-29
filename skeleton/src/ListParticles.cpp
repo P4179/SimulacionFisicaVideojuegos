@@ -40,6 +40,13 @@ void ListParticles::add(list<Particle*> newListP) {
 	}
 }
 
+void ListParticles::registerForceParticle(Particle* particle, ForceGenerator* fg) {
+	// contiene la particula
+	if (std::find(listP.begin(), listP.end(), particle) != listP.end()) {
+		registry->addRegistry(fg, particle);
+	}
+}
+
 void ListParticles::kill() {
 	for (auto& particle : listP) {
 		registry->deleteParticleRegistry(particle);

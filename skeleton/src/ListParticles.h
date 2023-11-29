@@ -24,6 +24,8 @@ public:
 
 	void add(list<Particle*> newListP);
 
+	void registerForceParticle(Particle* particle, ForceGenerator* fg);
+
 	void kill();
 
 	void refresh();

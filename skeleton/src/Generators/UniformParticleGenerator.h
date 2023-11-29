@@ -15,7 +15,7 @@ private:
 public:
 	UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth);
 
-	list<Particle*> generateParticles();
+	virtual list<Particle*> generateParticles();
 
 	virtual void update(ListParticles* particles);
 };

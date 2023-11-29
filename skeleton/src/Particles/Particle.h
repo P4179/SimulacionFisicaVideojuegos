@@ -34,6 +34,11 @@ protected:
 	bool alive;
 	float elapsedTime;
 
+	// PRACTICE 3 -> PARTICULA CUADRADA PARA LA FLOTACION (TIENE UN VOLUMEN Y UNA ALTURA)
+	// longitud/altura de la particula
+	float height;
+	float volume;
+
 	// t está en segundos
 	void updateLifeTime(double t);
 
@@ -52,10 +57,26 @@ protected:
 		force = Vector3(0);
 	}
 
+	inline void commonConstructor(physx::PxShape* shape, Vector4 color, float vSimulada) {
+		// geometría, posición, color (R, G, B, alpha)
+		// RGB va desde 0 hasta 1
+		// el new ya hace el register
+		renderItem = new RenderItem(shape, &pose, color);
+
+		// VELOCIDAD
+		// no esta mal usar la velocidad simulada
+		// es decir, vel indica la dir y vSimulada la magnitud del vector
+		// sin embargo, estaria mejor hace que vel sea el propio vector e incluya todo
+		vel = vel.getNormalized();
+		this->vel = vel * vSimulada;
+	}
+
 public:
 	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Default);
 
 	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1));
+
+	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float height, float volume, Vector4 color = Vector4(1, 0, 0, 1));
 
 	virtual ~Particle();
 
@@ -72,6 +93,8 @@ public:
 	inline bool getAlive() const {
 		return alive;
 	}
+
+	virtual void onDeath(ListParticles* particles) {};
 
 	// añadir una fuerza a la fuerza resultante
 	// se utiliza el principio de superposicion
@@ -107,5 +130,11 @@ public:
 		return pose.p;
 	}
 
-	virtual void onDeath(ListParticles* particles) {};
+	inline float getLength() const {
+		return height;
+	}
+
+	inline float getVolume() const {
+		return volume;
+	}
 };

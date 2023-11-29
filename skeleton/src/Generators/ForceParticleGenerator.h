@@ -4,7 +4,7 @@
 using namespace std;
 
 class ForceParticleGenerator : public UniformParticleGenerator {
-private:
+protected:
 	vector<ForceGenerator*> forceGens;
 
 public:
@@ -32,7 +32,10 @@ public:
 		return false;
 	}
 
-	inline void addForce(ForceGenerator* force) {
+	// la lista de particulas no se utiliza
+	// sin embargo, se puede utilizar en las clases hijas que solo hagan
+	// un commit inicial de particulas y luego, se les quiere poner mas fuerzas
+	virtual inline void addForce(ForceGenerator* force, ListParticles* particles) {
 		forceGens.push_back(force);
 	}
 };

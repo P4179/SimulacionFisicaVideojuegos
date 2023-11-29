@@ -273,9 +273,13 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
-    <ClInclude Include="src\ForceGenerators\ExplosionGenerator.h" />
+    <ClInclude Include="src\ForceGenerators\AnchoredSpringForceGenerator.h" />
+    <ClInclude Include="src\ForceGenerators\BuoyancyForceGenerator.h" />
+    <ClInclude Include="src\ForceGenerators\ElasticRubberForceGenerator.h" />
+    <ClInclude Include="src\ForceGenerators\ExplosionForceGenerator.h" />
     <ClInclude Include="src\ForceGenerators\ForceGenerator.h" />
     <ClInclude Include="src\ForceGenerators\GravityForceGenerator.h" />
+    <ClInclude Include="src\ForceGenerators\SpringForceGenerator.h" />
     <ClInclude Include="src\ForceGenerators\WhirlwindForceGenerator.h" />
     <ClInclude Include="src\ForceGenerators\WindForceGenerator.h" />
     <ClInclude Include="src\Generators\CircleGenerator.h" />
@@ -283,6 +287,7 @@
     <ClInclude Include="src\Generators\ForceParticleGenerator.h" />
     <ClInclude Include="src\Generators\GaussianParticleGenerator.h" />
     <ClInclude Include="src\Generators\ParticleGenerator.h" />
+    <ClInclude Include="src\Generators\SpringParticleGenerator.h" />
     <ClInclude Include="src\Generators\UniformParticleGenerator.h" />
     <ClInclude Include="src\ListParticles.h" />
     <ClInclude Include="src\ParticleForceRegistry.h" />

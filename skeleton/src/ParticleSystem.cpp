@@ -2,7 +2,7 @@
 #include "checkML.h"
 
 ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity),
-particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)), forceGenerators(MAX_FORCES), selectedGen(NONE) {
+particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX, { nullptr, false })), forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE) {
 
 	// inicializar semilla de rand para que cada vez que se ejecute el programa
 	// no salgan los mismo números
@@ -19,8 +19,8 @@ particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX)), forceGene
 void ParticleSystem::generateForceGens() {
 	forceGenerators[GravityGen] = new GravityForceGenerator("GravityGen", gravity, -1);
 	forceGenerators[WindGen] = new WindForceGenerator("WindGen", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1, true, false);
-	forceGenerators[WhirlWindGen] = new WhirlwindForceGenerator("WhirlwindGen", Vector3(0, 0, 0), 800, 50, 50, 20, false, true);
-	explosionGen = new ExplosionGenerator("ExplosionGen", Vector3(0, 50, 0), 20, 3000, 15, -1, false);
+	forceGenerators[WhirlWindGen] = new WhirlwindForceGenerator("WhirlwindGen", Vector3(0, 0, 0), 800, 50, 50, 20, false, false);
+	explosionGen = new ExplosionForceGenerator("ExplosionGen", Vector3(0, 50, 0), 20, 3000, 15, -1, false);
 	forceGenerators[ExplosionGen] = explosionGen;
 
 	ParticleInfo info;
@@ -202,13 +202,10 @@ void ParticleSystem::integrate(double t) {
 void ParticleSystem::keyPressed(int __cdecl key) {
 	switch (key) {
 	case 'C':
-		registry->clear();
 		changeActiveGen(FuerzaDefecto);
 		break;
 	case 'V':
-		if (selectNextGen(FuerzaDefecto, Explosion)) {
-			registry->clear();
-		}
+		selectNextGen(FuerzaDefecto, Explosion);
 		break;
 	case 'B':
 		if (isGenActive(Explosion)) {

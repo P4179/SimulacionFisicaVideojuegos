@@ -40,21 +40,12 @@ void Particle::calculateSimulatedPhysics(ParticleType type, Vector3 acReal, floa
 	acSimulada = acReal * (vSimulada / vReal) * (vSimulada / vReal);
 }
 
+// NO SE UTILIZA: INVERSO DE LA MASA, ALTURA, VOLUMEN
 Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius, Vector4 color, ParticleType type) :
 	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), radius(radius) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
-	// geometría, posición, color (R, G, B, alpha)
-	// RGB va desde 0 hasta 1
-	// el new ya hace el register
-	renderItem = new RenderItem(shape, &pose, color);
-
-	// VELOCIDAD
-	// no esta mal usar la velocidad simulada
-	// es decir, vel indica la dir y vSimulada la magnitud del vector
-	// sin embargo, estaria mejor hace que vel sea el propio vector e incluya todo
-	vel = vel.getNormalized();
-	this->vel = vel * vSimulada;
+	commonConstructor(shape, color, vSimulada);
 
 	// se utiliza directamente la ACELERACION
 	acSimulada = acReal;
@@ -63,22 +54,22 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 	//calculateSimulatedPhysics(type, acReal, vSimulada);
 }
 
+// NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA, ALTURA, VOLUMEN
 Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius, Vector4 color) :
 	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
 	elapsedTime(0), force(Vector3(0)), radius(radius) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
-	// geometría, posición, color (R, G, B, alpha)
-	// RGB va desde 0 hasta 1
-	// el new ya hace el register
-	renderItem = new RenderItem(shape, &pose, color);
+	commonConstructor(shape, color, vSimulada);
+}
 
-	// VELOCIDAD
-	// no esta mal usar la velocidad simulada
-	// es decir, vel indica la dir y vSimulada la magnitud del vector
-	// sin embargo, estaria mejor hace que vel sea el propio vector e incluya todo
-	vel = vel.getNormalized();
-	this->vel = vel * vSimulada;
+// NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA, RADIO
+Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float height, float volume, Vector4 color) :
+	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
+	elapsedTime(0), force(Vector3(0)), height(height), volume(volume) {
+
+	physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(height, height, height));
+	commonConstructor(shape, color, vSimulada);
 }
 
 Particle::~Particle() {
@@ -102,6 +93,7 @@ void Particle::integrate(double t) {
 	// una fuerza a un objeto de masa 0 se utiliza directamente el
 	// inverso de la masa (a = F*invMasa)
 	try {
+		// ALGORITMO DE EULER SEMI-IMPLÍCITO (PRIMERO VELOCIDAD, LUEGO POS)
 		Vector3 resultAc = force * getInvMasa();
 		vel += resultAc * t;
 

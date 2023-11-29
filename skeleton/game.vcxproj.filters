@@ -93,7 +93,22 @@
     <ClInclude Include="src\ForceGenerators\WhirlwindForceGenerator.h">
       <Filter>HeaderFiles\ForceGenerators</Filter>
     </ClInclude>
-    <ClInclude Include="src\ForceGenerators\ExplosionGenerator.h">
+    <ClInclude Include="src\ForceGenerators\ExplosionForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\SpringForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\AnchoredSpringForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\SpringParticleGenerator.h">
+      <Filter>HeaderFiles\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\ElasticRubberForceGenerator.h">
+      <Filter>HeaderFiles\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ForceGenerators\BuoyancyForceGenerator.h">
       <Filter>HeaderFiles\ForceGenerators</Filter>
     </ClInclude>
   </ItemGroup>

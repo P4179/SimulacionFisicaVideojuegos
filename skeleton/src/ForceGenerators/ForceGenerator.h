@@ -17,7 +17,7 @@ protected:
 public:
 	virtual void updateForce(Particle* particle, double t) = 0;
 
-	// devuelve true si ha pasado todo el tiemop que el generador puede estar vivo
+	// devuelve true si ha pasado todo el tiempo que el generador puede estar vivo
 	inline void updateTime(double t) {
 		time += t;
 	}
