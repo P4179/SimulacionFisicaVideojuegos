@@ -5,6 +5,8 @@
 // una que mueve una particula y otra que mueve la otra particula
 class SpringForceGenerator : public ForceGenerator {
 protected:
+	// constante elastica del muelle
+	// determina la intensidad de la fuerza
 	double k;
 	// longitud del muelle cuando esta en reposo
 	double restingLength;
@@ -27,9 +29,23 @@ public:
 		// k es la cte elastica del muelle
 		// x es cuanto se ha deformado el muelle (longitud de deformacion)
 		Vector3 force = k * relativePos * deltaX;
+		particle->addForce(force);
 	}
 
 	virtual inline Vector3 getPosOtherEnd() const {
 		return other->getPos();
+	}
+
+	inline void decreaseK() {
+		--k;
+		if (k < 0) {
+			k = 0;
+		}
+		cout << "K: " + to_string((int)k) << "\n";
+	}
+
+	inline void increaseK() {
+		++k;
+		cout << "K: " + to_string((int)k) << "\n";
 	}
 };

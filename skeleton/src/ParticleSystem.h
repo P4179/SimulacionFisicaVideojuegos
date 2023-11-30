@@ -1,19 +1,27 @@
 #pragma once
-#include <list>
 #include <unordered_map>
-#include <unordered_set>
+#include <functional>
+// generadores de particulas
 #include "./Generators/UniformParticleGenerator.h"
 #include "./Generators/GaussianParticleGenerator.h"
 #include "./Generators/FireworkGenerator.h"
 #include "./Generators/ParticleGenerator.h"
 #include "./Generators/CircleGenerator.h"
-#include "./ListParticles.h"
-#include "./ForceGenerators/GravityForceGenerator.h"
-#include "ParticleForceRegistry.h"
 #include "./Generators/ForceParticleGenerator.h"
+#include "./Generators/LauncherParticleGenerator.h"
+// otros
+#include "./ListParticles.h"
+#include "ParticleForceRegistry.h"
+// generadores de fuerza
+#include "./ForceGenerators/GravityForceGenerator.h"
 #include "./ForceGenerators/WindForceGenerator.h"
 #include "./ForceGenerators/WhirlwindForceGenerator.h"
 #include "./ForceGenerators/ExplosionForceGenerator.h"
+	// Practica 3
+#include "./ForceGenerators/AnchoredSpringForceGenerator.h"
+#include "./ForceGenerators/BuoyancyForceGenerator.h"
+#include "./ForceGenerators/ElasticRubberForceGenerator.h"
+#include "./ForceGenerators/SpringForceGenerator.h"
 
 using namespace std;
 
@@ -22,12 +30,18 @@ enum Generators {
 	// generadores que se ejecutan cada vez
 	Fuente, Manguera, LLuvia, MangueraGaussiana, Niebla,
 	FuerzaDefecto, Viento1, Viento2, Torbellino, Explosion,
+	// lanzador de particulas, es decir, asigna cada particula con su fuerza
+	Launch,
 	// generadores que se lanzan al principio o solo sirven para propagar
 	Fire1, Fire2, Fire3, Fire4, Circle, MAX, NONE
 };
 
 enum ForceGens {
-	GravityGen, WindGen, WhirlWindGen, ExplosionGen, MAX_FORCES
+	GravityGen, WindGen, WhirlWindGen, ExplosionGen,
+	// PRACTICA 3 --> cada vez que se cambia de generador, si estan creadas, se eliminan
+	// Se hace asi porque tienen objetos propios que se seguirian mostrando en escena
+	AnchorGen, SpringGen1, SpringGen2, ElasticRubber1, ElasticRubber2, BuoyanceGen,
+	MAX_FORCES
 };
 
 const unordered_map<Generators, string> generatorsNames{
@@ -41,6 +55,7 @@ const unordered_map<Generators, string> generatorsNames{
 	{Viento2, "Viento2"},
 	{Torbellino, "Torbellino"},
 	{Explosion, "Explosion"},
+	{Launch, "Launch"},
 	{Fire1, "Fire1"},
 	{Fire2,"Fire2"},
 	{Fire3,"Fire3"},
@@ -58,12 +73,19 @@ private:
 	unordered_map<string, ParticleGenerator*> particleGenFindByName;
 	Vector3 gravity;
 	GaussianParticleGenerator* mangueraGaussiana;
-	ForceParticleGenerator* fuerzaDefGenParticula;
 	ExplosionForceGenerator* explosionGen;
 	Generators selectedGen;
 
 	vector<ForceGenerator*> forceGenerators;
 	ParticleForceRegistry* registry;
+
+	// guarda el generador de fuerzas por defecto de la practica 2, al que se le ponen o quitan fuerzas
+	ForceParticleGenerator* fuerzaDefGenParticula;
+	// guarda el generador al que se le van a poner o quitar fuerzas ahora
+	ForceParticleGenerator* cambiarFuerzasGen;
+	// guarda el lanzador de particulas en una variable para poder usarlo cuando se quiera
+	LauncherParticleGen* launcherParticle;
+	SpringForceGenerator* springFg;
 
 	// generador normal
 	template<typename T, typename ...Ts>
@@ -92,20 +114,44 @@ private:
 		return fireworkGenerator;
 	}
 
+	inline void launch(std::function<void(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, vector<ForceGenerator*>& forceGens)> function) {
+		// importa el orden
+		changeActiveGen(Launch);
+		vector<std::pair<ForceGenerator*, Particle*>> forcesParticles = {};
+		vector<ForceGenerator*> forceGens = {};
+		// rellenar los dos vectores
+		function(forcesParticles, forceGens);
+		launcherParticle->launch(particles, forcesParticles, forceGens);
+		cambiarFuerzasGen = launcherParticle;
+	}
+
 	inline void disableAllGenerators() {
 		for (auto& generator : particle_generators) {
 			generator.second = false;
 		}
 	}
 
+	inline void removeSpringSystem() {
+		launcherParticle->clear();
+		for (ForceGens fGen = AnchorGen; fGen <= BuoyanceGen; fGen = ForceGens(fGen + 1)) {
+			if (forceGenerators[fGen] != nullptr) {
+				delete forceGenerators[fGen];
+				forceGenerators[fGen] = nullptr;
+			}
+		}
+		springFg = nullptr;
+	}
+
 	inline void changeActiveGen(Generators gen) {
-		// se deregistrar particulas y fuerzas
+		// ELIMINADO
+		// se deregistran particulas y fuerzas
 		registry->clear();
 		// se eliminan las particulas vivas en escena
 		particles->kill();
+		removeSpringSystem();
+		disableAllGenerators();
 
 		selectedGen = gen;
-		disableAllGenerators();
 		if (gen >= Fire1) {
 			getParticleGenerator(gen)->init(particles);
 		}
@@ -122,6 +168,7 @@ private:
 		return activeGens;
 	}
 
+	// puede haber varios generadores activos a la vez
 	inline bool isGenActive(Generators gen) {
 		auto activeGens = getActiveGens();
 		return activeGens.find(getParticleGenerator(gen)) != activeGens.end();
@@ -154,6 +201,8 @@ private:
 	void generateNormalGens();
 
 	void generateFireworkSystem();
+
+	void generateAnchorSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, vector<ForceGenerator*>& forceGens);
 
 public:
 	ParticleSystem(Vector3 gravity = Vector3(0, -10, 0));

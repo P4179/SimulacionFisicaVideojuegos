@@ -4,9 +4,8 @@
 // fuerza entre una particula y una posicion fija
 class AnchoredSpringForceGenerator : public SpringForceGenerator {
 private:
-	Vector3 anchoredPos;
 	physx::PxTransform anchorPose;
-	const float HALF_SIZE = 10;
+	const float HALF_SIZE = 4;
 	const Vector4 COLOR = Vector4(0.188, 0.188, 0.188, 1);
 	RenderItem* renderItem;
 
@@ -15,7 +14,7 @@ public:
 		SpringForceGenerator(name, k, restingLength, nullptr, duration), anchorPose(anchoredPos.x, anchoredPos.y, anchoredPos.z) {
 
 		// la caja se inicializa con las mitades de la altura, anchura y profundidad
-		physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(HALF_SIZE, 2 * HALF_SIZE, HALF_SIZE));
+		physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(HALF_SIZE, HALF_SIZE, HALF_SIZE));
 		// geometría, posición, color (R, G, B, alpha)
 		// RGB va desde 0 hasta 1
 		// el new ya hace el register
@@ -27,7 +26,7 @@ public:
 	}
 
 	virtual inline Vector3 getPosOtherEnd() const {
-		return anchoredPos;
+		return anchorPose.p;
 	}
 
 };

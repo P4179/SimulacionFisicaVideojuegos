@@ -287,7 +287,7 @@
     <ClInclude Include="src\Generators\ForceParticleGenerator.h" />
     <ClInclude Include="src\Generators\GaussianParticleGenerator.h" />
     <ClInclude Include="src\Generators\ParticleGenerator.h" />
-    <ClInclude Include="src\Generators\SpringParticleGenerator.h" />
+    <ClInclude Include="src\Generators\LauncherParticleGenerator.h" />
     <ClInclude Include="src\Generators\UniformParticleGenerator.h" />
     <ClInclude Include="src\ListParticles.h" />
     <ClInclude Include="src\ParticleForceRegistry.h" />

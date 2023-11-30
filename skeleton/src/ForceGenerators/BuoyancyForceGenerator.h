@@ -54,6 +54,8 @@ public:
 		// El volumen del liquido desalojada corresponde con el volumen que hay del objeto dentro del agua
 		// Por lo tanto, la formula queda:
 		// Fflot = VliqDesalojado * d * g
+		// SE ASEMEJA MUCHO A LA FORMULA DE UN MUELLE, ES POR ESO QUE SE TRATA DE UN CASO PARTICULAR
+		// DE UN MUELLE
 
 		Vector3 force = Vector3(0, particle->getVolume() * inmmersed * density * GRAVITY, 0);
 		particle->addForce(force);

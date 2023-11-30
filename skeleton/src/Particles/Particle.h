@@ -30,6 +30,7 @@ protected:
 	Vector3 acSimulada;
 
 	// tiempo de vida de la partícula
+	// un tiempo de vida negativo quiere decir que la particula es infinita
 	float lifeTime;
 	bool alive;
 	float elapsedTime;

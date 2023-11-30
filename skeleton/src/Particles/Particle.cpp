@@ -3,10 +3,12 @@
 
 // t está en segundos
 void Particle::updateLifeTime(double t) {
-	elapsedTime += t;
-	if (elapsedTime > lifeTime) {
-		elapsedTime = 0;
-		alive = false;
+	if (lifeTime >= 0) {
+		elapsedTime += t;
+		if (elapsedTime > lifeTime) {
+			elapsedTime = 0;
+			alive = false;
+		}
 	}
 }
 

@@ -2,7 +2,8 @@
 #include "checkML.h"
 
 ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity),
-particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX, { nullptr, false })), forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE) {
+particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX, { nullptr, false })), 
+forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE), springFg(nullptr) {
 
 	// inicializar semilla de rand para que cada vez que se ejecute el programa
 	// no salgan los mismo números
@@ -14,6 +15,10 @@ particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX, { nullptr, 
 	generateForceGens();
 
 	generateNormalGens();
+
+	// nunca se va a iniciar
+	// solo se guarda para utilizar a posteriori
+	launcherParticle = addParticleGenerator<LauncherParticleGen>(Launch, false);
 }
 
 void ParticleSystem::generateForceGens() {
@@ -33,6 +38,7 @@ void ParticleSystem::generateForceGens() {
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	fuerzaDefGenParticula = addParticleGenerator<ForceParticleGenerator>(FuerzaDefecto, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
+	cambiarFuerzasGen = fuerzaDefGenParticula;	// se setea por si se lanzara este generador desde el principio
 
 	info.invMasa = 0.035;
 	info.color = Vector4(0.871, 0.804, 0.157, 1);
@@ -163,6 +169,16 @@ void ParticleSystem::generateFireworkSystem() {
 	}
 }
 
+void ParticleSystem::generateAnchorSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, vector<ForceGenerator*>& forceGens) {
+	Particle* particle1 = new Particle(Vector3(-30, 20, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0);
+	Particle* particle2 = new Particle(Vector3(30, 30, 0), Vector3(0, 0, 0), 0.1, DAMPING, -1, 0, 4, Vector4(0.322, 0.702, 0.361, 1));
+	springFg = new AnchoredSpringForceGenerator("AnchoredSpringFg", 700, 10, Vector3(0, 50, 0));
+	forceGenerators[AnchorGen] = springFg;
+	forceParticles.push_back({ forceGenerators[AnchorGen], particle1 });
+	forceParticles.push_back({ forceGenerators[AnchorGen], particle2 });
+	forceGens.push_back(forceGenerators[GravityGen]);
+}
+
 ParticleSystem::~ParticleSystem() {
 	delete particles;
 
@@ -172,7 +188,9 @@ ParticleSystem::~ParticleSystem() {
 	particle_generators.clear();
 
 	for (auto& forceGen : forceGenerators) {
-		delete forceGen;
+		if (forceGen != nullptr) {
+			delete forceGen;
+		}
 	}
 	forceGenerators.clear();
 
@@ -201,29 +219,60 @@ void ParticleSystem::integrate(double t) {
 
 void ParticleSystem::keyPressed(int __cdecl key) {
 	switch (key) {
+	case '1':
+		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, vector<ForceGenerator*>& forceGens) {
+			generateAnchorSystem(forceParticles, forceGens);
+			});
+		break;
+	case '2':
+
+		break;
+	case '3':
+
+		break;
+	case '4':
+
+		break;
+	case '5':
+
+		break;
+	case '9':
+		if (springFg != nullptr) {
+			springFg->decreaseK();
+		}
+		break;
+	case '0':
+		if (springFg != nullptr) {
+			springFg->increaseK();
+		}
+		break;
 	case 'C':
 		changeActiveGen(FuerzaDefecto);
+		cambiarFuerzasGen = fuerzaDefGenParticula;
 		break;
 	case 'V':
 		selectNextGen(FuerzaDefecto, Explosion);
+		if (isGenActive(FuerzaDefecto)) {
+			cambiarFuerzasGen = fuerzaDefGenParticula;
+		}
 		break;
 	case 'B':
 		if (isGenActive(Explosion)) {
 			explosionGen->enableExplosion();
 		}
 	case 'I':
-		if (isGenActive(FuerzaDefecto)) {
-			this->toggleForce(fuerzaDefGenParticula, GravityGen);
+		if (isGenActive(FuerzaDefecto) || isGenActive(Launch)) {
+			this->toggleForce(cambiarFuerzasGen, GravityGen);
 		}
 		break;
 	case 'O':
-		if (isGenActive(FuerzaDefecto)) {
-			this->toggleForce(fuerzaDefGenParticula, WindGen);
+		if (isGenActive(FuerzaDefecto) || isGenActive(Launch)) {
+			this->toggleForce(cambiarFuerzasGen, WindGen);
 		}
 		break;
 	case 'P':
-		if (isGenActive(FuerzaDefecto)) {
-			this->toggleForce(fuerzaDefGenParticula, WhirlWindGen);
+		if (isGenActive(FuerzaDefecto) || isGenActive(Launch)) {
+			this->toggleForce(cambiarFuerzasGen, WhirlWindGen);
 		}
 		break;
 	case 'Z':
