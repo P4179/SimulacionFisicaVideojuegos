@@ -1,8 +1,8 @@
 #pragma once
 #include <list>
+#include "ParticleForceRegistry.h"
 
 class Particle;
-class ParticleForceRegistry;
 class ForceGenerator;
 
 using namespace std;
@@ -20,7 +20,22 @@ public:
 
 	virtual ~ListParticles();
 
-	void add(list<Particle*> newListP, const vector<ForceGenerator*>& forceGens);
+	template<typename T>
+	void add(list<Particle*> newListP, const T& forceGens) {
+		for (auto particle : newListP) {
+			listP.push_back(particle);
+
+			for (auto& forceGen : forceGens) {
+				registry->addRegistry(forceGen, particle);
+			}
+
+			/*
+			for (int i = 0; i < forceGens.size(); ++i) {
+				registry->addRegistry(forceGens[i], particle);
+			}
+			*/
+		}
+	}
 
 	void add(list<Particle*> newListP);
 

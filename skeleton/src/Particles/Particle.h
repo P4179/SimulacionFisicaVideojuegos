@@ -1,7 +1,10 @@
 #pragma once
 #include "../../RenderUtils.hpp"
+#include <iostream>
 
 class ListParticles;
+
+using namespace std;
 
 enum ParticleType { Default };
 
@@ -17,6 +20,7 @@ protected:
 	// a render item le pasaremos la dirección de este pose, para que se actualize automáticamente
 	physx::PxTransform pose;
 	RenderItem* renderItem;
+	Vector4 color;
 	float radius;
 
 	// vector que contiene todas las fuerzas que se le aplican a la partícula
@@ -35,9 +39,9 @@ protected:
 	bool alive;
 	float elapsedTime;
 
-	// PRACTICE 3 -> PARTICULA CUADRADA PARA LA FLOTACION (TIENE UN VOLUMEN Y UNA ALTURA)
-	// longitud/altura de la particula
-	float height;
+	// PRACTICA 3 -> PARTICULA CUADRADA PARA LA FLOTACION (TIENE UN VOLUMEN Y UNA ALTURA)
+	// importa longitud/altura de la particula
+	Vector3 size;
 	float volume;
 
 	// t está en segundos
@@ -77,7 +81,7 @@ public:
 
 	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1));
 
-	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float height, float volume, Vector4 color = Vector4(1, 0, 0, 1));
+	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, Vector3 size, Vector4 color = Vector4(1, 0, 0, 1));
 
 	virtual ~Particle();
 
@@ -110,6 +114,38 @@ public:
 		return invMasa;
 	}
 
+	inline void aumentarMasa() {
+		invMasa = invMasa / 10;
+		cout << "Inverso masa = " << invMasa << "\n";
+	}
+
+	inline void disminuirMasa() {
+		float aux = invMasa * 10;
+		if (aux < 1) {
+			invMasa = aux;
+		}
+		cout << "Inverso masa = " << invMasa << "\n";
+	}
+
+	inline void disminuirTam() {
+		Vector3 aux = size + Vector3(-2);
+		if (aux.x > 0 && aux.y > 0 && aux.z > 0) {
+			size = aux;
+			volume = size.x * size.y * size.z;
+			DeregisterRenderItem(renderItem);
+			physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(size));
+			renderItem = new RenderItem(shape, &pose, color);
+		}
+	}
+
+	inline void aumentarTam() {
+		size += Vector3(2);
+		volume = size.x * size.y * size.z;
+		DeregisterRenderItem(renderItem);
+		physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(size));
+		renderItem = new RenderItem(shape, &pose, color);
+	}
+
 	inline float getMasa() {
 		// la letra 'e' significa que se trata de notación científica
 		// por ejemplo, 1e-10 es 1*10^(-10)
@@ -132,7 +168,7 @@ public:
 	}
 
 	inline float getLength() const {
-		return height;
+		return size.y;
 	}
 
 	inline float getVolume() const {

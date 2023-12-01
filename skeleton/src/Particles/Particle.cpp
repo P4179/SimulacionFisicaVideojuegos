@@ -44,7 +44,7 @@ void Particle::calculateSimulatedPhysics(ParticleType type, Vector3 acReal, floa
 
 // NO SE UTILIZA: INVERSO DE LA MASA, ALTURA, VOLUMEN
 Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius, Vector4 color, ParticleType type) :
-	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), radius(radius) {
+	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), radius(radius), color(color) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
 	commonConstructor(shape, color, vSimulada);
@@ -59,18 +59,18 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 // NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA, ALTURA, VOLUMEN
 Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius, Vector4 color) :
 	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
-	elapsedTime(0), force(Vector3(0)), radius(radius) {
+	elapsedTime(0), force(Vector3(0)), radius(radius), color(color) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
 	commonConstructor(shape, color, vSimulada);
 }
 
 // NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA, RADIO
-Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float height, float volume, Vector4 color) :
+Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, Vector3 size, Vector4 color) :
 	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
-	elapsedTime(0), force(Vector3(0)), height(height), volume(volume) {
+	elapsedTime(0), force(Vector3(0)), size(size), volume(size.x* size.y* size.z), color(color) {
 
-	physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(height, height, height));
+	physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(size));
 	commonConstructor(shape, color, vSimulada);
 }
 

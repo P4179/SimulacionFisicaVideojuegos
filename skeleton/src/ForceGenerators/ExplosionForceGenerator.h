@@ -38,15 +38,19 @@ public:
 			render = new RenderItem(shape, &center, INFLUENCE_AREA_COLOR);
 			shape->release();
 		}
+		else {
+			render = nullptr;
+		}
 	}
 
 	virtual ~ExplosionForceGenerator() {
-		if (show) {
+		if (show && render != nullptr) {
 			DeregisterRenderItem(render);
 		}
 	}
 
 	virtual void updateForce(Particle* particle, double t) {
+		cout << show << "\n";
 		if (explode) {
 			elapsedTime += t;
 			radius = originalRadius + SOUND_AIR_SPEED * elapsedTime;

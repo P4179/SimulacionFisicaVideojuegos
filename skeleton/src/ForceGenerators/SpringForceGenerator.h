@@ -8,7 +8,7 @@ protected:
 	// constante elastica del muelle
 	// determina la intensidad de la fuerza
 	double k;
-	// longitud del muelle cuando esta en reposo
+	// longitud del muelle cuando esta en reposo (no se ha deformado)
 	double restingLength;
 	Particle* other;
 
@@ -41,11 +41,12 @@ public:
 		if (k < 0) {
 			k = 0;
 		}
-		cout << "K: " + to_string((int)k) << "\n";
+		cout << this->getName() <<": K = " + to_string((int)k) << "\n";
 	}
 
 	inline void increaseK() {
 		++k;
 		cout << "K: " + to_string((int)k) << "\n";
+		cout << this->getName() << ": K = " + to_string((int)k) << "\n";
 	}
 };

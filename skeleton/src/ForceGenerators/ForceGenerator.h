@@ -15,6 +15,9 @@ protected:
 	ForceGenerator(string name, double duration = -1.0) : name(name), duration(duration), time(0.0) {}
 
 public:
+	// virtual para que se llame a la de las clases hijas
+	virtual ~ForceGenerator() {}
+
 	virtual void updateForce(Particle* particle, double t) = 0;
 
 	// devuelve true si ha pasado todo el tiempo que el generador puede estar vivo

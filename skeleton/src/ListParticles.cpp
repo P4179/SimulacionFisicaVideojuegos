@@ -1,6 +1,5 @@
 #include "Particles/Particle.h"
 #include "ListParticles.h"
-#include "ParticleForceRegistry.h"
 #include "checkML.h"
 #include <iostream>
 
@@ -24,6 +23,7 @@ ListParticles::~ListParticles() {
 	kill();
 }
 
+/*
 void ListParticles::add(list<Particle*> newListP, const vector<ForceGenerator*>& forceGens) {
 	for (auto particle : newListP) {
 		listP.push_back(particle);
@@ -33,6 +33,7 @@ void ListParticles::add(list<Particle*> newListP, const vector<ForceGenerator*>&
 		}
 	}
 }
+*/
 
 void ListParticles::add(list<Particle*> newListP) {
 	for (auto particle : newListP) {

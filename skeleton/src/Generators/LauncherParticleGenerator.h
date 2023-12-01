@@ -20,22 +20,21 @@ public:
 
 	void launch(ListParticles* particles,
 		const vector<std::pair<ForceGenerator*, Particle*>>& forcesParticles,
-		const vector<ForceGenerator*>& forceGens = vector<ForceGenerator*>()) {
+		const unordered_set<ForceGenerator*>& forceGens = unordered_set<ForceGenerator*>()) {
 
 		// se asignan los nuevos valores del lanzador
 		this->forcesParticles = forcesParticles;
 		this->forceGens = forceGens;
 
-		// se lanza
 		// resto de fuerzas que queremos aplicar + fuerza que tiene asociada esa particula
-		vector<ForceGenerator*> fGens(forceGens.size() + 1);
+		vector<ForceGenerator*> currentForces(forceGens.size() + 1);
 		// se inserta el resto de fuerzas
-		for (int i = 0; i < forceGens.size(); ++i) {
-			fGens[i] = forceGens[i];
-		}
+		// copy los elementos de un contenedor de origen a uno de destino (tiene que haber espacio suficiente)
+		std::copy(forceGens.begin(), forceGens.end(), currentForces.begin());
 		for (auto forceParticle : this->forcesParticles) {
-			fGens[fGens.size() - 1] = forceParticle.first;
-			particles->add({ forceParticle.second }, fGens);
+			// se inserta la fuerza de muelle que le corresponde a esa particula
+			currentForces[currentForces.size() - 1] = forceParticle.first;
+			particles->add({ forceParticle.second }, currentForces);
 		}
 	}
 
@@ -48,8 +47,27 @@ public:
 		}
 	}
 
-	inline void clear() {
+	virtual inline void clear() {
 		forcesParticles.clear();
-		forceGens.clear();
+		ForceParticleGenerator::clear();
+	}
+
+	vector<Particle*> findParticleByForce(ForceGenerator* force) {
+		vector<Particle*> particles;
+
+		// fuerza comun, se devuelven todas las particulas
+		if (forceGens.find(force) != forceGens.end()) {
+			for (auto forceParticle : forcesParticles) {
+				particles.push_back(forceParticle.second);
+			}
+		}
+		else {
+			for (auto forceParticle : forcesParticles) {
+				if (forceParticle.first == force) {
+					particles.push_back(forceParticle.second);
+				}
+			}
+		}
+		return particles;
 	}
 };

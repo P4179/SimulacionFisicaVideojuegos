@@ -4,28 +4,18 @@
 class BuoyancyForceGenerator : public ForceGenerator {
 private:
 	const float GRAVITY = 9.8;
-	const float LIQUID_HEIGHT = 10;
-	const float LIQUID_SIZE = 50;
-	const Vector4 COLOR = Vector4(0.212, 0.643, 1, 1);
+	const float LIQUID_SIZE = 100;
+	const Vector4 COLOR = Vector4(0.212, 0.643, 0.9, 1);
 	float h0;	// altura del liquido
 	float density;	// densidad del agua
-	RenderItem* renderItem;
 
 public:
-	BuoyancyForceGenerator(string name, Vector3 liquidPos, float density, double duration = -1.0) :
-		ForceGenerator(name, duration), h0(liquidPos.y), density(density) {
+	BuoyancyForceGenerator(string name, float liquidPosY, float liquidHeight, float density, double duration = -1.0) :
+		ForceGenerator(name, duration), h0(liquidPosY + liquidHeight), density(density) {
 
-		// la caja se inicializa con las mitades de la altura, anchura y profundidad
-		physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(LIQUID_SIZE, LIQUID_HEIGHT, LIQUID_SIZE));
-		// geometría, posición, color (R, G, B, alpha)
-		// RGB va desde 0 hasta 1
-		// el new ya hace el register
-		physx::PxTransform pose(liquidPos.x, liquidPos.y, liquidPos.z);
-		renderItem = new RenderItem(shape, &pose, COLOR);
-	}
-
-	virtual ~BuoyancyForceGenerator() {
-		DeregisterRenderItem(renderItem);
+		// agua
+		// si se crea directamente, se producen errores muy raros
+		new Particle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(LIQUID_SIZE, liquidHeight, LIQUID_SIZE), COLOR);
 	}
 
 	virtual void updateForce(Particle* particle, double t) {

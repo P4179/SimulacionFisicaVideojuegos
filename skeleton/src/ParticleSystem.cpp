@@ -18,15 +18,15 @@ forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE), springFg(nullptr) {
 
 	// nunca se va a iniciar
 	// solo se guarda para utilizar a posteriori
-	launcherParticle = addParticleGenerator<LauncherParticleGen>(Launch, false);
+	launcherParticleGen = addParticleGenerator<LauncherParticleGen>(LaunchGen, false);
 }
 
 void ParticleSystem::generateForceGens() {
-	forceGenerators[GravityGen] = new GravityForceGenerator("GravityGen", gravity, -1);
-	forceGenerators[WindGen] = new WindForceGenerator("WindGen", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1, true, false);
-	forceGenerators[WhirlWindGen] = new WhirlwindForceGenerator("WhirlwindGen", Vector3(0, 0, 0), 800, 50, 50, 20, false, false);
-	explosionGen = new ExplosionForceGenerator("ExplosionGen", Vector3(0, 50, 0), 20, 3000, 15, -1, false);
-	forceGenerators[ExplosionGen] = explosionGen;
+	forceGenerators[GravityFg] = new GravityForceGenerator("GravityFg", gravity, -1);
+	forceGenerators[WindFg] = new WindForceGenerator("WindFg", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1, true, false);
+	forceGenerators[WhirlWindFg] = new WhirlwindForceGenerator("WhirlwindFg", Vector3(0, 0, 0), 800, 50, 50, 20, false, false);
+	explosionFg = new ExplosionForceGenerator("ExplosionFg", Vector3(0, 50, 0), 20, 3000, 15, -1, false);
+	forceGenerators[ExplosionFg] = explosionFg;
 
 	ParticleInfo info;
 	info.damping = DAMPING;
@@ -37,8 +37,8 @@ void ParticleSystem::generateForceGens() {
 	info.radius = 1.4;
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	fuerzaDefGenParticula = addParticleGenerator<ForceParticleGenerator>(FuerzaDefecto, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
-	cambiarFuerzasGen = fuerzaDefGenParticula;	// se setea por si se lanzara este generador desde el principio
+	aplicarFuerzaGen = addParticleGenerator<ForceParticleGenerator>(AplicarFuerzaGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
+	cambiarFuerzasGen = aplicarFuerzaGen;	// se setea por si se lanzara este generador desde el principio
 
 	info.invMasa = 0.035;
 	info.color = Vector4(0.871, 0.804, 0.157, 1);
@@ -46,8 +46,8 @@ void ParticleSystem::generateForceGens() {
 	info.radius = 1.2;
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	auto gens = { forceGenerators[WindGen] };
-	addParticleGenerator<ForceParticleGenerator>(Viento1, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	auto gens = { forceGenerators[WindFg] };
+	addParticleGenerator<ForceParticleGenerator>(Viento1Gen, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
 	info.invMasa = 0.015;
 	info.color = Vector4(0.871, 0.569, 0.157, 1);
@@ -55,8 +55,8 @@ void ParticleSystem::generateForceGens() {
 	info.radius = 1.2;
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	gens = { forceGenerators[WindGen] };
-	addParticleGenerator<ForceParticleGenerator>(Viento2, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	gens = { forceGenerators[WindFg] };
+	addParticleGenerator<ForceParticleGenerator>(Viento2Gen, true, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
 	info.invMasa = 0.03;
 	info.color = Vector4(0.51, 0.749, 0.584, 1);
@@ -64,10 +64,10 @@ void ParticleSystem::generateForceGens() {
 	info.radius = 1.3;
 	info.vSimulada = 40;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	gens = { forceGenerators[WhirlWindGen] };
+	gens = { forceGenerators[WhirlWindFg] };
 	// LAS PARTÍCULAS NO SE MUEVEN, SINO QUE ES LA PROPIA FUERZA DEL TORBELLINO EL QUE HACE TODO EL MOVIMIENTO
 	// EL GENERADOR SOLO COLAS PARTÍCULAS EN UNA ZONA Y LUEGO, LAS FUERZAS LAS MUEVE
-	addParticleGenerator<ForceParticleGenerator>(Torbellino, false, Vector3(0, 0, 0), Vector3(0, 0, 0), info, 0.3, 1, Vector3(0, 0, 0), Vector3(10, 0, 10), gens);
+	addParticleGenerator<ForceParticleGenerator>(TorbellinoGen, false, Vector3(0, 0, 0), Vector3(0, 0, 0), info, 0.3, 1, Vector3(0, 0, 0), Vector3(10, 0, 10), gens);
 
 	info.invMasa = 0.02;
 	info.color = Vector4(0.851, 0.404, 0.282, 1);
@@ -75,8 +75,8 @@ void ParticleSystem::generateForceGens() {
 	info.radius = 1;
 	info.vSimulada = 30;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	gens = { forceGenerators[ExplosionGen] };
-	addParticleGenerator<ForceParticleGenerator>(Explosion, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	gens = { forceGenerators[ExplosionFg] };
+	addParticleGenerator<ForceParticleGenerator>(ExplosionGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 }
 
 void ParticleSystem::generateNormalGens() {
@@ -89,19 +89,19 @@ void ParticleSystem::generateNormalGens() {
 	info.radius = 1.4;
 	info.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion
-	addParticleGenerator<UniformParticleGenerator>(Fuente, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
+	addParticleGenerator<UniformParticleGenerator>(FuenteGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
 
 	info.color = Vector4(0.18, 0.596, 0.839, 1);
 	info.lifeTime = 20;
 	info.radius = 1;
 	info.vSimulada = 40.0;
-	addParticleGenerator<UniformParticleGenerator>(Manguera, false, Vector3(-40, 10, 0), Vector3(0.6, 1, 0), info, 0.3, 1, Vector3(0, 0.3, 0.2), Vector3(1, 0, 1));
+	addParticleGenerator<UniformParticleGenerator>(MangueraGen, false, Vector3(-40, 10, 0), Vector3(0.6, 1, 0), info, 0.3, 1, Vector3(0, 0.3, 0.2), Vector3(1, 0, 1));
 
 	info.color = Vector4(0.361, 0.529, 0.729, 1);
 	info.lifeTime = 20;
 	info.radius = 0.6;
 	info.vSimulada = 35.0;
-	addParticleGenerator<UniformParticleGenerator>(LLuvia, false, Vector3(0, 65, 0), Vector3(0, -1, 0), info, 0.5, 3, Vector3(0, 0, 0), Vector3(20, 2, 20));
+	addParticleGenerator<UniformParticleGenerator>(LLuviaGen, false, Vector3(0, 65, 0), Vector3(0, -1, 0), info, 0.5, 3, Vector3(0, 0, 0), Vector3(20, 2, 20));
 
 	// si el alpha de la bola es 1, la pantalla se pone negra
 	info.color = Vector4(0.596, 0.929, 0.855, 1);
@@ -110,7 +110,7 @@ void ParticleSystem::generateNormalGens() {
 	info.vSimulada = 45.0;
 	// la vel inicial y las direcciones de velocidad solo sirven para indicar cual incrementa más y cual incrementa menos
 	// pues luego, se normalizara el vector y se multiplicar por la vSimulada
-	mangueraGaussiana = addParticleGenerator<GaussianParticleGenerator>(MangueraGaussiana, false, Vector3(-60, 10, 0), Vector3(0.7, 0.4, 0), info, 0.5, 3, Vector3(0.03, 0.02, 0.05), Vector3(0, 0, 0.5));
+	mangueraGaussianGen = addParticleGenerator<GaussianParticleGenerator>(MangueraGaussianaGen, false, Vector3(-60, 10, 0), Vector3(0.7, 0.4, 0), info, 0.5, 3, Vector3(0.03, 0.02, 0.05), Vector3(0, 0, 0.5));
 
 	info.color = Vector4(0.518, 0.635, 0.678, 0.7);
 	info.lifeTime = 20;
@@ -118,7 +118,7 @@ void ParticleSystem::generateNormalGens() {
 	info.vSimulada = 8;
 	// la vel inicial y las direcciones de velocidad solo sirven para indicar cual incrementa más y cual incrementa menos
 	// pues luego, se normalizara el vector y se multiplicar por la vSimulada
-	addParticleGenerator<GaussianParticleGenerator>(Niebla, false, Vector3(0, 30, 0), Vector3(0, 1, 0), info, 0.7, 4, Vector3(2.5, 0.02, 2.5), Vector3(15, 12, 15));
+	addParticleGenerator<GaussianParticleGenerator>(NieblaGen, false, Vector3(0, 30, 0), Vector3(0, 1, 0), info, 0.7, 4, Vector3(2.5, 0.02, 2.5), Vector3(15, 12, 15));
 
 	generateFireworkSystem();
 }
@@ -133,28 +133,28 @@ void ParticleSystem::generateFireworkSystem() {
 	info.radius = 1.3;
 	info.vSimulada = 25.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
-	auto fireGen = addFireworkGenerator<FireworkGenerator>(Fire1, false, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 2, Vector3(0.1, 0.2, 0.1), Vector3(1, 1, 1));
+	auto fireGen = addFireworkGenerator<FireworkGenerator>(Fire1Gen, false, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 2, Vector3(0.1, 0.2, 0.1), Vector3(1, 1, 1));
 
 	info.color = Vector4(0.196, 0.871, 0.153, 1);
 	info.lifeTime = 2.3;
 	info.radius = 0.9;
 	info.vSimulada = 20.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
-	fireGen = addFireworkGenerator<FireworkGenerator>(Fire2, false, true, Vector3(0, 20, 0), Vector3(0, 1, 0), info, 4, Vector3(0.8, 0.1, 0.8), Vector3(1, 1, 1));
+	fireGen = addFireworkGenerator<FireworkGenerator>(Fire2Gen, false, true, Vector3(0, 20, 0), Vector3(0, 1, 0), info, 4, Vector3(0.8, 0.1, 0.8), Vector3(1, 1, 1));
 
 	info.color = Vector4(0.612, 0.216, 0.91, 1);
 	info.lifeTime = 2.9;
 	info.radius = 1;
 	info.vSimulada = 25.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
-	fireGen = addFireworkGenerator<FireworkGenerator>(Fire3, false, true, Vector3(0, 20, 0), Vector3(0.8, 0.8, 0), info, 2, Vector3(0.3, 0, 0.5), Vector3(1, 1, 1));
+	fireGen = addFireworkGenerator<FireworkGenerator>(Fire3Gen, false, true, Vector3(0, 20, 0), Vector3(0.8, 0.8, 0), info, 2, Vector3(0.3, 0, 0.5), Vector3(1, 1, 1));
 
 	info.color = Vector4(0.961, 0.118, 0.808, 1);
 	info.lifeTime = 2.7;
 	info.radius = 0.8;
 	info.vSimulada = 30.0;
 	// pos original, velocidad original, info particula, numero particulas, variacion velocidad, variacion posicion
-	fireGen = addFireworkGenerator<FireworkGenerator>(Fire4, false, true, Vector3(0, 20, 0), Vector3(-0.7, 0.6, 0), info, 3, Vector3(0.4, 0.2, 0.1), Vector3(1, 1, 1));
+	fireGen = addFireworkGenerator<FireworkGenerator>(Fire4Gen, false, true, Vector3(0, 20, 0), Vector3(-0.7, 0.6, 0), info, 3, Vector3(0.4, 0.2, 0.1), Vector3(1, 1, 1));
 
 	info.color = Vector4(0.922, 0.906, 0.18, 1);
 	info.lifeTime = 1.5;
@@ -162,21 +162,58 @@ void ParticleSystem::generateFireworkSystem() {
 	info.vSimulada = 35;
 	try {
 		// los dos últimos vectores, que definen el plano donde se crea el círculo deben ser perpendiculares y unitarios
-		addFireworkGenerator<CircleGenerator>(Circle, false, false, Vector3(-10, 30, 0), info, 20, Vector3(0.1, 0.1, 0), Vector3(0, 1, 0), Vector3(1, 0, 0));
+		addFireworkGenerator<CircleGenerator>(CircleGen, false, false, Vector3(-10, 30, 0), info, 20, Vector3(0.1, 0.1, 0), Vector3(0, 1, 0), Vector3(1, 0, 0));
 	}
 	catch (exception e) {
 		cout << "It could not be created a circle generator" << "\n";
 	}
 }
 
-void ParticleSystem::generateAnchorSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, vector<ForceGenerator*>& forceGens) {
+void ParticleSystem::generateAnchorSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
 	Particle* particle1 = new Particle(Vector3(-30, 20, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0);
 	Particle* particle2 = new Particle(Vector3(30, 30, 0), Vector3(0, 0, 0), 0.1, DAMPING, -1, 0, 4, Vector4(0.322, 0.702, 0.361, 1));
-	springFg = new AnchoredSpringForceGenerator("AnchoredSpringFg", 700, 10, Vector3(0, 50, 0));
-	forceGenerators[AnchorGen] = springFg;
-	forceParticles.push_back({ forceGenerators[AnchorGen], particle1 });
-	forceParticles.push_back({ forceGenerators[AnchorGen], particle2 });
-	forceGens.push_back(forceGenerators[GravityGen]);
+	springFg = new AnchoredSpringForceGenerator("AnchoredSpringFg", 700, 20, Vector3(0, 50, 0));
+	forceGenerators[AnchorFg] = springFg;
+	forceParticles.push_back({ forceGenerators[AnchorFg], particle1 });
+	forceParticles.push_back({ forceGenerators[AnchorFg], particle2 });
+
+	forceGens.insert(forceGenerators[GravityFg]);
+}
+
+void ParticleSystem::generateSpringSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+	Particle* particle1 = new Particle(Vector3(-30, 70, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0);
+	Particle* particle2 = new Particle(Vector3(30, 70, 0), Vector3(0, 0, 0), 0.08, DAMPING, -1, 0, 4, Vector4(0.322, 0.702, 0.361, 1));
+
+	forceGenerators[Spring1Fg] = new SpringForceGenerator("Spring1Fg", 1500, 30, particle2);
+	forceParticles.push_back({ forceGenerators[Spring1Fg], particle1 });
+	springFg = new SpringForceGenerator("Spring2Fg", 700, 30, particle1);
+	forceGenerators[Spring2Fg] = springFg;
+	forceParticles.push_back({ forceGenerators[Spring2Fg], particle2 });
+
+	forceGens.insert(forceGenerators[GravityFg]);
+}
+
+void ParticleSystem::generateElasticRubberSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+	Particle* particle1 = new Particle(Vector3(-40, 65, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 2.5, Vector4(0.812, 0.365, 0.765, 1));
+	Particle* particle2 = new Particle(Vector3(40, 65, 0), Vector3(0, 0, 0), 0.1, DAMPING, -1, 0, 4, Vector4(0.322, 0.702, 0.361, 1));
+
+	forceGenerators[ElasticRubber1Fg] = new ElasticRubberForceGenerator("ElasticRubber1Fg", 650, 40, particle2);
+	forceParticles.push_back({ forceGenerators[ElasticRubber1Fg], particle1 });
+	springFg = new ElasticRubberForceGenerator("ElasticRubber2Fg", 700, 40, particle1);
+	forceGenerators[ElasticRubber2Fg] = springFg;
+	forceParticles.push_back({ forceGenerators[ElasticRubber2Fg], particle2 });
+
+	forceGens.insert(forceGenerators[GravityFg]);
+}
+
+void ParticleSystem::generateBuoyancySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+	Particle* particle = new Particle(Vector3(0, 100, 0), Vector3(0, 0, 0), 0.0001, DAMPING, -1, 0, Vector3(8, 8, 8));
+	//Particle* particle2 = new Particle(Vector3(0, 90, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 4);
+	forceGenerators[BuoyanceFg] = new BuoyancyForceGenerator("BuoyanceFg", 0, 30, WATER_DENSITY);
+	forceParticles.push_back({ forceGenerators[BuoyanceFg], particle });
+	//forceParticles.push_back({ forceGenerators[BuoyanceFg], particle2 });
+
+	forceGens.insert(forceGenerators[GravityFg]);
 }
 
 ParticleSystem::~ParticleSystem() {
@@ -217,103 +254,171 @@ void ParticleSystem::integrate(double t) {
 	}
 }
 
+/*
+* ocupadas
+* 1, 2, 3, 4, 5, 7, 8, 9, 0, O, P		PRACTICA 4	
+* Z, X, C								PRACTICA 3
+* V, B, N, M, J, K, L, M				PRACTICA 2
+* T, Y, U								CAMBIAR FUERZAS
+* 
+*/
 void ParticleSystem::keyPressed(int __cdecl key) {
 	switch (key) {
+		// muelle anclado a un objeto estatico
 	case '1':
-		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, vector<ForceGenerator*>& forceGens) {
+		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
 			generateAnchorSystem(forceParticles, forceGens);
 			});
 		break;
+		// particulas unidas mediante un muelle
 	case '2':
-
+		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+			generateSpringSystem(forceParticles, forceGens);
+			});
 		break;
+		// goma elastica
 	case '3':
-
+		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+			generateElasticRubberSystem(forceParticles, forceGens);
+			});
+		break;
+		// slinky
+		// flotacion
+	case '5':
+		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+			generateBuoyancySystem(forceParticles, forceGens);
+			});
 		break;
 	case '4':
-
+		cout << "hola" << "\n";
 		break;
-	case '5':
-
-		break;
-	case '9':
+		// disminuir k de los muelles
+	case '7':
 		if (springFg != nullptr) {
 			springFg->decreaseK();
 		}
 		break;
-	case '0':
+		// aumentar k de los muelles
+	case '8':
 		if (springFg != nullptr) {
 			springFg->increaseK();
 		}
 		break;
-	case 'C':
-		changeActiveGen(FuerzaDefecto);
-		cambiarFuerzasGen = fuerzaDefGenParticula;
-		break;
-	case 'V':
-		selectNextGen(FuerzaDefecto, Explosion);
-		if (isGenActive(FuerzaDefecto)) {
-			cambiarFuerzasGen = fuerzaDefGenParticula;
+		// disminuir masa para la flotacion
+	case '9':
+		if (forceGenerators[BuoyanceFg] != nullptr) {
+			for (auto particle : launcherParticleGen->findParticleByForce(forceGenerators[BuoyanceFg])) {
+				particle->disminuirMasa();
+			}
 		}
 		break;
-	case 'B':
-		if (isGenActive(Explosion)) {
-			explosionGen->enableExplosion();
-		}
-	case 'I':
-		if (isGenActive(FuerzaDefecto) || isGenActive(Launch)) {
-			this->toggleForce(cambiarFuerzasGen, GravityGen);
+		// aumentar masa para la flotacion
+	case '0':
+		if (forceGenerators[BuoyanceFg] != nullptr) {
+			for (auto particle : launcherParticleGen->findParticleByForce(forceGenerators[BuoyanceFg])) {
+				particle->aumentarMasa();
+			}
 		}
 		break;
+		// disminuir tam y volumen para la flotacion
 	case 'O':
-		if (isGenActive(FuerzaDefecto) || isGenActive(Launch)) {
-			this->toggleForce(cambiarFuerzasGen, WindGen);
+		if (forceGenerators[BuoyanceFg] != nullptr) {
+			for (auto particle : launcherParticleGen->findParticleByForce(forceGenerators[BuoyanceFg])) {
+				particle->disminuirTam();
+			}
 		}
 		break;
+		// aumentar tam y volumen para la flotacion
 	case 'P':
-		if (isGenActive(FuerzaDefecto) || isGenActive(Launch)) {
-			this->toggleForce(cambiarFuerzasGen, WhirlWindGen);
+		if (forceGenerators[BuoyanceFg] != nullptr) {
+			for (auto particle : launcherParticleGen->findParticleByForce(forceGenerators[BuoyanceFg])) {
+				particle->aumentarTam();
+			}
 		}
 		break;
+		// generadores de particulas con fuerzas
 	case 'Z':
-		changeActiveGen(Fuente);
+		changeActiveGen(AplicarFuerzaGen);
+		cambiarFuerzasGen = aplicarFuerzaGen;
 		break;
 	case 'X':
-		selectNextGen(Fuente, Niebla);
+		selectNextGen(AplicarFuerzaGen, ExplosionGen);
+		if (isGenActive(AplicarFuerzaGen)) {
+			cambiarFuerzasGen = aplicarFuerzaGen;
+		}
 		break;
+		// activar explosion
+	case 'C':
+		if (isGenActive(ExplosionGen)) {
+			explosionFg->enableExplosion();
+		}
 		break;
+		// añadir/quitar gravedad
+	case 'T':
+		if (isGenActive(AplicarFuerzaGen) || isGenActive(LaunchGen)) {
+			this->toggleForce(cambiarFuerzasGen, GravityFg);
+		}
+		break;
+		// añadir/quitar viento
+	case 'Y':
+		if (isGenActive(AplicarFuerzaGen) || isGenActive(LaunchGen)) {
+			this->toggleForce(cambiarFuerzasGen, WindFg);
+		}
+		break;
+		// añadir/quitar torbellino
+	case 'U':
+		if (isGenActive(AplicarFuerzaGen) || isGenActive(LaunchGen)) {
+			this->toggleForce(cambiarFuerzasGen, WhirlWindFg);
+		}
+		break;
+		// generadores de la practica 2
+	case 'V':
+		changeActiveGen(FuenteGen);
+		break;
+	case 'B':
+		selectNextGen(FuenteGen, NieblaGen);
+		break;
+		// lanzar firework 1
 	case 'N':
-		changeActiveGen(Fire1);
+		changeActiveGen(Fire1Gen);
 		break;
+		// lanzar firework circular
 	case 'M':
-		changeActiveGen(Circle);
+		changeActiveGen(CircleGen);
 		break;
+		// disminuir la velocida simulada para la manguera gaussiana
 	case 'H':
-		if (isGenActive(MangueraGaussiana)) {
-			getParticleGenerator(MangueraGaussiana)->decreaseSimulatedV();
+		if (isGenActive(MangueraGaussianaGen)) {
+			getParticleGenerator(MangueraGaussianaGen)->decreaseSimulatedV();
 		}
 		break;
+		// aumentar la velocidad simulada para la manguera gaussiana
 	case 'J':
-		if (isGenActive(MangueraGaussiana)) {
-			getParticleGenerator(MangueraGaussiana)->increaseSimulatedV();
+		if (isGenActive(MangueraGaussianaGen)) {
+			getParticleGenerator(MangueraGaussianaGen)->increaseSimulatedV();
 		}
 		break;
+		// disminuir el ancho de la manguera gaussiana
 	case 'K':
-		if (isGenActive(MangueraGaussiana)) {
-			auto stdDevVel = mangueraGaussiana->getStdDevVel();
+		if (isGenActive(MangueraGaussianaGen)) {
+			auto stdDevVel = mangueraGaussianGen->getStdDevVel();
 			stdDevVel.z -= 0.1;
 			if (stdDevVel.z < 0) {
 				stdDevVel.z = 0;
 			}
-			mangueraGaussiana->setStdDevVel(stdDevVel);
+			mangueraGaussianGen->setStdDevVel(stdDevVel);
 		}
 		break;
+		// aumentar el ancho de la manguera guassiana
 	case 'L':
-		if (isGenActive(MangueraGaussiana)) {
-			auto stdDevVel = mangueraGaussiana->getStdDevVel();
+		if (isGenActive(MangueraGaussianaGen)) {
+			auto stdDevVel = mangueraGaussianGen->getStdDevVel();
 			stdDevVel.z += 0.1;
-			mangueraGaussiana->setStdDevVel(stdDevVel);
+			mangueraGaussianGen->setStdDevVel(stdDevVel);
 		}
+		break;
+	default:
+
 		break;
 	}
 }
