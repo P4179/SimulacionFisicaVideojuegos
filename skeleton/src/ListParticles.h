@@ -23,23 +23,19 @@ public:
 	template<typename T>
 	void add(list<Particle*> newListP, const T& forceGens) {
 		for (auto particle : newListP) {
-			listP.push_back(particle);
+			// si la particula no se ha encontrado se mete
+			// sino, solo se le ponen las nuevas fuerzas
+			if (std::find(listP.begin(), listP.end(), particle) == listP.end()) {
+				listP.push_back(particle);
+			}
 
-			for (auto& forceGen : forceGens) {
+			for (auto forceGen : forceGens) {
 				registry->addRegistry(forceGen, particle);
 			}
-
-			/*
-			for (int i = 0; i < forceGens.size(); ++i) {
-				registry->addRegistry(forceGens[i], particle);
-			}
-			*/
 		}
 	}
 
 	void add(list<Particle*> newListP);
-
-	void registerForceParticle(Particle* particle, ForceGenerator* fg);
 
 	void kill();
 

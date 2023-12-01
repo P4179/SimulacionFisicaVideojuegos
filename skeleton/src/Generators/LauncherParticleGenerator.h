@@ -41,7 +41,7 @@ public:
 	inline void addForce(ForceGenerator* force, ListParticles* particles) override {
 		if (!forcesParticles.empty()) {
 			for (auto forceParticle : forcesParticles) {
-				particles->registerForceParticle(forceParticle.second, force);
+				particles->add<vector<ForceGenerator*>>({ forceParticle.second }, { force });
 			}
 			ForceParticleGenerator::addForce(force, particles);
 		}

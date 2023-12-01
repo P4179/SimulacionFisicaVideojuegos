@@ -206,6 +206,47 @@ void ParticleSystem::generateElasticRubberSystem(vector<std::pair<ForceGenerator
 	forceGens.insert(forceGenerators[GravityFg]);
 }
 
+void ParticleSystem::generateSlinkySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+	Particle* particle1 = new Particle(Vector3(0, 75, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 2, Vector4(0.58, 0, 0.83, 1));
+	Particle* particle2 = new Particle(Vector3(0, 60, 0), Vector3(0, 0, 0), 0.15, DAMPING, -1, 0, 3, Vector4(0.29, 0, 0.51, 1));
+	Particle* particle3 = new Particle(Vector3(0, 45, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 2, Vector4(0, 0, 1, 1));
+	Particle* particle4 = new Particle(Vector3(0, 30, 0), Vector3(0, 0, 0), 0.15, DAMPING, -1, 0, 3, Vector4(0, 1, 0, 1));
+	Particle* particle5 = new Particle(Vector3(0, 15, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 2, Vector4(1, 1, 0, 1));
+	Particle* particle6 = new Particle(Vector3(0, 0, 0), Vector3(0, 0, 0), 0.15, DAMPING, -1, 0, 3, Vector4(1, 0.498, 0, 1));
+
+	// particula 1-2
+	forceGenerators[Slinky1Fg] = new SpringForceGenerator("Slink1Fg", 600, 10, particle2);
+	forceParticles.push_back({ forceGenerators[Slinky1Fg], particle1 });
+	forceGenerators[Slinky1BisFg] = new SpringForceGenerator("Slink1BisFg", 600, 10, particle1);
+	forceParticles.push_back({ forceGenerators[Slinky1BisFg], particle2 });
+
+	// particula 2-3
+	forceGenerators[Slinky2Fg] = new SpringForceGenerator("Slink2Fg", 700, 10, particle3);
+	forceParticles.push_back({ forceGenerators[Slinky2Fg], particle2 });
+	forceGenerators[Slinky2BisFg] = new SpringForceGenerator("Slink2BisFg", 700, 10, particle2);
+	forceParticles.push_back({ forceGenerators[Slinky2BisFg], particle3 });
+
+	// particula 3-4
+	forceGenerators[Slinky3Fg] = new SpringForceGenerator("Slink3Fg", 800, 10, particle4);
+	forceParticles.push_back({ forceGenerators[Slinky3Fg], particle3 });
+	forceGenerators[Slinky3BisFg] = new SpringForceGenerator("Slink3BisFg", 800, 10, particle3);
+	forceParticles.push_back({ forceGenerators[Slinky3BisFg], particle4 });
+
+	// particula 4-5
+	forceGenerators[Slinky4Fg] = new SpringForceGenerator("Slink4Fg", 900, 10, particle5);
+	forceParticles.push_back({ forceGenerators[Slinky4Fg], particle4 });
+	forceGenerators[Slinky4BisFg] = new SpringForceGenerator("Slink4BisFg", 900, 10, particle4);
+	forceParticles.push_back({ forceGenerators[Slinky4BisFg], particle5 });
+
+	// particula 5-6
+	forceGenerators[Slinky5Fg] = new SpringForceGenerator("Slink5Fg", 1000, 10, particle6);
+	forceParticles.push_back({ forceGenerators[Slinky5Fg], particle5 });
+	forceGenerators[Slinky5BisFg] = new SpringForceGenerator("Slink5BisFg", 1000, 10, particle5);
+	forceParticles.push_back({ forceGenerators[Slinky5BisFg], particle6 });
+
+	forceGens.insert(forceGenerators[GravityFg]);
+}
+
 void ParticleSystem::generateBuoyancySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
 	Particle* particle = new Particle(Vector3(0, 100, 0), Vector3(0, 0, 0), 0.0001, DAMPING, -1, 0, Vector3(8, 8, 8));
 	//Particle* particle2 = new Particle(Vector3(0, 90, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 4);
@@ -290,7 +331,9 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 			});
 		break;
 	case '4':
-		cout << "hola" << "\n";
+		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+			generateSlinkySystem(forceParticles, forceGens);
+			});
 		break;
 		// disminuir k de los muelles
 	case '7':

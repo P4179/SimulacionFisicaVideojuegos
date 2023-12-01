@@ -59,6 +59,8 @@ protected:
 	}
 
 public:
+	virtual ~ParticleGenerator() {}
+
 	// devuelve una lista de partículas
 	virtual list<Particle*> generateParticles() = 0;
 

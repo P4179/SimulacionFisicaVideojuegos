@@ -40,7 +40,10 @@ enum ForceGens {
 	GravityFg, WindFg, WhirlWindFg, ExplosionFg,
 	// PRACTICA 3 --> cada vez que se cambia de generador, si estan creadas, se eliminan
 	// Se hace asi porque tienen objetos propios que se seguirian mostrando en escena
-	AnchorFg, Spring1Fg, Spring2Fg, ElasticRubber1Fg, ElasticRubber2Fg, BuoyanceFg,
+	AnchorFg, Spring1Fg, Spring2Fg, ElasticRubber1Fg, ElasticRubber2Fg,
+	Slinky1Fg, Slinky2Fg, Slinky3Fg, Slinky4Fg, Slinky5Fg,
+	Slinky1BisFg, Slinky2BisFg, Slinky3BisFg, Slinky4BisFg, Slinky5BisFg,
+	BuoyanceFg,
 	MAX_FORCES
 };
 
@@ -209,6 +212,8 @@ private:
 	void generateSpringSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
 
 	void generateElasticRubberSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
+
+	void generateSlinkySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
 
 	void generateBuoyancySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
 

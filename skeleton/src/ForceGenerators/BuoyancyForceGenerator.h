@@ -8,6 +8,7 @@ private:
 	const Vector4 COLOR = Vector4(0.212, 0.643, 0.9, 1);
 	float h0;	// altura del liquido
 	float density;	// densidad del agua
+	Particle* liquid;
 
 public:
 	BuoyancyForceGenerator(string name, float liquidPosY, float liquidHeight, float density, double duration = -1.0) :
@@ -15,7 +16,11 @@ public:
 
 		// agua
 		// si se crea directamente, se producen errores muy raros
-		new Particle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(LIQUID_SIZE, liquidHeight, LIQUID_SIZE), COLOR);
+		liquid = new Particle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(LIQUID_SIZE, liquidHeight, LIQUID_SIZE), COLOR);
+	}
+
+	virtual ~BuoyancyForceGenerator() {
+		delete liquid;
 	}
 
 	virtual void updateForce(Particle* particle, double t) {

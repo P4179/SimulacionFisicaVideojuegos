@@ -23,28 +23,9 @@ ListParticles::~ListParticles() {
 	kill();
 }
 
-/*
-void ListParticles::add(list<Particle*> newListP, const vector<ForceGenerator*>& forceGens) {
-	for (auto particle : newListP) {
-		listP.push_back(particle);
-
-		for (int i = 0; i < forceGens.size(); ++i) {
-			registry->addRegistry(forceGens[i], particle);
-		}
-	}
-}
-*/
-
 void ListParticles::add(list<Particle*> newListP) {
 	for (auto particle : newListP) {
 		listP.push_back(particle);
-	}
-}
-
-void ListParticles::registerForceParticle(Particle* particle, ForceGenerator* fg) {
-	// contiene la particula
-	if (std::find(listP.begin(), listP.end(), particle) != listP.end()) {
-		registry->addRegistry(fg, particle);
 	}
 }
 
