@@ -34,6 +34,39 @@
     <ClCompile Include="src\Generators\CircleGenerator.cpp">
       <Filter>SourceFiles\Generators</Filter>
     </ClCompile>
+    <ClCompile Include="src\ForceGenerators\AnchoredSpringForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForceGenerators\BuoyancyForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForceGenerators\ElasticRubberForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForceGenerators\ExplosionForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForceGenerators\GravityForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForceGenerators\SpringForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForceGenerators\WhirlwindForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForceGenerators\WindForceGenerator.cpp">
+      <Filter>SourceFiles\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generators\LauncherParticleGenerator.cpp">
+      <Filter>SourceFiles\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleForceRegistry.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShootManager.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -136,6 +169,9 @@
     </Filter>
     <Filter Include="HeaderFiles\ForceGenerators">
       <UniqueIdentifier>{48dc0aac-0b9f-4588-b868-34b368d42a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourceFiles\ForceGenerators">
+      <UniqueIdentifier>{61280eae-1bf4-4a30-b7ac-86e14ed65441}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
