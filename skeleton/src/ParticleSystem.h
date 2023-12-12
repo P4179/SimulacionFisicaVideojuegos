@@ -79,7 +79,7 @@ private:
 	Generators selectedGen;
 
 	vector<ForceGenerator*> forceGenerators;
-	ParticleForceRegistry* registry;
+	ParticleForceRegistry<Particle, ForceGenerator>* registry;
 
 	GaussianParticleGenerator* mangueraGaussianGen;
 	ExplosionForceGenerator* explosionFg;

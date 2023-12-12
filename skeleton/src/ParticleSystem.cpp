@@ -9,7 +9,7 @@ forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE), springFg(nullptr) {
 	// no salgan los mismo números
 	srand(time(NULL));
 
-	registry = new ParticleForceRegistry();
+	registry = new ParticleForceRegistry<Particle, ForceGenerator>();
 	particles = new ListParticles(1000, registry);
 
 	generateForceGens();

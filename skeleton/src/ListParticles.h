@@ -11,12 +11,12 @@ class ListParticles {
 private:
 	int maxParticles;
 	std::list<Particle*> listP;
-	ParticleForceRegistry* registry;
+	ParticleForceRegistry<Particle, ForceGenerator>* registry;
 
 	void removeExcess();
 
 public:
-	ListParticles(int maxParticles, ParticleForceRegistry* registry);
+	ListParticles(int maxParticles, ParticleForceRegistry<Particle, ForceGenerator>* registry);
 
 	virtual ~ListParticles();
 

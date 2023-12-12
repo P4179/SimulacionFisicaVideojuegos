@@ -1,3 +1,4 @@
+/*
 #include "ParticleForceRegistry.h"
 
 ParticleForceRegistry::ParticleForceRegistry() : particleForce(), forceParticle() {}
@@ -70,3 +71,4 @@ void ParticleForceRegistry::updateTime(double t) {
 		}
 	}
 }
+*/
