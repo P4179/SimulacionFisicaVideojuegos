@@ -67,6 +67,12 @@
     <ClCompile Include="src\ShootManager.cpp">
       <Filter>SourceFiles</Filter>
     </ClCompile>
+    <ClCompile Include="src\RBGenerators\RigidBodyGenerator.cpp">
+      <Filter>SourceFiles\RBGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RBStructure\RigidBodySystem.cpp">
+      <Filter>SourceFiles\RBStructure</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -146,6 +152,30 @@
     </ClInclude>
     <ClInclude Include="src\Singleton.h">
       <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RBStructure\RigidBodySystem.h">
+      <Filter>HeaderFiles\RBStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RigidBodies\StaticRigidBody.h">
+      <Filter>HeaderFiles\RigidBodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RigidBodies\BoxStaticRB.h">
+      <Filter>HeaderFiles\RigidBodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RigidBodies\DynamicRigidBody.h">
+      <Filter>HeaderFiles\RigidBodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RigidBodies\SphereDynamicRB.h">
+      <Filter>HeaderFiles\RigidBodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RBGenerators\RigidBodyGenerator.h">
+      <Filter>HeaderFiles\RBGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RBGenerators\UniformRBGenerator.h">
+      <Filter>HeaderFiles\RBGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RBGenerators\GaussianRBGenerator.h">
+      <Filter>HeaderFiles\RBGenerators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

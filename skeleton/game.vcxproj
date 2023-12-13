@@ -276,6 +276,8 @@
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Particles\Firework.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
+    <ClCompile Include="src\RBGenerators\RigidBodyGenerator.cpp" />
+    <ClCompile Include="src\RBStructure\RigidBodySystem.cpp" />
     <ClCompile Include="src\ShootManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +307,14 @@
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Particles\Firework.h" />
     <ClInclude Include="src\Particles\Particle.h" />
+    <ClInclude Include="src\RBGenerators\GaussianRBGenerator.h" />
+    <ClInclude Include="src\RBGenerators\RigidBodyGenerator.h" />
+    <ClInclude Include="src\RBGenerators\UniformRBGenerator.h" />
+    <ClInclude Include="src\RBStructure\RigidBodySystem.h" />
+    <ClInclude Include="src\RigidBodies\BoxStaticRB.h" />
+    <ClInclude Include="src\RigidBodies\DynamicRigidBody.h" />
+    <ClInclude Include="src\RigidBodies\SphereDynamicRB.h" />
+    <ClInclude Include="src\RigidBodies\StaticRigidBody.h" />
     <ClInclude Include="src\ShootManager.h" />
     <ClInclude Include="src\Singleton.h" />
   </ItemGroup>

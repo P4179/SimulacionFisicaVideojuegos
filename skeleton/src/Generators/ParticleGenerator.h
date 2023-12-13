@@ -19,8 +19,6 @@ struct ParticleInfo {
 // CLASE ABSTRACTA
 class ParticleGenerator {
 protected:
-	const int NUM_MAX_PARTICLES = 100;
-
 	string name;
 	// posición inicial / origen (luego, se le suma una variabilidad)
 	Vector3 _mean_pos;

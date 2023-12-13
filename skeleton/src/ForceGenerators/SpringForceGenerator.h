@@ -3,7 +3,7 @@
 
 // dos fuerzas distintas por cada muelle
 // una que mueve una particula y otra que mueve la otra particula
-class SpringForceGenerator : public ForceGenerator {
+class SpringForceGenerator : public ForceGenerator<Particle> {
 protected:
 	// constante elastica del muelle
 	// determina la intensidad de la fuerza

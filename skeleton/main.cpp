@@ -12,6 +12,7 @@
 
 #include "../skeleton/src/ShootManager.h"
 #include "../skeleton/src/ParticleSystem.h"
+#include "../skeleton/src/RBStructure/RigidBodySystem.h"
 
 // SE PUEDE ESCRIBIR TEXTO PINTADO
 std::string display_text = "This is a test";
@@ -35,6 +36,7 @@ ContactReportCallback gContactReportCallback;
 
 ShootManager* shoot = nullptr;
 ParticleSystem* particleSystem = nullptr;
+RigidBodySystem* RBSystem = nullptr;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -47,6 +49,7 @@ void initPhysics(bool interactive)
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
 	gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 	// método que crear la física del motor de físcia de Physics
+	// PxToleranceScale sirve para cambiar la escala de tam y velocidad en toda la simulacion
 	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
 	// material que se utiliza para todo
 	// coeficientes de rozamineto
@@ -60,11 +63,15 @@ void initPhysics(bool interactive)
 	sceneDesc.cpuDispatcher = gDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
+	// se genera una escena
+	// una escena es una simulacion de un conjunto de objetos/actores que puede interaccionar entre ellos
+	// puede haber varias escenas, pero cada actor solo puede pertenecer a una de ellas
 	gScene = gPhysics->createScene(sceneDesc);
 
 	// CREAR OBJETOS
 	//shoot = new ShootManager();
-	particleSystem = new ParticleSystem();
+	//particleSystem = new ParticleSystem();
+	RBSystem = RigidBodySystem::init(gPhysics, gScene);
 }
 
 
@@ -130,7 +137,11 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	if (particleSystem != nullptr) {
 		particleSystem->keyPressed(toupper(key));
 	}
+	if (RBSystem != nullptr) {
+		RBSystem->keyPressed(toupper(key));
+	}
 
+	/*
 	switch (toupper(key))
 	{
 		//case 'B': break;
@@ -142,12 +153,17 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	default:
 		break;
 	}
+	*/
 }
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
+
+	if (RBSystem != nullptr) {
+		RBSystem->onCollision(actor1, actor2);
+	}
 }
 
 

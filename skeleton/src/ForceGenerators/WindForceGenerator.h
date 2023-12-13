@@ -5,7 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-class WindForceGenerator : public ForceGenerator {
+class WindForceGenerator : public ForceGenerator<Particle> {
 protected:
 	// depende de la forma del objeto con el que impacto el viento
 	// para objetos esfericos es 0.5

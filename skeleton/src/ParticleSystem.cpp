@@ -9,7 +9,7 @@ forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE), springFg(nullptr) {
 	// no salgan los mismo números
 	srand(time(NULL));
 
-	registry = new ParticleForceRegistry<Particle, ForceGenerator>();
+	registry = new ParticleForceRegistry<Particle>();
 	particles = new ListParticles(1000, registry);
 
 	generateForceGens();
@@ -25,7 +25,7 @@ void ParticleSystem::generateForceGens() {
 	forceGenerators[GravityFg] = new GravityForceGenerator("GravityFg", gravity, -1);
 	forceGenerators[WindFg] = new WindForceGenerator("WindFg", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1, true, false);
 	forceGenerators[WhirlWindFg] = new WhirlwindForceGenerator("WhirlwindFg", Vector3(0, 0, 0), 800, 50, 50, 20, false, false);
-	explosionFg = new ExplosionForceGenerator("ExplosionFg", Vector3(0, 50, 0), 20, 3000, 15, -1, false);
+	explosionFg = new ExplosionForceGenerator<Particle>("ExplosionFg", Vector3(0, 50, 0), 20, 3000, 15, -1, true);
 	forceGenerators[ExplosionFg] = explosionFg;
 
 	ParticleInfo info;
@@ -169,7 +169,7 @@ void ParticleSystem::generateFireworkSystem() {
 	}
 }
 
-void ParticleSystem::generateAnchorSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+void ParticleSystem::generateAnchorSystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 	Particle* particle1 = new Particle(Vector3(-30, 20, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0);
 	Particle* particle2 = new Particle(Vector3(30, 30, 0), Vector3(0, 0, 0), 0.1, DAMPING, -1, 0, 4, Vector4(0.322, 0.702, 0.361, 1));
 	springFg = new AnchoredSpringForceGenerator("AnchoredSpringFg", 700, 20, Vector3(0, 50, 0));
@@ -180,7 +180,7 @@ void ParticleSystem::generateAnchorSystem(vector<std::pair<ForceGenerator*, Part
 	forceGens.insert(forceGenerators[GravityFg]);
 }
 
-void ParticleSystem::generateSpringSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+void ParticleSystem::generateSpringSystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 	Particle* particle1 = new Particle(Vector3(-30, 70, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0);
 	Particle* particle2 = new Particle(Vector3(30, 70, 0), Vector3(0, 0, 0), 0.08, DAMPING, -1, 0, 4, Vector4(0.322, 0.702, 0.361, 1));
 
@@ -193,7 +193,7 @@ void ParticleSystem::generateSpringSystem(vector<std::pair<ForceGenerator*, Part
 	forceGens.insert(forceGenerators[GravityFg]);
 }
 
-void ParticleSystem::generateElasticRubberSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+void ParticleSystem::generateElasticRubberSystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 	Particle* particle1 = new Particle(Vector3(-40, 65, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 2.5, Vector4(0.812, 0.365, 0.765, 1));
 	Particle* particle2 = new Particle(Vector3(40, 65, 0), Vector3(0, 0, 0), 0.1, DAMPING, -1, 0, 4, Vector4(0.322, 0.702, 0.361, 1));
 
@@ -206,7 +206,7 @@ void ParticleSystem::generateElasticRubberSystem(vector<std::pair<ForceGenerator
 	forceGens.insert(forceGenerators[GravityFg]);
 }
 
-void ParticleSystem::generateSlinkySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+void ParticleSystem::generateSlinkySystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 	Particle* particle1 = new Particle(Vector3(0, 75, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 2, Vector4(0.58, 0, 0.83, 1));
 	Particle* particle2 = new Particle(Vector3(0, 60, 0), Vector3(0, 0, 0), 0.15, DAMPING, -1, 0, 3, Vector4(0.29, 0, 0.51, 1));
 	Particle* particle3 = new Particle(Vector3(0, 45, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 2, Vector4(0, 0, 1, 1));
@@ -247,7 +247,7 @@ void ParticleSystem::generateSlinkySystem(vector<std::pair<ForceGenerator*, Part
 	forceGens.insert(forceGenerators[GravityFg]);
 }
 
-void ParticleSystem::generateBuoyancySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+void ParticleSystem::generateBuoyancySystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 	Particle* particle = new Particle(Vector3(0, 100, 0), Vector3(0, 0, 0), 0.0001, DAMPING, -1, 0, Vector3(8, 8, 8));
 	//Particle* particle2 = new Particle(Vector3(0, 90, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 4);
 	forceGenerators[BuoyanceFg] = new BuoyancyForceGenerator("BuoyanceFg", 0, 30, WATER_DENSITY);
@@ -307,31 +307,31 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 	switch (key) {
 		// muelle anclado a un objeto estatico
 	case '1':
-		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+		launch([this](vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 			generateAnchorSystem(forceParticles, forceGens);
 			});
 		break;
 		// particulas unidas mediante un muelle
 	case '2':
-		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+		launch([this](vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 			generateSpringSystem(forceParticles, forceGens);
 			});
 		break;
 		// goma elastica
 	case '3':
-		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+		launch([this](vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 			generateElasticRubberSystem(forceParticles, forceGens);
 			});
 		break;
 		// slinky
 		// flotacion
 	case '5':
-		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+		launch([this](vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 			generateBuoyancySystem(forceParticles, forceGens);
 			});
 		break;
 	case '4':
-		launch([this](vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens) {
+		launch([this](vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
 			generateSlinkySystem(forceParticles, forceGens);
 			});
 		break;

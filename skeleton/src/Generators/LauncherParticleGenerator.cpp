@@ -4,15 +4,15 @@ LauncherParticleGen::LauncherParticleGen(string name) : ForceParticleGenerator(n
 forcesParticles() {}
 
 void LauncherParticleGen::launch(ListParticles* particles,
-	const vector<std::pair<ForceGenerator*, Particle*>>& forcesParticles,
-	const unordered_set<ForceGenerator*>& forceGens) {
+	const vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forcesParticles,
+	const unordered_set<ForceGenerator<Particle>*>& forceGens) {
 
 	// se asignan los nuevos valores del lanzador
 	this->forcesParticles = forcesParticles;
 	this->forceGens = forceGens;
 
 	// resto de fuerzas que queremos aplicar + fuerza que tiene asociada esa particula
-	vector<ForceGenerator*> currentForces(forceGens.size() + 1);
+	vector<ForceGenerator<Particle>*> currentForces(forceGens.size() + 1);
 	// se inserta el resto de fuerzas
 	// copy los elementos de un contenedor de origen a uno de destino (tiene que haber espacio suficiente)
 	std::copy(forceGens.begin(), forceGens.end(), currentForces.begin());
@@ -23,7 +23,7 @@ void LauncherParticleGen::launch(ListParticles* particles,
 	}
 }
 
-vector<Particle*> LauncherParticleGen::findParticleByForce(ForceGenerator* force) {
+vector<Particle*> LauncherParticleGen::findParticleByForce(ForceGenerator<Particle>* force) {
 	vector<Particle*> particles;
 
 	// fuerza comun, se devuelven todas las particulas

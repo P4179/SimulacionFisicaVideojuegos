@@ -6,10 +6,10 @@ using namespace std;
 
 class ForceParticleGenerator : public UniformParticleGenerator {
 protected:
-	unordered_set<ForceGenerator*> forceGens;
+	unordered_set<ForceGenerator<Particle>*> forceGens;
 
 public:
-	ForceParticleGenerator(string name, Vector3 meanPos, Vector3 meanVel, ParticleInfo info, double genProbability, int numParticles, Vector3 velWidth, Vector3 posWidth, const unordered_set<ForceGenerator*>& forceGens = unordered_set<ForceGenerator*>()) :
+	ForceParticleGenerator(string name, Vector3 meanPos, Vector3 meanVel, ParticleInfo info, double genProbability, int numParticles, Vector3 velWidth, Vector3 posWidth, const unordered_set<ForceGenerator<Particle>*>& forceGens = unordered_set<ForceGenerator<Particle>*>()) :
 		UniformParticleGenerator(name, meanPos, meanVel, info, genProbability, numParticles, velWidth, posWidth), forceGens(forceGens) {}
 
 	virtual Particle* createParticle(Vector3 pos, Vector3 vel) {
@@ -21,11 +21,11 @@ public:
 		particles->add(generateParticles(), forceGens);
 	}
 
-	inline bool containsForce(ForceGenerator* force) {
+	inline bool containsForce(ForceGenerator<Particle>* force) {
 		return forceGens.find(force) != forceGens.end();
 	}
 
-	inline bool removeForce(ForceGenerator* force) {
+	inline bool removeForce(ForceGenerator<Particle>* force) {
 		auto it = forceGens.find(force);
 		if (it != forceGens.end()) {
 			forceGens.erase(it);
@@ -37,7 +37,7 @@ public:
 	// la lista de particulas no se utiliza
 	// sin embargo, se puede utilizar en las clases hijas que solo hagan
 	// un commit inicial de particulas y luego, se les quiere poner mas fuerzas
-	virtual inline void addForce(ForceGenerator* force, ListParticles* particles) {
+	virtual inline void addForce(ForceGenerator<Particle>* force, ListParticles* particles) {
 		forceGens.insert(force);
 	}
 

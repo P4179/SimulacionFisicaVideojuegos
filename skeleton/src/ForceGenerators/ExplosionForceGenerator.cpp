@@ -1,3 +1,4 @@
+/*
 #include "ExplosionForceGenerator.h"
 
 bool ExplosionForceGenerator::isInInfluenceArea(Particle* particle) {
@@ -28,7 +29,6 @@ ExplosionForceGenerator::~ExplosionForceGenerator() {
 }
 
 void ExplosionForceGenerator::updateForce(Particle* particle, double t) {
-	cout << show << "\n";
 	if (explode) {
 		elapsedTime += t;
 		radius = originalRadius + SOUND_AIR_SPEED * elapsedTime;
@@ -49,3 +49,4 @@ void ExplosionForceGenerator::enableExplosion() {
 	elapsedTime = 0;
 	radius = originalRadius;
 }
+*/

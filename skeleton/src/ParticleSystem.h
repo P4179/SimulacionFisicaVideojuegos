@@ -78,11 +78,11 @@ private:
 	Vector3 gravity;
 	Generators selectedGen;
 
-	vector<ForceGenerator*> forceGenerators;
-	ParticleForceRegistry<Particle, ForceGenerator>* registry;
+	vector<ForceGenerator<Particle>*> forceGenerators;
+	ParticleForceRegistry<Particle>* registry;
 
 	GaussianParticleGenerator* mangueraGaussianGen;
-	ExplosionForceGenerator* explosionFg;
+	ExplosionForceGenerator<Particle>* explosionFg;
 	// guarda el generador de fuerzas por defecto de la practica 2, al que se le ponen o quitan fuerzas
 	ForceParticleGenerator* aplicarFuerzaGen;
 	// guarda el generador al que se le van a poner o quitar fuerzas ahora
@@ -118,11 +118,11 @@ private:
 		return fireworkGenerator;
 	}
 
-	inline void launch(std::function<void(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens)> function) {
+	inline void launch(std::function<void(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens)> function) {
 		// importa el orden
 		changeActiveGen(LaunchGen);
-		vector<std::pair<ForceGenerator*, Particle*>> forcesParticles = {};
-		unordered_set<ForceGenerator*> forceGens = {};
+		vector<std::pair<ForceGenerator<Particle>*, Particle*>> forcesParticles = {};
+		unordered_set<ForceGenerator<Particle>*> forceGens = {};
 		// rellenar los dos vectores
 		function(forcesParticles, forceGens);
 		// el generador vincula particulas y fuerzas, es decir, hace el commit inicial
@@ -207,15 +207,15 @@ private:
 
 	void generateFireworkSystem();
 
-	void generateAnchorSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
+	void generateAnchorSystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens);
 
-	void generateSpringSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
+	void generateSpringSystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens);
 
-	void generateElasticRubberSystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
+	void generateElasticRubberSystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens);
 
-	void generateSlinkySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
+	void generateSlinkySystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens);
 
-	void generateBuoyancySystem(vector<std::pair<ForceGenerator*, Particle*>>& forceParticles, unordered_set<ForceGenerator*>& forceGens);
+	void generateBuoyancySystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens);
 
 public:
 	ParticleSystem(Vector3 gravity = Vector3(0, -10, 0));

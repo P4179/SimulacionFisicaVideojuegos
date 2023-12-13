@@ -2,21 +2,18 @@
 #include <list>
 #include "ParticleForceRegistry.h"
 
-class Particle;
-class ForceGenerator;
-
 using namespace std;
 
 class ListParticles {
 private:
 	int maxParticles;
 	std::list<Particle*> listP;
-	ParticleForceRegistry<Particle, ForceGenerator>* registry;
+	ParticleForceRegistry<Particle>* registry;
 
 	void removeExcess();
 
 public:
-	ListParticles(int maxParticles, ParticleForceRegistry<Particle, ForceGenerator>* registry);
+	ListParticles(int maxParticles, ParticleForceRegistry<Particle>* registry);
 
 	virtual ~ListParticles();
 

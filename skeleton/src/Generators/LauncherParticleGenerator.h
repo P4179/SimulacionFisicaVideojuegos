@@ -9,7 +9,7 @@ Ademas, se puede indicar un conjunto de fuerzas comun que afectan a todas las pa
 class LauncherParticleGen : public ForceParticleGenerator {
 private:
 	// sirve para indicar la fuerza que le afecta a cada particula
-	vector<std::pair<ForceGenerator*, Particle*>> forcesParticles;
+	vector<std::pair<ForceGenerator<Particle>*, Particle*>> forcesParticles;
 
 public:
 	// el vector de fuerzas va a servir para tener un registro del resto de fuerzas que se están aplicando
@@ -18,13 +18,13 @@ public:
 	virtual void update() {}
 
 	void launch(ListParticles* particles,
-		const vector<std::pair<ForceGenerator*, Particle*>>& forcesParticles,
-		const unordered_set<ForceGenerator*>& forceGens = unordered_set<ForceGenerator*>());
+		const vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forcesParticles,
+		const unordered_set<ForceGenerator<Particle>*>& forceGens = unordered_set<ForceGenerator<Particle>*>());
 
-	inline void addForce(ForceGenerator* force, ListParticles* particles) override {
+	inline void addForce(ForceGenerator<Particle>* force, ListParticles* particles) override {
 		if (!forcesParticles.empty()) {
 			for (auto forceParticle : forcesParticles) {
-				particles->add<vector<ForceGenerator*>>({ forceParticle.second }, { force });
+				particles->add<vector<ForceGenerator<Particle>*>>({ forceParticle.second }, { force });
 			}
 			ForceParticleGenerator::addForce(force, particles);
 		}
@@ -35,5 +35,5 @@ public:
 		ForceParticleGenerator::clear();
 	}
 
-	vector<Particle*> findParticleByForce(ForceGenerator* force);
+	vector<Particle*> findParticleByForce(ForceGenerator<Particle>* force);
 };

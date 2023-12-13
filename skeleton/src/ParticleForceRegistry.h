@@ -5,8 +5,7 @@
 #include <unordered_map>
 
 // T1 --> tipo de particula
-// T2 --> tipo de generador de fuerza
-template<typename T1, typename T2>
+template<typename T1>
 class ParticleForceRegistry {
 private:
 	// se hace de esta manera para mejorar la complejidad
@@ -16,9 +15,9 @@ private:
 	// (no hace falta recorrer todas las fuerzas)
 
 	// las fuerzas que se le asignan a cada partícula
-	unordered_map<T1*, unordered_set<T2*>> particleForce;
+	unordered_map<T1*, unordered_set<ForceGenerator<T1>*>> particleForce;
 	// las partículas que le corresponden a cada fuerza
-	unordered_map<T2*, unordered_set<T1*>> forceParticle;
+	unordered_map<ForceGenerator<T1>*, unordered_set<T1*>> forceParticle;
 
 public:
 	ParticleForceRegistry() : particleForce(), forceParticle() {}
@@ -32,7 +31,7 @@ public:
 		}
 	}
 
-	void addRegistry(T2* fg, T1* p) {
+	void addRegistry(ForceGenerator<T1>* fg, T1* p) {
 		// SISTEMA PARTÍCULA - FUERZA
 		auto it = particleForce.find(p);
 		// ya está esta partícula
@@ -41,9 +40,7 @@ public:
 			it->second.insert(fg);
 		}
 		else {
-			unordered_set<ForceGenerator*> fgSet;
-			fgSet.insert(fg);
-			particleForce.insert({ p, fgSet });
+			particleForce.insert({ p, {fg} });
 		}
 
 		// SISTEMA FUERZA - PARTÍCULA
@@ -64,7 +61,8 @@ public:
 		particleForce.erase(particle);
 	}
 
-	void deleteForceRegistry(T2* fg) {
+	void deleteForceRegistry(ForceGenerator<T1>* fg) {
+		fg->resetTime();
 		for (auto it = particleForce.begin(); it != particleForce.end(); ++it) {
 			it->second.erase(fg);
 		}

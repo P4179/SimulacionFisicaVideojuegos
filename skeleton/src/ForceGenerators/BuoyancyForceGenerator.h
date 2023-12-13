@@ -1,7 +1,7 @@
 #pragma once
 #include "ForceGenerator.h"
 
-class BuoyancyForceGenerator : public ForceGenerator {
+class BuoyancyForceGenerator : public ForceGenerator<Particle> {
 private:
 	const float GRAVITY = 9.8;
 	const float LIQUID_SIZE = 100;

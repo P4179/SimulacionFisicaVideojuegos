@@ -16,7 +16,7 @@ void ListParticles::removeExcess() {
 	}
 }
 
-ListParticles::ListParticles(int maxParticles, ParticleForceRegistry<Particle, ForceGenerator>* registry) :
+ListParticles::ListParticles(int maxParticles, ParticleForceRegistry<Particle>* registry) :
 	maxParticles(maxParticles), registry(registry) {}
 
 ListParticles::~ListParticles() {
