@@ -1,3 +1,4 @@
+/*
 #include "GaussianParticleGenerator.h"
 
 double GaussianParticleGenerator::variation(double standardDesviation) {
@@ -17,8 +18,8 @@ double GaussianParticleGenerator::variation(double standardDesviation) {
 	}
 }
 
-GaussianParticleGenerator::GaussianParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos) :
-	ParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles),
+GaussianParticleGenerator::GaussianParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos, const unordered_set<ForceGenerator<Particle>*>& forceGens) :
+	ForceParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles, forceGens),
 	std_dev_pos(stdDevPos), std_dev_vel(stdDevVel) {}
 
 list<Particle*> GaussianParticleGenerator::generateParticles() {
@@ -45,6 +46,8 @@ list<Particle*> GaussianParticleGenerator::generateParticles() {
 	return particles;
 }
 
+/*
 void GaussianParticleGenerator::update(ListParticles* particles) {
 	particles->add(generateParticles());
 }
+*/

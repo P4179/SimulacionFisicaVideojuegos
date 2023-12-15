@@ -8,9 +8,9 @@ private:
 	uniform_real_distribution<double> dist;
 
 public:
-	UniformRBGenerator(RBGens gen, Vector3 meanPos, Vector3 meanVel, double genProbability, int numParticles, DynamicRBFeatures RBfeat, float damping,
+	UniformRBGenerator(RBGens gen, Vector3 meanPos, Vector3 meanVel, double genProbability, int numParticles, ParticleInfo RBfeat,
 		Vector3 velWidth, Vector3 posWidth) :
-		RigidBodyGenerator(gen, meanPos, meanVel, genProbability, numParticles, RBfeat, damping), velWidth(velWidth), posWidth(posWidth),
+		RigidBodyGenerator(gen, meanPos, meanVel, genProbability, numParticles, RBfeat), velWidth(velWidth), posWidth(posWidth),
 		dist(uniform_real_distribution<double>(-1.0, 1.0)) {}
 
 	virtual void generateRB() {

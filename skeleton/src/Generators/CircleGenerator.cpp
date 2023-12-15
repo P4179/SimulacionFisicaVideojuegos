@@ -1,8 +1,8 @@
 #include "CircleGenerator.h"
 #include "../checkML.h"
 
-CircleGenerator::CircleGenerator(string name, Vector3 mean_pos, ParticleInfo info, int num_particles, Vector3 stdDevVel, Vector3 dirSin, Vector3 dirCos) :
-	FireworkGenerator(name, mean_pos, Vector3(0, 0, 0), info, num_particles, stdDevVel, Vector3(0, 0, 0)), dirSin(dirSin), dirCos(dirCos) {
+CircleGenerator::CircleGenerator(string name, Vector3 mean_pos, ParticleInfo info, int num_particles, Vector3 stdDevVel, Vector3 dirSin, Vector3 dirCos, const unordered_set<ForceGenerator<Particle>*>& forceGens) :
+	FireworkGenerator(name, mean_pos, Vector3(0, 0, 0), info, num_particles, stdDevVel, Vector3(0, 0, 0), forceGens), dirSin(dirSin), dirCos(dirCos) {
 	// dos vectores son perpendiculares si el ángulo que forman es 90º
 	// el producto escalar de dos vectores es a·b = |a||b|cos(X)
 	// y el cos(90º) es 0, por lo tanto, su producto escalar es 0

@@ -3,20 +3,13 @@
 #include <random>
 #include "../Particles/Particle.h"
 #include "../ListParticles.h"
+#include "../particle_info.h"
 
 using namespace std;
-
-struct ParticleInfo {
-	float invMasa = 0.0;	// no se utiliza en la practica 2
-	Vector3 ac = Vector3(0);	// no se utiliza en la practica 3
-	float damping;
-	float lifeTime;
-	float vSimulada;
-	float radius;
-	Vector4 color;
-};
+using namespace physx;
 
 // CLASE ABSTRACTA
+template<typename T>
 class ParticleGenerator {
 protected:
 	string name;
@@ -56,32 +49,46 @@ protected:
 		_mt = std::mt19937(rd());
 	}
 
-	virtual Particle* createParticle(Vector3 vel, Vector3 pos) {
-		return new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
+	virtual T* createParticle(Vector3 pos, Vector3 vel) {
+		switch (_info.geometry) {
+		case  PxGeometryType::eBOX:
+			return new T(pos, vel, _info.renderParticle_data.invMasa, _info.damping, _info.lifeTime, _info.renderParticle_data.vSimulada, _info.box_data.size, _info.color);
+			break;
+
+		case PxGeometryType::eSPHERE:
+			return new T(pos, vel, _info.renderParticle_data.invMasa, _info.damping, _info.lifeTime, _info.renderParticle_data.vSimulada, _info.sphere_data.radius, _info.color);
+			break;
+		}
+		//return new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
 	}
 
 public:
 	virtual ~ParticleGenerator() {}
 
 	// devuelve una lista de partículas
-	virtual list<Particle*> generateParticles() = 0;
+	virtual list<T*> generateParticles() = 0;
 
+	// solo para particulas render y fuerzas locales
+	
 	// solo lo usan los generadores que actualizan las particulas periodicamente
 	virtual void update(ListParticles* particles) = 0;
-
 	// si interesara hacer un commit inicial de partículas
 	void init(ListParticles* particles) {
 		particles->add(generateParticles());
 	}
 
+	inline string getName() const {
+		return name;
+	}
+
 	inline void increaseSimulatedV() {
-		++_info.vSimulada;
+		++_info.renderParticle_data.vSimulada;
 	}
 
 	inline void decreaseSimulatedV() {
-		--_info.vSimulada;
-		if (_info.vSimulada < 0) {
-			_info.vSimulada = 0;
+		--_info.renderParticle_data.vSimulada;
+		if (_info.renderParticle_data.vSimulada < 0) {
+			_info.renderParticle_data.vSimulada = 0;
 		}
 	}
 

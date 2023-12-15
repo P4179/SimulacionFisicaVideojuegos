@@ -6,17 +6,11 @@
 RigidBodySystem::RigidBodySystem(PxPhysics* gPhysics, PxScene* gScene) : gPhysics(gPhysics), gScene(gScene),
 RBGenerators(MAX_GENS), RBfGenerators(MAX_FGENS) {
 
-	floor = new BoxStaticRB(gPhysics, gScene, Vector3(0, 0, 0), Vector4(1, 0, 0, 1), Vector3(200, 10, 200));
-	list<DynamicRigidBody*> list;
-	list.push_back(new SphereDynamicRB(gPhysics, gScene, Vector3(-20, 100, 0), Vector3(0, -1, 0), Vector3(0, 0, 0), DAMPING, 0.15, Vector4(1, 1, 0, 1), 3));
-	list.push_back(new SphereDynamicRB(gPhysics, gScene, Vector3(20, 100, 0), Vector3(0, -1, 0), Vector3(0, 0, 0), DAMPING, 0.15, Vector4(1, 0, 1, 1), 3));
-	add(list);
+	floor = new BoxStaticRB(gPhysics, gScene, Vector3(0, 80, 0), Vector4(1, 0, 0, 1), Vector3(100, 3, 100));
 	registry = new ParticleForceRegistry<DynamicRigidBody>();
 
-	// se crean todos los generadores
-
 	// se crean todas las fuerzas
-	explosionFg = new ExplosionForceGenerator<DynamicRigidBody>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 50, 0), 20, 3000, 15, -1, true);
+	explosionFg = new ExplosionForceGenerator<DynamicRigidBody>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 40, 0), 30, 30, 15, -1, true);
 	RBfGenerators.all[EXPLOSION_FG] = explosionFg;
 }
 
@@ -104,6 +98,25 @@ void RigidBodySystem::onCollision(physx::PxActor* actor1, physx::PxActor* actor2
 		cout << "Actor2 is a floor\n";
 	}
 	*/
+}
+
+void RigidBodySystem::create() {
+	// se crean todos los generadores
+	ParticleInfo info;
+	info.damping = DAMPING;
+	info.color = Vector4(0.337, 0.192, 0.8, 1);
+	info.lifeTime = 3;
+
+	info.geometry = physx::PxGeometryType::eSPHERE;
+	info.sphere_data.radius = 1.2;
+
+	info.rigidBody_data.massDef = Density;
+	info.rigidBody_data.density_data.density = 0.1;
+	// coeficientes de rozamiento estatico (no movimiento), dinamico (se mueve), elastico(rebota)
+	info.rigidBody_data.material = gPhysics->createMaterial(3, 2, 4);
+
+	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion
+	addGenerator(new UniformRBGenerator(UNIFORM_GEN, Vector3(0, 10, 0), Vector3(0, 70, 0), 0.3, 1, info, Vector3(2, 0, 2), Vector3(2, 0, 2)), true);
 }
 
 void RigidBodySystem::integrate(double t) {

@@ -6,7 +6,7 @@
 Sirve para realizar el lanzamiento inicial de una serie de particulas, cada una con una fuerza especifica
 Ademas, se puede indicar un conjunto de fuerzas comun que afectan a todas las particulas
 */
-class LauncherParticleGen : public ForceParticleGenerator {
+class LauncherParticleGen : public ForceParticleGenerator<Particle> {
 private:
 	// sirve para indicar la fuerza que le afecta a cada particula
 	vector<std::pair<ForceGenerator<Particle>*, Particle*>> forcesParticles;
@@ -15,6 +15,9 @@ public:
 	// el vector de fuerzas va a servir para tener un registro del resto de fuerzas que se están aplicando
 	LauncherParticleGen(string name);
 
+	// solo es un lanzador de particula
+	// no actualiza ni genera nuevas particulas
+	virtual list<Particle*> generateParticles() { return {}; }
 	virtual void update() {}
 
 	void launch(ListParticles* particles,

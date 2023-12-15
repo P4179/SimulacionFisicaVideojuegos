@@ -49,7 +49,7 @@ private:
 	// expresa la disminucion de la velocidad debido a las fuerzas de resistencia
 	const float DAMPING = 0.8;
 	// numero maximo de rigidbody que puede haber en escena
-	const int MAX = 1000;
+	const int MAX = 200;
 
 	// motor de fisicas
 	PxPhysics* gPhysics;
@@ -86,6 +86,8 @@ private:
 
 public:
 	virtual ~RigidBodySystem();
+
+	void create();
 
 	void onCollision(physx::PxActor* actor1, physx::PxActor* actor2);
 

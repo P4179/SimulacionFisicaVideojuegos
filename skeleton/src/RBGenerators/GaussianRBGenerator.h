@@ -1,6 +1,5 @@
 #pragma once
 #include "RigidBodyGenerator.h"
-#include <array>
 
 class GaussianRBGenerator : public RigidBodyGenerator {
 private:
@@ -18,8 +17,8 @@ private:
 	}
 
 public:
-	GaussianRBGenerator(RBGens gen, Vector3 meanPos, Vector3 meanVel, double genProbability, int numParticles, DynamicRBFeatures RBfeat, float damping, Vector3 standardDesvPos, Vector3 standardDesvVel) :
-		RigidBodyGenerator(gen, meanPos, meanVel, genProbability, numParticles, RBfeat, damping), standardDesvPos(standardDesvPos), standardDesvVel(standardDesvVel) {}
+	GaussianRBGenerator(RBGens gen, Vector3 meanPos, Vector3 meanVel, double genProbability, int numParticles, ParticleInfo RBfeat, Vector3 standardDesvPos, Vector3 standardDesvVel) :
+		RigidBodyGenerator(gen, meanPos, meanVel, genProbability, numParticles, RBfeat), standardDesvPos(standardDesvPos), standardDesvVel(standardDesvVel) {}
 
 	virtual void generateRB() {
 		if (probability()) {

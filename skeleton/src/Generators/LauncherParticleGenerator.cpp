@@ -1,6 +1,6 @@
 #include "LauncherParticleGenerator.h"
 
-LauncherParticleGen::LauncherParticleGen(string name) : ForceParticleGenerator(name, Vector3(), Vector3(), ParticleInfo(), double(), int(), Vector3(), Vector3()),
+LauncherParticleGen::LauncherParticleGen(string name) : ForceParticleGenerator(name, Vector3(), Vector3(), ParticleInfo(), double(), int()),
 forcesParticles() {}
 
 void LauncherParticleGen::launch(ListParticles* particles,

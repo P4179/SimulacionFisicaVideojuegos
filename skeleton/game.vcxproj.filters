@@ -177,6 +177,9 @@
     <ClInclude Include="src\RigidBodies\BoxDynamicRB.h">
       <Filter>HeaderFiles\RigidBodies</Filter>
     </ClInclude>
+    <ClInclude Include="src\particle_info.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

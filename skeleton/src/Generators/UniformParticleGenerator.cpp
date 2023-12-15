@@ -1,7 +1,8 @@
+/*
 #include "UniformParticleGenerator.h"
 
-UniformParticleGenerator::UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth) :
-	ParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles),
+UniformParticleGenerator::UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth, const unordered_set<ForceGenerator<Particle>*>& forceGens) :
+	ForceParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles, forceGens),
 	vel_width(velWidth), pos_width(posWidth), dist(uniform_real_distribution<double>(-1, 1)) {}
 
 list<Particle*> UniformParticleGenerator::generateParticles() {
@@ -30,6 +31,8 @@ list<Particle*> UniformParticleGenerator::generateParticles() {
 	return particles;
 }
 
+/*
 void UniformParticleGenerator::update(ListParticles* particles) {
 	particles->add(generateParticles());
 }
+*/

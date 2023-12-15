@@ -74,6 +74,7 @@ void initPhysics(bool interactive)
 
 	// no se elimina porque es un singleton y funciona con puntero inteligente
 	RBSystem = RigidBodySystem::init(gPhysics, gScene);
+	RBSystem->create();
 }
 
 

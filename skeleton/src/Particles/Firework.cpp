@@ -13,9 +13,9 @@ list<Particle*> Firework::explode() {
 	}
 }
 
-Firework::Firework(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime,
+Firework::Firework(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime,
 	float vSimulada, float radius, Vector4 color, ParticleType type) :
-	Particle(pos, vel, acReal, damping, lifeTime, vSimulada, radius, color, type) {}
+	Particle(pos, vel, invMasa, damping, lifeTime, vSimulada, radius, color) {}
 
 void Firework::onDeath(ListParticles* particles) {
 	particles->add(explode());

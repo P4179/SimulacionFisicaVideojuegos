@@ -4,42 +4,16 @@
 #include "../RBStructure/RigidBodySystem.h"
 #include <list>
 #include <random>
+#include "../particle_info.h"
 
 using namespace std;
-
-enum MassDefinition { Density, InertiaTensor };
-
-struct DynamicRBFeatures {
-	Vector4 color;
-	float lifeTime;
-	PxMaterial* material;
-
-	physx::PxGeometryType::Enum geometry;
-	struct {
-		Vector3 size;
-	} box_data;
-	struct {
-		float radius;
-	} sphere_data;
-
-	MassDefinition massDef;
-	struct {
-		// kg/m^3
-		float density;
-	} density_data;
-	MassDefinition inertiaTensor;
-	struct {
-		Vector3 massDistribution;
-	} inertiaTensor_data;
-};
 
 class RigidBodyGenerator {
 private:
 	RigidBodySystem* system;
 	RBGens gen;
 	double genProbability;	// [0, 1]
-	DynamicRBFeatures RBfeat;
-	float damping;
+	ParticleInfo RBfeat;
 	uniform_real_distribution<double> u;
 
 protected:
@@ -50,7 +24,7 @@ protected:
 
 	DynamicRigidBody* createRigidBody(Vector3 pos, Vector3 vel);
 
-	RigidBodyGenerator(RBGens gen, Vector3 meanPos, Vector3 meanVel, double genProbability, int numParticles, DynamicRBFeatures RBfeat, float damping);
+	RigidBodyGenerator(RBGens gen, Vector3 meanPos, Vector3 meanVel, double genProbability, int numParticles, ParticleInfo RBfeat);
 
 	inline void add(list<DynamicRigidBody*> list) {
 		system->add(list);
