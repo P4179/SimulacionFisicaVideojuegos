@@ -261,7 +261,6 @@
     <ClCompile Include="src\ForceGenerators\AnchoredSpringForceGenerator.cpp" />
     <ClCompile Include="src\ForceGenerators\BuoyancyForceGenerator.cpp" />
     <ClCompile Include="src\ForceGenerators\ElasticRubberForceGenerator.cpp" />
-    <ClCompile Include="src\ForceGenerators\ExplosionForceGenerator.cpp" />
     <ClCompile Include="src\ForceGenerators\GravityForceGenerator.cpp" />
     <ClCompile Include="src\ForceGenerators\SpringForceGenerator.cpp" />
     <ClCompile Include="src\ForceGenerators\WhirlwindForceGenerator.cpp" />
@@ -311,6 +310,7 @@
     <ClInclude Include="src\RBGenerators\RigidBodyGenerator.h" />
     <ClInclude Include="src\RBGenerators\UniformRBGenerator.h" />
     <ClInclude Include="src\RBStructure\RigidBodySystem.h" />
+    <ClInclude Include="src\RigidBodies\BoxDynamicRB.h" />
     <ClInclude Include="src\RigidBodies\BoxStaticRB.h" />
     <ClInclude Include="src\RigidBodies\DynamicRigidBody.h" />
     <ClInclude Include="src\RigidBodies\SphereDynamicRB.h" />

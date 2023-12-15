@@ -24,7 +24,8 @@ private:
 
 	bool isInInfluenceArea(T* particle) {
 		float distExplosion = (particle->getPos() - center.p).magnitude();
-		return distExplosion < radius;
+		bool aux = distExplosion < radius;
+		return aux;
 	}
 
 public:
@@ -35,7 +36,7 @@ public:
 		explosionFadingTime(explosionFadingTime), elapsedTime(0), explode(false) {
 
 		if (show) {
-			physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radiusInfluenceArea));
+			physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(originalRadius));
 			render = new RenderItem(shape, &center, INFLUENCE_AREA_COLOR);
 		}
 		else {
@@ -53,6 +54,11 @@ public:
 		if (explode) {
 			elapsedTime += t;
 			radius = originalRadius + SOUND_AIR_SPEED * elapsedTime;
+			if (show) {
+				DeregisterRenderItem(render);
+				physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
+				render = new RenderItem(shape, &center, INFLUENCE_AREA_COLOR);
+			}
 			// la partícula se encuentra dentro del area de influencia
 			if (isInInfluenceArea(particle)) {
 				Vector3 dif = particle->getPos() - center.p;

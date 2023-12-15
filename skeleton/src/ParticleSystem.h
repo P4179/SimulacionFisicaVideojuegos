@@ -17,7 +17,7 @@
 #include "./ForceGenerators/WindForceGenerator.h"
 #include "./ForceGenerators/WhirlwindForceGenerator.h"
 #include "./ForceGenerators/ExplosionForceGenerator.h"
-	// Practica 3
+// Practica 3
 #include "./ForceGenerators/AnchoredSpringForceGenerator.h"
 #include "./ForceGenerators/BuoyancyForceGenerator.h"
 #include "./ForceGenerators/ElasticRubberForceGenerator.h"

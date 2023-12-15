@@ -10,8 +10,6 @@ private:
 	Vector3 pos_width;
 	uniform_real_distribution<double> dist;
 
-	virtual Particle* createParticle(Vector3 vel, Vector3 pos);
-
 public:
 	UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth);
 

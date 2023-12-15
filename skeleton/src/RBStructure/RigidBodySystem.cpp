@@ -6,15 +6,17 @@
 RigidBodySystem::RigidBodySystem(PxPhysics* gPhysics, PxScene* gScene) : gPhysics(gPhysics), gScene(gScene),
 RBGenerators(MAX_GENS), RBfGenerators(MAX_FGENS) {
 
-	floor = new BoxStaticRB(gPhysics, gScene, Vector3(0, 0, 0), Vector4(1, 0, 0, 1), Vector3(100, 10, 100));
-	dynamic = new SphereDynamicRB(gPhysics, gScene, Vector3(0, 50, 0), Vector3(0, -1, 0), Vector3(0, 0, 0), DAMPING, 0.15, Vector4(1, 1, 0, 1), 10, 3);
-
+	floor = new BoxStaticRB(gPhysics, gScene, Vector3(0, 0, 0), Vector4(1, 0, 0, 1), Vector3(200, 10, 200));
+	list<DynamicRigidBody*> list;
+	list.push_back(new SphereDynamicRB(gPhysics, gScene, Vector3(-20, 100, 0), Vector3(0, -1, 0), Vector3(0, 0, 0), DAMPING, 0.15, Vector4(1, 1, 0, 1), 3));
+	list.push_back(new SphereDynamicRB(gPhysics, gScene, Vector3(20, 100, 0), Vector3(0, -1, 0), Vector3(0, 0, 0), DAMPING, 0.15, Vector4(1, 0, 1, 1), 3));
+	add(list);
 	registry = new ParticleForceRegistry<DynamicRigidBody>();
 
 	// se crean todos los generadores
 
 	// se crean todas las fuerzas
-	explosionFg = new ExplosionForceGenerator<DynamicRigidBody>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 50, 0), 20, 3000, 15);
+	explosionFg = new ExplosionForceGenerator<DynamicRigidBody>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 50, 0), 20, 3000, 15, -1, true);
 	RBfGenerators.all[EXPLOSION_FG] = explosionFg;
 }
 
@@ -47,6 +49,10 @@ void RigidBodySystem::toggleForce(RBfGens fGen) {
 	if (it == RBfGenerators.actives.end()) {
 		cout << fg->getName() << " incluido" << "\n";
 		RBfGenerators.actives.insert(fg);
+		// se añade la fuerza a las particulas existentes
+		for (auto rigidBody : rigidBodies) {
+			registry->addRegistry(fg, rigidBody);
+		}
 	}
 	// si esta
 	else {
@@ -73,7 +79,6 @@ void RigidBodySystem::toggleGen(RBGens gen) {
 
 RigidBodySystem::~RigidBodySystem() {
 	delete floor;
-	delete dynamic;
 
 	for (auto& rigidBody : rigidBodies) {
 		delete rigidBody;
@@ -87,7 +92,7 @@ RigidBodySystem::~RigidBodySystem() {
 		delete fGen;
 	}
 
-  	delete registry;
+	delete registry;
 }
 
 void RigidBodySystem::onCollision(physx::PxActor* actor1, physx::PxActor* actor2) {

@@ -1,15 +1,16 @@
 #pragma once
 #include <PxPhysicsAPI.h>
 #include "../../RenderUtils.hpp"
+#include <iostream>
 
 using namespace physx;
+using namespace std;
 
 // Elementos dinamicos en la escena (pueden cambiar su posicion)
 class DynamicRigidBody {
 protected:
 	PxPhysics* gPhysics;
 	PxScene* gScene;
-	PxTransform pose;
 	RenderItem* renderItem;
 	// hereda de actor
 	PxRigidDynamic* dynamicRigid;
@@ -19,7 +20,7 @@ protected:
 	float elapsedTime;
 	bool alive;
 
-	void commonParam(const Vector3& pos, const Vector3& linearVel, const Vector3& angularVel, float damping, PxShape* shape, const Vector4& color) {
+	void commonParam(const Vector3& pos, const Vector3& linearVel, const Vector3& angularVel, float damping, PxGeometry* geometry, PxMaterial* material, const Vector4& color) {
 		// fisicas y posicion del objeto estatico
 		dynamicRigid = gPhysics->createRigidDynamic(PxTransform(pos));
 		// velocidad con la que un objeto se desplaza un objeto a
@@ -30,6 +31,8 @@ protected:
 		dynamicRigid->setAngularVelocity(angularVel);
 		// NO SE SI HACE FALTA
 		dynamicRigid->setLinearDamping(damping);
+		// se crea la forma con su material a partir de una geometria
+		PxShape* shape = CreateShape(*geometry, material);
 		// forma del objeto, que afecta a las fisicas
 		dynamicRigid->attachShape(*shape);
 		// se pone el elem en la escena, pero luego hay que pintarlo aparte
@@ -39,10 +42,11 @@ protected:
 	}
 
 	DynamicRigidBody(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos,
-		const Vector3& linearVel, const Vector3& angularVel, float damping, float density, Vector4 color, PxShape* shape, float lifeTime) :
-		gPhysics(gPhysics), gScene(gScene), pose(PxTransform(pos)), lifeTime(lifeTime), elapsedTime(0), alive(true) {
+		const Vector3& linearVel, const Vector3& angularVel, float damping, float density, Vector4 color,
+		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1) :
+		gPhysics(gPhysics), gScene(gScene), lifeTime(lifeTime), elapsedTime(0), alive(true) {
 
-		commonParam(pos, linearVel, angularVel, damping, shape, color);
+		commonParam(pos, linearVel, angularVel, damping, geometry, material, color);
 		// 1ª FORMA DE DEFINIR LA MASA
 		// se hace a traves de una densidad (kg/m^3)
 		// la masa se distribuye de forma uniforme
@@ -51,10 +55,11 @@ protected:
 	}
 
 	DynamicRigidBody(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos,
-		const Vector3& linearVel, const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color, PxShape* shape, float lifeTime) :
-		gPhysics(gPhysics), gScene(gScene), pose(PxTransform(pos)), lifeTime(lifeTime), elapsedTime(0), alive(true) {
+		const Vector3& linearVel, const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color,
+		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1) :
+		gPhysics(gPhysics), gScene(gScene), lifeTime(lifeTime), elapsedTime(0), alive(true) {
 
-		commonParam(pos, linearVel, angularVel, damping, shape, color);
+		commonParam(pos, linearVel, angularVel, damping, geometry, material, color);
 		// 2ª FORMA DE DEFINIR LA MASA
 		// se hace a traves de un tensor de inercia
 		// un tensor de inercia describe como esta distribuida la masa de un objeto
@@ -71,11 +76,14 @@ protected:
 
 public:
 	virtual ~DynamicRigidBody() {
-		//DeregisterRenderItem(renderItem);
+		renderItem->release();
+		dynamicRigid->release();
 	}
 
 	inline Vector3 getPos() const {
-		return pose.p;
+		Vector3 pos = dynamicRigid->getGlobalPose().p;
+		//cout << "X: " << pos.x << " Y: " << pos.y << " Z: " << pos.z << "\n";
+		return pos;
 	}
 
 	inline void addForce(const Vector3& force) {
@@ -100,10 +108,6 @@ public:
 				alive = false;
 			}
 		}
-	}
-
-	inline void setPos(const Vector3& pos) {
-		pose.p = pos;
 	}
 
 	inline bool isAlive() const {

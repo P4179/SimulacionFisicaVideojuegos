@@ -1,19 +1,20 @@
 #pragma once
 #include "../RigidBodies/SphereDynamicRB.h"
+#include "../RigidBodies/BoxDynamicRB.h"
 #include "../RBStructure/RigidBodySystem.h"
 #include <list>
 #include <random>
 
 using namespace std;
 
-enum Shapes { Box, Sphere };
 enum MassDefinition { Density, InertiaTensor };
 
 struct DynamicRBFeatures {
 	Vector4 color;
 	float lifeTime;
+	PxMaterial* material;
 
-	Shapes shape;
+	physx::PxGeometryType::Enum geometry;
 	struct {
 		Vector3 size;
 	} box_data;

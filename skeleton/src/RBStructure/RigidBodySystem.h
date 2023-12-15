@@ -42,6 +42,7 @@ public:
 };
 
 class RigidBodySystem : public Singleton<RigidBodySystem> {
+	// permitir que la clase singleton pueda acceder a los miembros privados de esta clase
 	friend Singleton<RigidBodySystem>;
 
 private:
@@ -56,7 +57,6 @@ private:
 	PxScene* gScene;
 
 	StaticRigidBody* floor;
-	SphereDynamicRB* dynamic;
 
 	list<DynamicRigidBody*> rigidBodies;
 

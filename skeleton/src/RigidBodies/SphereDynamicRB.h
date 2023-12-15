@@ -6,12 +6,15 @@ private:
 
 public:
 	SphereDynamicRB(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos, const Vector3& linearVel,
-		const Vector3& angularVel, float damping, float density, Vector4 color, float lifeTime, float radius) :
+		const Vector3& angularVel, float damping, float density, Vector4 color, float radius,
+		PxMaterial* material = nullptr, float lifeTime = -1) :
 		DynamicRigidBody(gPhysics, gScene, pos, linearVel, angularVel, damping, density, color,
-			CreateShape(PxSphereGeometry(radius)), lifeTime) {}
+			// se pasa dir de memoria para que se pueda pasar el hijo (virtual)
+			&PxSphereGeometry(radius), material, lifeTime) {}
 
 	SphereDynamicRB(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos, const Vector3& linearVel,
-		const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color, float lifeTime, float radius) :
+		const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color, float radius,
+		PxMaterial* material = nullptr, float lifeTime = -1) :
 		DynamicRigidBody(gPhysics, gScene, pos, linearVel, angularVel, damping, massDistribution, color,
-			CreateShape(PxSphereGeometry(radius)), lifeTime) {}
+			&PxSphereGeometry(radius)) {}
 };

@@ -43,9 +43,6 @@
     <ClCompile Include="src\ForceGenerators\ElasticRubberForceGenerator.cpp">
       <Filter>SourceFiles\ForceGenerators</Filter>
     </ClCompile>
-    <ClCompile Include="src\ForceGenerators\ExplosionForceGenerator.cpp">
-      <Filter>SourceFiles\ForceGenerators</Filter>
-    </ClCompile>
     <ClCompile Include="src\ForceGenerators\GravityForceGenerator.cpp">
       <Filter>SourceFiles\ForceGenerators</Filter>
     </ClCompile>
@@ -150,9 +147,6 @@
     <ClInclude Include="src\ForceGenerators\BuoyancyForceGenerator.h">
       <Filter>HeaderFiles\ForceGenerators</Filter>
     </ClInclude>
-    <ClInclude Include="src\Singleton.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
     <ClInclude Include="src\RBStructure\RigidBodySystem.h">
       <Filter>HeaderFiles\RBStructure</Filter>
     </ClInclude>
@@ -176,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="src\RBGenerators\GaussianRBGenerator.h">
       <Filter>HeaderFiles\RBGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Singleton.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RigidBodies\BoxDynamicRB.h">
+      <Filter>HeaderFiles\RigidBodies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

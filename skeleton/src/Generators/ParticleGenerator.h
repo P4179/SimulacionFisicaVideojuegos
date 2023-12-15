@@ -56,6 +56,10 @@ protected:
 		_mt = std::mt19937(rd());
 	}
 
+	virtual Particle* createParticle(Vector3 vel, Vector3 pos) {
+		return new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
+	}
+
 public:
 	virtual ~ParticleGenerator() {}
 

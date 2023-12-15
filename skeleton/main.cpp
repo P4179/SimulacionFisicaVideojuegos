@@ -71,6 +71,8 @@ void initPhysics(bool interactive)
 	// CREAR OBJETOS
 	//shoot = new ShootManager();
 	//particleSystem = new ParticleSystem();
+
+	// no se elimina porque es un singleton y funciona con puntero inteligente
 	RBSystem = RigidBodySystem::init(gPhysics, gScene);
 }
 
@@ -95,6 +97,9 @@ void stepPhysics(bool interactive, double t)
 	if (particleSystem != nullptr) {
 		particleSystem->integrate(t);
 	}
+	if (RBSystem != nullptr) {
+		RBSystem->integrate(t);
+	}
 }
 
 // Function to clean data
@@ -102,6 +107,17 @@ void stepPhysics(bool interactive, double t)
 // liberación de todos los objetos que se han creado
 void cleanupPhysics(bool interactive)
 {
+	// borrar memoria
+	if (shoot != nullptr) {
+		delete shoot;
+	}
+	if (particleSystem != nullptr) {
+		delete particleSystem;
+	}
+	if (RBSystem != nullptr) {
+		delete RBSystem;
+	}
+
 	PX_UNUSED(interactive);
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
@@ -114,14 +130,6 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 
 	gFoundation->release();
-
-	// borrar memoria
-	if (shoot != nullptr) {
-		delete shoot;
-	}
-	if (particleSystem != nullptr) {
-		delete particleSystem;
-	}
 }
 
 // Function called when a key is pressed
