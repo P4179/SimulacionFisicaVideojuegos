@@ -49,7 +49,7 @@ private:
 	// expresa la disminucion de la velocidad debido a las fuerzas de resistencia
 	const float DAMPING = 0.8;
 	// numero maximo de rigidbodies que puede haber en escena
-	const int MAX = 200;
+	const int MAX = 2000;
 
 	// motor de fisicas
 	PxPhysics* gPhysics;

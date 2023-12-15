@@ -8,7 +8,7 @@ RBGenerators(MAX_GENS), RBfGenerators(MAX_FGENS), floor(nullptr), rigidBodies() 
 	registry = new ParticleForceRegistry<Particle>();
 
 	// se crean todas las fuerzas
-	explosionFg = new ExplosionForceGenerator<Particle>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 40, 0), 30, 30, 15, -1, true);
+	explosionFg = new ExplosionForceGenerator<Particle>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 50, 0), 30, 20, 15, -1, true);
 	RBfGenerators.all[EXPLOSION_FG] = explosionFg;
 }
 
@@ -99,27 +99,48 @@ void RigidBodySystem::onCollision(physx::PxActor* actor1, physx::PxActor* actor2
 }
 
 void RigidBodySystem::create() {
-	floor = new BoxStaticRB(gPhysics, gScene, Vector3(0, 0, 0), Vector4(1, 0, 0, 1), Vector3(100, 3, 100));
+	floor = new BoxStaticRB(gPhysics, gScene, Vector3(0, 0, 0), Vector4(0.118, 0.569, 0.22, 1), Vector3(100, 1, 100));
 
-	// se crean todos los generadores
 	ParticleInfo info;
 	info.damping = DAMPING;
-	info.color = Vector4(0.337, 0.192, 0.8, 1);
-	info.lifeTime = 3;
 	info.type = RigidBody;
+
+	// se crean todos los generadores
+	info.color = Vector4(0.204, 0.8, 0.82, 1);
+	info.lifeTime = 8;
 
 	info.geometry = physx::PxGeometryType::eSPHERE;
 	info.sphere_data.radius = 1.2;
 
-	info.rigidBody_data.massDef = Density;
-	info.rigidBody_data.density_data.density = 0.1;
-	// coeficientes de rozamiento estatico (cuando el objeto no se mueve),
-	// rozamiento dinamico (cuando el objeto se esta moviendo,
-	// elastica (indica cuanto rebota)
-	info.rigidBody_data.material = gPhysics->createMaterial(3, 2, 4);
+	info.rigidBody_data.massDef = InertiaTensor;
+	info.rigidBody_data.inertiaTensor_data.massDistribution = Vector3(1.0, 2.0, 3.0);
+	// coef de rozamiento estatico --> resistencia al inicio del movimiento entre dos en reposo relativo (cuando estan parados)
+	// coef dinamico --> resistencia entre dos objetos en movimiento relativo (cuando se estan moviendo)
+	// coef rebote
+	// Sueles estar entre [0, 1] si se quiere conseguir una simulacion mas coherente con las leyes de la fisica
+	info.rigidBody_data.material = gPhysics->createMaterial(0.2, 0.6, 2);
 
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion
-	addGenerator(new GaussianParticleGenerator(RB_GENS_NAMES.at(GAUSSIAN_GEN), Vector3(0, 0, 0), Vector3(0, 10, 0), info, 0.5, 1, Vector3(0, 0, 0), Vector3(0, 0, 0)),
+	addGenerator(new UniformParticleGenerator(RB_GENS_NAMES.at(UNIFORM_GEN), Vector3(0, 150, 0), Vector3(0, -100, 0), info, 0.2, 2, Vector3(0, 10, 0), Vector3(80, 5, 80)),
+		UNIFORM_GEN, true);
+
+
+	info.color = Vector4(0.337, 0.192, 0.8, 1);
+	info.lifeTime = 10;
+
+	info.geometry = physx::PxGeometryType::eBOX;
+	info.box_data.size = Vector3(0.6, 0.3, 0.3);
+
+	info.rigidBody_data.massDef = Density;
+	info.rigidBody_data.density_data.density = 0.1;
+	// coef de rozamiento estatico --> resistencia al inicio del movimiento entre dos en reposo relativo (cuando estan parados)
+	// coef dinamico --> resistencia entre dos objetos en movimiento relativo (cuando se estan moviendo)
+	// coef rebote
+	// Sueles estar entre [0, 1] si se quiere conseguir una simulacion mas coherente con las leyes de la fisica
+	info.rigidBody_data.material = gPhysics->createMaterial(0.2, 0.3, 2);
+
+	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion
+	addGenerator(new GaussianParticleGenerator(RB_GENS_NAMES.at(GAUSSIAN_GEN), Vector3(0, 20, 0), Vector3(0, 70, 0), info, 0.2, 1, Vector3(5, 0, 5), Vector3(2, 0, 2)),
 		GAUSSIAN_GEN, true);
 }
 

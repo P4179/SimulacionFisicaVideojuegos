@@ -16,5 +16,5 @@ public:
 		const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color, float radius,
 		PxMaterial* material = nullptr, float lifeTime = -1) :
 		DynamicRigidBody(gPhysics, gScene, pos, linearVel, angularVel, damping, massDistribution, color,
-			&PxSphereGeometry(radius)) {}
+			&PxSphereGeometry(radius), material, lifeTime) {}
 };
