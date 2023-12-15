@@ -1,17 +1,6 @@
 #include "Particle.h"
 #include <iostream>
 
-// t está en segundos
-void Particle::updateLifeTime(double t) {
-	if (lifeTime >= 0) {
-		elapsedTime += t;
-		if (elapsedTime > lifeTime) {
-			elapsedTime = 0;
-			alive = false;
-		}
-	}
-}
-
 void Particle::infoParticleType(ParticleType type, float& masaReal, float& vReal) {
 	switch (type) {
 	case Default:
@@ -42,7 +31,8 @@ void Particle::calculateSimulatedPhysics(ParticleType type, Vector3 acReal, floa
 	acSimulada = acReal * (vSimulada / vReal) * (vSimulada / vReal);
 }
 
-// NO SE UTILIZA: INVERSO DE LA MASA, ALTURA, VOLUMEN
+// PRACTICA 2
+// NO SE UTILIZA: INVERSO DE LA MASA
 Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius, Vector4 color, ParticleType type) :
 	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), radius(radius), color(color) {
 	// se necesita un radio
@@ -56,7 +46,8 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 	//calculateSimulatedPhysics(type, acReal, vSimulada);
 }
 
-// NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA, ALTURA, VOLUMEN
+// PRACTICA 3 EN ADELANTE (CREAR ESFERA)
+// NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA
 Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius, Vector4 color) :
 	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
 	elapsedTime(0), force(Vector3(0)), radius(radius), color(color) {
@@ -65,17 +56,31 @@ Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, floa
 	commonConstructor(shape, color, vSimulada);
 }
 
+// CREAR CUALQUIER FORMA
 // NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA, RADIO
-Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, Vector3 size, Vector4 color) :
+Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, physx::PxGeometry* geometry, Vector4 color) :
 	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
-	elapsedTime(0), force(Vector3(0)), size(size), volume(size.x* size.y* size.z), color(color) {
+	elapsedTime(0), force(Vector3(0)), color(color) {
 
-	physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(size));
-	commonConstructor(shape, color, vSimulada);
+	if (geometry != nullptr) {
+		physx::PxShape* shape = CreateShape(*geometry);
+		commonConstructor(shape, color, vSimulada);
+	}
 }
 
 Particle::~Particle() {
 	DeregisterRenderItem(renderItem);
+}
+
+// t está en segundos
+void Particle::updateLifeTime(double t) {
+	if (lifeTime >= 0) {
+		elapsedTime += t;
+		if (elapsedTime > lifeTime) {
+			elapsedTime = 0;
+			alive = false;
+		}
+	}
 }
 
 void Particle::integrate(double t) {

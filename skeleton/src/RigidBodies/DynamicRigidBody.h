@@ -1,28 +1,24 @@
 #pragma once
 #include <PxPhysicsAPI.h>
 #include "../../RenderUtils.hpp"
+#include "../Particles/Particle.h"
 #include <iostream>
 
 using namespace physx;
 using namespace std;
 
 // Elementos dinamicos en la escena (pueden cambiar su posicion)
-class DynamicRigidBody {
+class DynamicRigidBody : public Particle {
 protected:
 	PxPhysics* gPhysics;
 	PxScene* gScene;
-	RenderItem* renderItem;
 	// hereda de actor
 	PxRigidDynamic* dynamicRigid;
 
-	// si es negativa, la vida de la particula es infinita
-	float lifeTime;
-	float elapsedTime;
-	bool alive;
 
-	void commonParam(const Vector3& pos, const Vector3& linearVel, const Vector3& angularVel, float damping, PxGeometry* geometry, PxMaterial* material, const Vector4& color) {
+	void commonParam(const Vector3& linearVel, const Vector3& angularVel, float damping, PxGeometry* geometry, PxMaterial* material, const Vector4& color) {
 		// fisicas y posicion del objeto estatico
-		dynamicRigid = gPhysics->createRigidDynamic(PxTransform(pos));
+		dynamicRigid = gPhysics->createRigidDynamic(pose);
 		// velocidad con la que un objeto se desplaza un objeto a
 		// lo largo de una trayectoria recta/punto A a punto B (m/s)
 		dynamicRigid->setLinearVelocity(linearVel);
@@ -44,9 +40,10 @@ protected:
 	DynamicRigidBody(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos,
 		const Vector3& linearVel, const Vector3& angularVel, float damping, float density, Vector4 color,
 		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1) :
-		gPhysics(gPhysics), gScene(gScene), lifeTime(lifeTime), elapsedTime(0), alive(true) {
+		Particle(pos, {}, {}, damping, lifeTime, {}, nullptr, color),
+		gPhysics(gPhysics), gScene(gScene) {
 
-		commonParam(pos, linearVel, angularVel, damping, geometry, material, color);
+		commonParam(linearVel, angularVel, damping, geometry, material, color);
 		// 1ª FORMA DE DEFINIR LA MASA
 		// se hace a traves de una densidad (kg/m^3)
 		// la masa se distribuye de forma uniforme
@@ -57,9 +54,10 @@ protected:
 	DynamicRigidBody(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos,
 		const Vector3& linearVel, const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color,
 		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1) :
-		gPhysics(gPhysics), gScene(gScene), lifeTime(lifeTime), elapsedTime(0), alive(true) {
+		Particle(pos, {}, {}, damping, lifeTime, {}, nullptr, color),
+		gPhysics(gPhysics), gScene(gScene) {//, lifeTime(lifeTime), elapsedTime(0), alive(true) {
 
-		commonParam(pos, linearVel, angularVel, damping, geometry, material, color);
+		commonParam(linearVel, angularVel, damping, geometry, material, color);
 		// 2ª FORMA DE DEFINIR LA MASA
 		// se hace a traves de un tensor de inercia
 		// un tensor de inercia describe como esta distribuida la masa de un objeto
@@ -76,17 +74,10 @@ protected:
 
 public:
 	virtual ~DynamicRigidBody() {
-		renderItem->release();
 		dynamicRigid->release();
 	}
 
-	inline Vector3 getPos() const {
-		Vector3 pos = dynamicRigid->getGlobalPose().p;
-		//cout << "X: " << pos.x << " Y: " << pos.y << " Z: " << pos.z << "\n";
-		return pos;
-	}
-
-	inline void addForce(const Vector3& force) {
+	inline void addForce(const Vector3& force) override {
 		dynamicRigid->addForce(force);
 	}
 
@@ -100,17 +91,19 @@ public:
 		return dynamicRigid;
 	}
 
-	inline void updateLifeTime(double t) {
-		if (lifeTime >= 0) {
-			elapsedTime += t;
-			if (elapsedTime > lifeTime) {
-				elapsedTime = 0;
-				alive = false;
-			}
-		}
+	void integrate(double t) override {
+		updateLifeTime(t);
 	}
 
-	inline bool isAlive() const {
-		return alive;
+	// VIENTO PARA RIGID_BODY (falta definir areas para cada tipo)
+	virtual inline Vector3 getVel() const override {
+		return dynamicRigid->getLinearVelocity();
+	}
+
+	// FUERZAS PARA RIGID_BODYS
+	inline Vector3 getPos() const override {
+		Vector3 pos = dynamicRigid->getGlobalPose().p;
+		//cout << "X: " << pos.x << " Y: " << pos.y << " Z: " << pos.z << "\n";
+		return pos;
 	}
 };

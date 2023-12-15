@@ -4,22 +4,15 @@
 
 using namespace std;
 
-template <typename T>
-class ForceParticleGenerator : public ParticleGenerator<T> {
+class ForceParticleGenerator : public ParticleGenerator {
 protected:
 	unordered_set<ForceGenerator<Particle>*> forceGens;
 
-	/*
-	Particle* createParticle(Vector3 pos, Vector3 vel) override {
-		return new Particle(pos, vel, _info.invMasa, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
-	}
-	*/
-
-	ForceParticleGenerator(string name, Vector3 meanPos, Vector3 meanVel, ParticleInfo info, double genProbability, int numParticles, const unordered_set<ForceGenerator<T>*>& forceGens = unordered_set<ForceGenerator<T>*>()) :
+	ForceParticleGenerator(string name, Vector3 meanPos, Vector3 meanVel, ParticleInfo info, double genProbability, int numParticles, const unordered_set<ForceGenerator<Particle>*>& forceGens = unordered_set<ForceGenerator<Particle>*>()) :
 		ParticleGenerator(name, meanPos, meanVel, info, genProbability, numParticles), forceGens(forceGens) {}
 public:
 
-	// solo para particulas render y fuerzas locales
+	// para fuerzas locales
 	virtual void update(ListParticles* particles) {
 		// no hace falta indicar el template, ya lo supone el compilador
 		particles->add(generateParticles(), forceGens);

@@ -22,12 +22,6 @@
     <ClCompile Include="src\Particles\Firework.cpp">
       <Filter>SourceFiles\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\Generators\UniformParticleGenerator.cpp">
-      <Filter>SourceFiles\Generators</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Generators\GaussianParticleGenerator.cpp">
-      <Filter>SourceFiles\Generators</Filter>
-    </ClCompile>
     <ClCompile Include="src\ParticleSystem.cpp">
       <Filter>SourceFiles</Filter>
     </ClCompile>
@@ -58,14 +52,8 @@
     <ClCompile Include="src\Generators\LauncherParticleGenerator.cpp">
       <Filter>SourceFiles\Generators</Filter>
     </ClCompile>
-    <ClCompile Include="src\ParticleForceRegistry.cpp">
-      <Filter>SourceFiles</Filter>
-    </ClCompile>
     <ClCompile Include="src\ShootManager.cpp">
       <Filter>SourceFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RBGenerators\RigidBodyGenerator.cpp">
-      <Filter>SourceFiles\RBGenerators</Filter>
     </ClCompile>
     <ClCompile Include="src\RBStructure\RigidBodySystem.cpp">
       <Filter>SourceFiles\RBStructure</Filter>
@@ -162,15 +150,6 @@
     <ClInclude Include="src\RigidBodies\SphereDynamicRB.h">
       <Filter>HeaderFiles\RigidBodies</Filter>
     </ClInclude>
-    <ClInclude Include="src\RBGenerators\RigidBodyGenerator.h">
-      <Filter>HeaderFiles\RBGenerators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\RBGenerators\UniformRBGenerator.h">
-      <Filter>HeaderFiles\RBGenerators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\RBGenerators\GaussianRBGenerator.h">
-      <Filter>HeaderFiles\RBGenerators</Filter>
-    </ClInclude>
     <ClInclude Include="src\Singleton.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
@@ -179,6 +158,9 @@
     </ClInclude>
     <ClInclude Include="src\particle_info.h">
       <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particles\BoxParticle.h">
+      <Filter>HeaderFiles\Particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -209,12 +191,6 @@
     <Filter Include="SourceFiles\ForceGenerators">
       <UniqueIdentifier>{61280eae-1bf4-4a30-b7ac-86e14ed65441}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HeaderFiles\RBGenerators">
-      <UniqueIdentifier>{13551cef-91e2-4ac2-afb1-1fabd7c3700d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HeaderFiles\RBForceGenerators">
-      <UniqueIdentifier>{12e1e9cc-0161-4494-9738-1c4642a33560}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HeaderFiles\RBStructure">
       <UniqueIdentifier>{7bc0d1ba-0633-4498-9627-894a0f31a475}</UniqueIdentifier>
     </Filter>
@@ -226,12 +202,6 @@
     </Filter>
     <Filter Include="SourceFiles\RigidBodies">
       <UniqueIdentifier>{f79f8825-6ab1-4b14-9a00-f6ccbfbab73d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SourceFiles\RBForceGenerators">
-      <UniqueIdentifier>{d618139e-1fc6-4b06-815c-00e001e59d09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SourceFiles\RBGenerators">
-      <UniqueIdentifier>{4c266420-2461-4336-b1e0-1c32678ab32a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

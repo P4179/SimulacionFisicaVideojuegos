@@ -5,8 +5,7 @@
 
 using namespace std;
 
-template <typename T>
-class GaussianParticleGenerator : public ForceParticleGenerator<T> {
+class GaussianParticleGenerator : public ForceParticleGenerator {
 protected:
 	Vector3 std_dev_pos;
 	Vector3 std_dev_vel;
@@ -29,16 +28,14 @@ protected:
 	}
 
 public:
-	GaussianParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos, const unordered_set<ForceGenerator<T>*>& forceGens = {}) :
+	GaussianParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos, const unordered_set<ForceGenerator<Particle>*>& forceGens = {}) :
 		ForceParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles, forceGens),
 		std_dev_pos(stdDevPos), std_dev_vel(stdDevVel) {}
 
-	list<T*> generateParticles() {
+	list<Particle*> generateParticles() {
 		list<Particle*> particles;
 
-		double probability = _u(_mt);
-		if (_generation_probability > probability) {
-
+		if (probability()) {
 			for (int i = 0; i < _num_particles; ++i) {
 				Vector3 vel = _mean_vel;
 				vel.x += variation(std_dev_vel.x);
@@ -50,14 +47,13 @@ public:
 				pos.y += variation(std_dev_pos.y);
 				pos.z += variation(std_dev_pos.z);
 
-				particles.push_back(createParticle(vel, pos));
+				particles.push_back(createParticle(pos, vel));
 			}
 		}
 
 		return particles;
 	}
 
-	//virtual void update(ListParticles* particles);
 
 	inline void setStdDevVel(Vector3 newVel) {
 		this->std_dev_vel = newVel;

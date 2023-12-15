@@ -12,7 +12,7 @@
 #include "../ForceGenerators/ExplosionForceGenerator.h"
 #include "../ParticleForceRegistry.h"
 
-class RigidBodyGenerator;
+class ParticleGenerator;
 
 using namespace physx;
 using namespace std;
@@ -48,7 +48,7 @@ class RigidBodySystem : public Singleton<RigidBodySystem> {
 private:
 	// expresa la disminucion de la velocidad debido a las fuerzas de resistencia
 	const float DAMPING = 0.8;
-	// numero maximo de rigidbody que puede haber en escena
+	// numero maximo de rigidbodies que puede haber en escena
 	const int MAX = 200;
 
 	// motor de fisicas
@@ -58,20 +58,20 @@ private:
 
 	StaticRigidBody* floor;
 
-	list<DynamicRigidBody*> rigidBodies;
+	list<Particle*> rigidBodies;
 
-	GensSystem<RigidBodyGenerator> RBGenerators;
-	GensSystem<ForceGenerator<DynamicRigidBody>> RBfGenerators;
+	GensSystem<ParticleGenerator> RBGenerators;
+	GensSystem<ForceGenerator<Particle>> RBfGenerators;
 
-	ParticleForceRegistry<DynamicRigidBody>* registry;
+	ParticleForceRegistry<Particle>* registry;
 
-	ExplosionForceGenerator<DynamicRigidBody>* explosionFg;
+	ExplosionForceGenerator<Particle>* explosionFg;
 
 	RigidBodySystem() {}
 
 	RigidBodySystem(PxPhysics* gPhysics, PxScene* gScene);
 
-	void addGenerator(RigidBodyGenerator* gen, bool enable);
+	void addGenerator(ParticleGenerator* gen, RBGens name, bool enable);
 
 	void refresh();
 
@@ -95,7 +95,8 @@ public:
 
 	void keyPressed(int __cdecl key);
 
-	void add(list<DynamicRigidBody*> list);
+	// fuerzas globales
+	void add(list<Particle*> list);
 
 	inline PxPhysics* getPhysics() const {
 		return gPhysics;

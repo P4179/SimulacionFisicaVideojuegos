@@ -267,15 +267,11 @@
     <ClCompile Include="src\ForceGenerators\WindForceGenerator.cpp" />
     <ClCompile Include="src\Generators\CircleGenerator.cpp" />
     <ClCompile Include="src\Generators\FireworkGenerator.cpp" />
-    <ClCompile Include="src\Generators\GaussianParticleGenerator.cpp" />
     <ClCompile Include="src\Generators\LauncherParticleGenerator.cpp" />
-    <ClCompile Include="src\Generators\UniformParticleGenerator.cpp" />
     <ClCompile Include="src\ListParticles.cpp" />
-    <ClCompile Include="src\ParticleForceRegistry.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Particles\Firework.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
-    <ClCompile Include="src\RBGenerators\RigidBodyGenerator.cpp" />
     <ClCompile Include="src\RBStructure\RigidBodySystem.cpp" />
     <ClCompile Include="src\ShootManager.cpp" />
   </ItemGroup>
@@ -304,12 +300,10 @@
     <ClInclude Include="src\ListParticles.h" />
     <ClInclude Include="src\ParticleForceRegistry.h" />
     <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\Particles\BoxParticle.h" />
     <ClInclude Include="src\Particles\Firework.h" />
     <ClInclude Include="src\Particles\Particle.h" />
     <ClInclude Include="src\particle_info.h" />
-    <ClInclude Include="src\RBGenerators\GaussianRBGenerator.h" />
-    <ClInclude Include="src\RBGenerators\RigidBodyGenerator.h" />
-    <ClInclude Include="src\RBGenerators\UniformRBGenerator.h" />
     <ClInclude Include="src\RBStructure\RigidBodySystem.h" />
     <ClInclude Include="src\RigidBodies\BoxDynamicRB.h" />
     <ClInclude Include="src\RigidBodies\BoxStaticRB.h" />

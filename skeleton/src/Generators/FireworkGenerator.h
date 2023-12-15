@@ -6,12 +6,12 @@ class Firework;
 
 using namespace std;
 
-class FireworkGenerator : public GaussianParticleGenerator<Particle> {
+class FireworkGenerator : public GaussianParticleGenerator {
 private:
 	static vector<FireworkGenerator*> fireworks;
 
 protected:
-	virtual Particle* createParticle(Vector3 vel, Vector3 pos);
+	virtual Particle* createParticle(Vector3 pos, Vector3 vel);
 
 public:
 	FireworkGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, int num_particles, Vector3 stdDevVel, Vector3 stdDevPos, const unordered_set<ForceGenerator<Particle>*>& forceGens = unordered_set<ForceGenerator<Particle>*>());

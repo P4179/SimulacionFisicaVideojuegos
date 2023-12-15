@@ -36,7 +36,7 @@ void WindForceGenerator::updateForce(Particle* particle, double t) {
 			// A --> área de la sección transversal a la dirección de movimiento (PI*Diametro^2/4)
 			// se aproxima a que es un cuarto del area de la esfera
 			// p --> densidad del aire (1.2)
-			float A = M_PI * (2 * particle->getRadius()) * (2 * particle->getRadius()) / 4;
+			float A = particle->getArea() / 4;
 			k = A * COEF_ROZ_AIRE * DENSIDAD_AIRE;
 		}
 		Vector3 force = COEF_ROZ_AIRE * dif + k * dif.magnitude() * dif;

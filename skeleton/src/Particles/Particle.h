@@ -1,26 +1,25 @@
 #pragma once
 #include "../../RenderUtils.hpp"
 #include <iostream>
+// numero PI
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 class ListParticles;
 
 using namespace std;
 
+// PRACTICA 1-2
 enum ParticleType { Default };
 
+/*
+Particle es la clase base y se trata de una esfera
+- Hijos directos que son particles render con distintas formas
+- DynamicRigidBody. Clase abstracta. Tiene hijos con diferentes formas
+- Firework
+*/
 class Particle {
-protected:
-	// coeficiente damping -> se utiliza para solucionar errores de simulación
-	// se puede utilizar además para simular rozamiento
-	double damping;
-
-	// vector velocidad, que indica la dirección del tiro
-	// luego, tiene en cuenta la velocidad simulada
-	Vector3 vel;
-	// a render item le pasaremos la dirección de este pose, para que se actualize automáticamente
-	physx::PxTransform pose;
-	RenderItem* renderItem;
-	Vector4 color;
+private:
 	float radius;
 
 	// vector que contiene todas las fuerzas que se le aplican a la partícula
@@ -33,19 +32,9 @@ protected:
 	float masaSimulada;
 	Vector3 acSimulada;
 
-	// tiempo de vida de la partícula
-	// un tiempo de vida negativo quiere decir que la particula es infinita
-	float lifeTime;
-	bool alive;
-	float elapsedTime;
-
-	// PRACTICA 3 -> PARTICULA CUADRADA PARA LA FLOTACION (TIENE UN VOLUMEN Y UNA ALTURA)
-	// importa longitud/altura de la particula
-	Vector3 size;
-	float volume;
-
-	// t está en segundos
-	void updateLifeTime(double t);
+	// vector velocidad, que indica la dirección del tiro
+	// luego, tiene en cuenta la velocidad simulada
+	Vector3 vel;
 
 	void infoParticleType(ParticleType type, float& masaReal, float& vReal);
 
@@ -76,16 +65,40 @@ protected:
 		this->vel = vel * vSimulada;
 	}
 
+protected:
+	// coeficiente damping -> se utiliza para solucionar errores de simulación
+	// se puede utilizar además para simular rozamiento
+	double damping;
+
+	// a render item le pasaremos la dirección de este pose, para que se actualize automáticamente
+	physx::PxTransform pose;
+	RenderItem* renderItem;
+	Vector4 color;
+
+	// tiempo de vida de la partícula
+	// un tiempo de vida negativo quiere decir que la particula es infinita
+	float lifeTime;
+	bool alive;
+	float elapsedTime;
+
+	// PRACTICA 3 -> PARTICULA CUADRADA PARA LA FLOTACION (TIENE UN VOLUMEN Y UNA ALTURA)
+	// importa longitud/altura de la particula
+	//Vector3 size;
+	//float volume;
+
+	// t está en segundos
+	void updateLifeTime(double t);
+
+	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, physx::PxGeometry* geometry, Vector4 color = Vector4(1, 0, 0, 1));
+
 public:
 	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Default);
 
 	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1));
 
-	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, Vector3 size, Vector4 color = Vector4(1, 0, 0, 1));
-
 	virtual ~Particle();
 
-	void integrate(double t);
+	virtual void integrate(double t);
 
 	inline bool isAlive() const {
 		return alive;
@@ -103,49 +116,17 @@ public:
 
 	// añadir una fuerza a la fuerza resultante
 	// se utiliza el principio de superposicion
-	inline void addForce(const Vector3& f) {
+	virtual inline void addForce(const Vector3& f) {
 		force += f;
 	}
 
+	// SOLO PARA LA PARTICULA RENDER
 	inline float getInvMasa() const {
 		if (invMasa < 1e-10) {
 			throw std::exception("Particle with infinite mass");
 		}
 		return invMasa;
 	}
-
-	inline void aumentarMasa() {
-		invMasa = invMasa / 10;
-		cout << "Inverso masa = " << invMasa << "\n";
-	}
-
-	inline void disminuirMasa() {
-		float aux = invMasa * 10;
-		if (aux < 1) {
-			invMasa = aux;
-		}
-		cout << "Inverso masa = " << invMasa << "\n";
-	}
-
-	inline void disminuirTam() {
-		Vector3 aux = size + Vector3(-2);
-		if (aux.x > 0 && aux.y > 0 && aux.z > 0) {
-			size = aux;
-			volume = size.x * size.y * size.z;
-			DeregisterRenderItem(renderItem);
-			physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(size));
-			renderItem = new RenderItem(shape, &pose, color);
-		}
-	}
-
-	inline void aumentarTam() {
-		size += Vector3(2);
-		volume = size.x * size.y * size.z;
-		DeregisterRenderItem(renderItem);
-		physx::PxShape* shape = CreateShape(physx::PxBoxGeometry(size));
-		renderItem = new RenderItem(shape, &pose, color);
-	}
-
 	inline float getMasa() {
 		// la letra 'e' significa que se trata de notación científica
 		// por ejemplo, 1e-10 es 1*10^(-10)
@@ -154,24 +135,35 @@ public:
 		}
 		return 1 / invMasa;
 	}
+	inline void aumentarMasa() {
+		invMasa = invMasa / 10;
+		cout << "Inverso masa = " << invMasa << "\n";
+	}
+	inline void disminuirMasa() {
+		float aux = invMasa * 10;
+		if (aux < 1) {
+			invMasa = aux;
+		}
+		cout << "Inverso masa = " << invMasa << "\n";
+	}
 
-	inline Vector3 getVel() const {
+	// SE UTILIZAN PARA LA FLOTACION
+	virtual inline void disminuirTam() {}
+	virtual inline void aumentarTam() {}
+	// IMPORTANTE REDEFINIR
+	virtual inline float getLength() const { return 0; }
+	virtual inline float getVolume() const { return 0; }
+
+	// SE UTILIZAN PARA EL VIENTO (REDEFINIR)
+	virtual inline float getArea() const {
+		return 4 * radius * M_PI;
+	}
+	virtual inline Vector3 getVel() const {
 		return vel;
 	}
 
-	inline float getRadius() const {
-		return radius;
-	}
-
-	inline Vector3 getPos() const {
+	// SE UTILIZAN PARA MUCHAS FUERZAS (REDEFINIR)
+	virtual inline Vector3 getPos() const {
 		return pose.p;
-	}
-
-	inline float getLength() const {
-		return size.y;
-	}
-
-	inline float getVolume() const {
-		return volume;
 	}
 };

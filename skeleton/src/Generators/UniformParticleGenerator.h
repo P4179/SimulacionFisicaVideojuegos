@@ -4,25 +4,21 @@
 
 using namespace std;
 
-template <typename T>
-class UniformParticleGenerator : public ForceParticleGenerator<T> {
+class UniformParticleGenerator : public ForceParticleGenerator {
 private:
 	Vector3 vel_width;
 	Vector3 pos_width;
 	uniform_real_distribution<double> dist;
 
 public:
-	UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth, const unordered_set<ForceGenerator<T>*>& forceGens = {}) :
+	UniformParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles, Vector3 velWidth, Vector3 posWidth, const unordered_set<ForceGenerator<Particle>*>& forceGens = {}) :
 		ForceParticleGenerator(name, mean_pos, mean_vel, info, generation_probability, num_particles, forceGens),
 		vel_width(velWidth), pos_width(posWidth), dist(uniform_real_distribution<double>(-1, 1)) {}
 
-	virtual list<T*> generateParticles() {
+	virtual list<Particle*> generateParticles() {
 		list<Particle*> particles;
 
-		double probability = _u(_mt);
-		// se generan partículas
-		if (_generation_probability > probability) {
-
+		if (probability()) {
 			for (int i = 0; i < _num_particles; ++i) {
 				Vector3 vel = _mean_vel;
 				vel.x += dist(_mt) * vel_width.x;
@@ -34,13 +30,11 @@ public:
 				pos.y += dist(_mt) * pos_width.y;
 				pos.z += dist(_mt) * pos_width.z;
 
-				Particle* particle = createParticle(pos, vel);//new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
+				Particle* particle = createParticle(pos, vel);
 				particles.push_back(particle);
 			}
 		}
 
 		return particles;
 	}
-
-	//virtual void update(ListParticles* particles);
 };

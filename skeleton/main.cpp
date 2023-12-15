@@ -68,7 +68,7 @@ void initPhysics(bool interactive)
 	// puede haber varias escenas, pero cada actor solo puede pertenecer a una de ellas
 	gScene = gPhysics->createScene(sceneDesc);
 
-	// CREAR OBJETOS
+	// CREAR OBJETOS 
 	//shoot = new ShootManager();
 	//particleSystem = new ParticleSystem();
 

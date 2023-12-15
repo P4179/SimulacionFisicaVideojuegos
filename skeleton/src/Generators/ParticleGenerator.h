@@ -2,14 +2,17 @@
 #include <list>
 #include <random>
 #include "../Particles/Particle.h"
+#include "../Particles/BoxParticle.h"
+#include "../RigidBodies/BoxDynamicRB.h"
+#include "../RigidBodies/SphereDynamicRB.h"
 #include "../ListParticles.h"
 #include "../particle_info.h"
+#include "../RBStructure/RigidBodySystem.h"
 
 using namespace std;
 using namespace physx;
 
 // CLASE ABSTRACTA
-template<typename T>
 class ParticleGenerator {
 protected:
 	string name;
@@ -49,29 +52,72 @@ protected:
 		_mt = std::mt19937(rd());
 	}
 
-	virtual T* createParticle(Vector3 pos, Vector3 vel) {
+	DynamicRigidBody* createRigidBody(Vector3 pos, Vector3 vel) {
+		auto system = RigidBodySystem::get();
 		switch (_info.geometry) {
-		case  PxGeometryType::eBOX:
-			return new T(pos, vel, _info.renderParticle_data.invMasa, _info.damping, _info.lifeTime, _info.renderParticle_data.vSimulada, _info.box_data.size, _info.color);
+		case PxGeometryType::eBOX:
+			switch (_info.rigidBody_data.massDef) {
+			case Density:
+				return new BoxDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+					_info.rigidBody_data.density_data.density, _info.color, _info.box_data.size, _info.rigidBody_data.material, _info.lifeTime);
+				break;
+			case InertiaTensor:
+				return new BoxDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+					_info.rigidBody_data.inertiaTensor_data.massDistribution, _info.color, _info.box_data.size, _info.rigidBody_data.material, _info.lifeTime);
+				break;
+			}
 			break;
 
 		case PxGeometryType::eSPHERE:
-			return new T(pos, vel, _info.renderParticle_data.invMasa, _info.damping, _info.lifeTime, _info.renderParticle_data.vSimulada, _info.sphere_data.radius, _info.color);
+			switch (_info.rigidBody_data.massDef) {
+			case Density:
+				return new SphereDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+					_info.rigidBody_data.density_data.density, _info.color, _info.sphere_data.radius, _info.rigidBody_data.material, _info.lifeTime);
+				break;
+			case InertiaTensor:
+				return new SphereDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+					_info.rigidBody_data.inertiaTensor_data.massDistribution, _info.color, _info.sphere_data.radius, _info.rigidBody_data.material, _info.lifeTime);
+				break;
+			}
 			break;
 		}
-		//return new Particle(pos, vel, _info.ac, _info.damping, _info.lifeTime, _info.vSimulada, _info.radius, _info.color);
+	}
+
+	Particle* createParticleRender(Vector3 pos, Vector3 vel) {
+		switch (_info.geometry) {
+		case  PxGeometryType::eBOX:
+			return new BoxParticle(pos, vel, _info.renderParticle_data.invMasa, _info.damping, _info.lifeTime, _info.renderParticle_data.vSimulada, _info.box_data.size, _info.color);
+			break;
+
+		case PxGeometryType::eSPHERE:
+			return new Particle(pos, vel, _info.renderParticle_data.invMasa, _info.damping, _info.lifeTime, _info.renderParticle_data.vSimulada, _info.sphere_data.radius, _info.color);
+			break;
+		}
+	}
+
+	virtual Particle* createParticle(Vector3 pos, Vector3 vel) {
+		if (_info.type == RenderParticle) {
+			return createParticleRender(pos, vel);
+		}
+		else if (_info.type == RigidBody) {
+			return createRigidBody(pos, vel);
+		}
+	}
+
+	inline bool probability() {
+		double prob = _u(_mt);
+		return _generation_probability > prob;
 	}
 
 public:
 	virtual ~ParticleGenerator() {}
 
 	// devuelve una lista de partículas
-	virtual list<T*> generateParticles() = 0;
-
-	// solo para particulas render y fuerzas locales
+	virtual list<Particle*> generateParticles() = 0;
 	
 	// solo lo usan los generadores que actualizan las particulas periodicamente
 	virtual void update(ListParticles* particles) = 0;
+
 	// si interesara hacer un commit inicial de partículas
 	void init(ListParticles* particles) {
 		particles->add(generateParticles());
@@ -81,10 +127,10 @@ public:
 		return name;
 	}
 
+	// SOLO PARA LAS PARTICULAS RENDER
 	inline void increaseSimulatedV() {
 		++_info.renderParticle_data.vSimulada;
 	}
-
 	inline void decreaseSimulatedV() {
 		--_info.renderParticle_data.vSimulada;
 		if (_info.renderParticle_data.vSimulada < 0) {

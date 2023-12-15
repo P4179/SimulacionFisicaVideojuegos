@@ -27,7 +27,7 @@ list<Particle*> CircleGenerator::generateParticles() {
 			vel.y += variation(std_dev_vel.y);
 			vel.z += variation(std_dev_vel.z);
 
-			particles.push_back(createParticle(vel, _mean_pos));
+			particles.push_back(createParticle(_mean_pos, vel));
 		}
 	}
 

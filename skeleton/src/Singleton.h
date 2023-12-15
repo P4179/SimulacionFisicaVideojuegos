@@ -3,7 +3,7 @@
 using namespace std;
 
 template<typename T>
-// instancia unica de lac
+// instancia unica
 class Singleton {
 private:
 	static T* instance;

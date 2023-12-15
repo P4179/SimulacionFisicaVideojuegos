@@ -73,22 +73,23 @@ private:
 
 	ListParticles* particles;
 	// se utiliza para actualizar los generadores y para obtener cada generador
-	vector<std::pair<ParticleGenerator<Particle>*, bool>> particle_generators;
-	unordered_map<string, ParticleGenerator<Particle>*> particleGenFindByName;
+	vector<std::pair<ParticleGenerator*, bool>> particle_generators;
+	unordered_map<string, ParticleGenerator*> particleGenFindByName;
 	Vector3 gravity;
 	Generators selectedGen;
 
 	vector<ForceGenerator<Particle>*> forceGenerators;
 	ParticleForceRegistry<Particle>* registry;
 
-	GaussianParticleGenerator<Particle>* mangueraGaussianGen;
-	ExplosionForceGenerator<Particle>* explosionFg;
+	GaussianParticleGenerator* mangueraGaussianGen;
 	// guarda el generador de fuerzas por defecto de la practica 2, al que se le ponen o quitan fuerzas
-	ForceParticleGenerator<Particle>* aplicarFuerzaGen;
+	ForceParticleGenerator* aplicarFuerzaGen;
 	// guarda el generador al que se le van a poner o quitar fuerzas ahora
-	ForceParticleGenerator<Particle>* cambiarFuerzasGen;
+	ForceParticleGenerator* cambiarFuerzasGen;
 	// guarda el lanzador de particulas en una variable para poder usarlo cuando se quiera
 	LauncherParticleGen* launcherParticleGen;
+
+	ExplosionForceGenerator<Particle>* explosionFg;
 	SpringForceGenerator* springFg;
 
 	// generador normal
@@ -163,8 +164,8 @@ private:
 		setParticleGenerator(gen, true);
 	}
 
-	inline unordered_set<ParticleGenerator<Particle>*> getActiveGens() {
-		unordered_set<ParticleGenerator<Particle>*> activeGens;
+	inline unordered_set<ParticleGenerator*> getActiveGens() {
+		unordered_set<ParticleGenerator*> activeGens;
 		for (auto generator : particle_generators) {
 			if (generator.second) {
 				activeGens.insert(generator.first);
@@ -190,7 +191,7 @@ private:
 		}
 	}
 
-	inline void toggleForce(ForceParticleGenerator<Particle>* gen, ForceGens force) {
+	inline void toggleForce(ForceParticleGenerator* gen, ForceGens force) {
 		if (gen->removeForce(forceGenerators[force])) {
 			cout << forceGenerators[force]->getName() << " eliminado" << "\n";
 			registry->deleteForceRegistry(forceGenerators[force]);
@@ -226,7 +227,7 @@ public:
 
 	void keyPressed(int __cdecl key);
 
-	inline ParticleGenerator<Particle>* getParticleGenerator(string name) const {
+	inline ParticleGenerator* getParticleGenerator(string name) const {
 		auto it = particleGenFindByName.find(name);
 		if (it == particleGenFindByName.end()) {
 			throw exception("It does not exist a particle generator with that name");
@@ -236,7 +237,7 @@ public:
 		}
 	}
 
-	inline ParticleGenerator<Particle>* getParticleGenerator(Generators gen) const {
+	inline ParticleGenerator* getParticleGenerator(Generators gen) const {
 		return particle_generators[gen].first;
 	}
 

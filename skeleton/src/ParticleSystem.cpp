@@ -2,7 +2,7 @@
 #include "checkML.h"
 
 ParticleSystem::ParticleSystem(Vector3 gravity) : gravity(gravity),
-particle_generators(vector<std::pair<ParticleGenerator<Particle>*, bool>>(MAX, { nullptr, false })), 
+particle_generators(vector<std::pair<ParticleGenerator*, bool>>(MAX, { nullptr, false })), 
 forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE), springFg(nullptr) {
 
 	// inicializar semilla de rand para que cada vez que se ejecute el programa
@@ -32,61 +32,61 @@ void ParticleSystem::generateForceGens() {
 	info.damping = DAMPING;
 	info.geometry = physx::PxGeometryType::eSPHERE;
 
-	info.renderParticle_data.invMasa = 0.02;
+	info.sphere_data.radius = 1.4;
 	info.color = Vector4(0.337, 0.192, 0.8, 1);
 	info.lifeTime = 8;
-	info.sphere_data.radius = 1.4;
+	info.renderParticle_data.invMasa = 0.02;
 	info.renderParticle_data.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
-	aplicarFuerzaGen = addParticleGenerator<UniformParticleGenerator<Particle>>(AplicarFuerzaGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
+	aplicarFuerzaGen = addParticleGenerator<UniformParticleGenerator>(AplicarFuerzaGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2));
 	cambiarFuerzasGen = aplicarFuerzaGen;	// se setea por si se lanzara este generador desde el principio
 
-	info.renderParticle_data.invMasa = 0.035;
+	info.sphere_data.radius = 1.2;
 	info.color = Vector4(0.871, 0.804, 0.157, 1);
 	info.lifeTime = 20;
-	info.sphere_data.radius = 1.2;
+	info.renderParticle_data.invMasa = 0.035;
 	info.renderParticle_data.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	auto gens = { forceGenerators[WindFg] };
-	addParticleGenerator<UniformParticleGenerator<Particle>>(Viento1Gen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	addParticleGenerator<UniformParticleGenerator>(Viento1Gen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
-	info.renderParticle_data.invMasa = 0.015;
+	info.sphere_data.radius = 1.2;
 	info.color = Vector4(0.871, 0.569, 0.157, 1);
 	info.lifeTime = 20;
-	info.sphere_data.radius = 1.2;
+	info.renderParticle_data.invMasa = 0.015;
 	info.renderParticle_data.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	gens = { forceGenerators[WindFg] };
-	addParticleGenerator<UniformParticleGenerator<Particle>>(Viento2Gen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	addParticleGenerator<UniformParticleGenerator>(Viento2Gen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
-	info.renderParticle_data.invMasa = 0.03;
+	info.sphere_data.radius = 1.3;
 	info.color = Vector4(0.51, 0.749, 0.584, 1);
 	info.lifeTime = 10;
-	info.sphere_data.radius = 1.3;
+	info.renderParticle_data.invMasa = 0.03;
 	info.renderParticle_data.vSimulada = 40;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	gens = { forceGenerators[WhirlWindFg] };
 	// LAS PARTÍCULAS NO SE MUEVEN, SINO QUE ES LA PROPIA FUERZA DEL TORBELLINO EL QUE HACE TODO EL MOVIMIENTO
 	// EL GENERADOR SOLO COLAS PARTÍCULAS EN UNA ZONA Y LUEGO, LAS FUERZAS LAS MUEVE
-	addParticleGenerator<UniformParticleGenerator<Particle>>(TorbellinoGen, false, Vector3(0, 0, 0), Vector3(0, 0, 0), info, 0.3, 1, Vector3(0, 0, 0), Vector3(10, 0, 10), gens);
+	addParticleGenerator<UniformParticleGenerator>(TorbellinoGen, false, Vector3(0, 0, 0), Vector3(0, 0, 0), info, 0.3, 1, Vector3(0, 0, 0), Vector3(10, 0, 10), gens);
 
-	info.renderParticle_data.invMasa = 0.02;
+	info.sphere_data.radius = 1;
 	info.color = Vector4(0.851, 0.404, 0.282, 1);
 	info.lifeTime = 8;
-	info.sphere_data.radius = 1;
+	info.renderParticle_data.invMasa = 0.02;
 	info.renderParticle_data.vSimulada = 30;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion, generador de fuerzas
 	gens = { forceGenerators[ExplosionFg] };
-	addParticleGenerator<UniformParticleGenerator<Particle>>(ExplosionGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	addParticleGenerator<UniformParticleGenerator>(ExplosionGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 }
 
 void ParticleSystem::generateNormalGens() {
 	auto gens = { forceGenerators[GravityFg] };
 
 	ParticleInfo info;
-	//info.ac = gravity;
-	info.renderParticle_data.invMasa = 0.01;
+	//info.ac = gravity;	Se cambio para que tb utilizaran fuerzas
 	info.damping = DAMPING;
+	info.renderParticle_data.invMasa = 0.01;
 	info.geometry = physx::PxGeometryType::eSPHERE;
 
 	info.color = Vector4(0.337, 0.192, 0.8, 1);
@@ -94,19 +94,19 @@ void ParticleSystem::generateNormalGens() {
 	info.sphere_data.radius = 1.4;
 	info.renderParticle_data.vSimulada = 45;
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion
-	addParticleGenerator<UniformParticleGenerator<Particle>>(FuenteGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
+	addParticleGenerator<UniformParticleGenerator>(FuenteGen, false, Vector3(0, 0, 0), Vector3(0, 1, 0), info, 0.3, 1, Vector3(0.2, 0, 0.2), Vector3(2, 0, 2), gens);
 
 	info.color = Vector4(0.18, 0.596, 0.839, 1);
 	info.lifeTime = 20;
 	info.sphere_data.radius = 1;
 	info.renderParticle_data.vSimulada = 40.0;
-	addParticleGenerator<UniformParticleGenerator<Particle>>(MangueraGen, false, Vector3(-40, 10, 0), Vector3(0.6, 1, 0), info, 0.3, 1, Vector3(0, 0.3, 0.2), Vector3(1, 0, 1), gens);
+	addParticleGenerator<UniformParticleGenerator>(MangueraGen, false, Vector3(-40, 10, 0), Vector3(0.6, 1, 0), info, 0.3, 1, Vector3(0, 0.3, 0.2), Vector3(1, 0, 1), gens);
 
 	info.color = Vector4(0.361, 0.529, 0.729, 1);
 	info.lifeTime = 20;
 	info.sphere_data.radius = 0.6;
 	info.renderParticle_data.vSimulada = 35.0;
-	addParticleGenerator<UniformParticleGenerator<Particle>>(LLuviaGen, true, Vector3(0, 65, 0), Vector3(0, -1, 0), info, 0.5, 3, Vector3(0, 0, 0), Vector3(20, 2, 20), gens);
+	addParticleGenerator<UniformParticleGenerator>(LLuviaGen, true, Vector3(0, 65, 0), Vector3(0, -1, 0), info, 0.5, 3, Vector3(0, 0, 0), Vector3(20, 2, 20), gens);
 
 	// si el alpha de la bola es 1, la pantalla se pone negra
 	info.color = Vector4(0.596, 0.929, 0.855, 1);
@@ -115,7 +115,7 @@ void ParticleSystem::generateNormalGens() {
 	info.renderParticle_data.vSimulada = 45.0;
 	// la vel inicial y las direcciones de velocidad solo sirven para indicar cual incrementa más y cual incrementa menos
 	// pues luego, se normalizara el vector y se multiplicar por la vSimulada
-	mangueraGaussianGen = addParticleGenerator<GaussianParticleGenerator<Particle>>(MangueraGaussianaGen, false, Vector3(-60, 10, 0), Vector3(0.7, 0.4, 0), info, 0.5, 3, Vector3(0.03, 0.02, 0.05), Vector3(0, 0, 0.5), gens);
+	mangueraGaussianGen = addParticleGenerator<GaussianParticleGenerator>(MangueraGaussianaGen, false, Vector3(-60, 10, 0), Vector3(0.7, 0.4, 0), info, 0.5, 3, Vector3(0.03, 0.02, 0.05), Vector3(0, 0, 0.5), gens);
 
 	info.color = Vector4(0.518, 0.635, 0.678, 0.7);
 	info.lifeTime = 20;
@@ -123,7 +123,7 @@ void ParticleSystem::generateNormalGens() {
 	info.renderParticle_data.vSimulada = 8;
 	// la vel inicial y las direcciones de velocidad solo sirven para indicar cual incrementa más y cual incrementa menos
 	// pues luego, se normalizara el vector y se multiplicar por la vSimulada
-	addParticleGenerator<GaussianParticleGenerator<Particle>>(NieblaGen, false, Vector3(0, 30, 0), Vector3(0, 1, 0), info, 0.7, 4, Vector3(2.5, 0.02, 2.5), Vector3(15, 12, 15), gens);
+	addParticleGenerator<GaussianParticleGenerator>(NieblaGen, false, Vector3(0, 30, 0), Vector3(0, 1, 0), info, 0.7, 4, Vector3(2.5, 0.02, 2.5), Vector3(15, 12, 15), gens);
 
 	generateFireworkSystem();
 }
@@ -132,8 +132,8 @@ void ParticleSystem::generateFireworkSystem() {
 	auto gens = { forceGenerators[GravityFg] };
 
 	ParticleInfo info;
-	//info.ac = gravity;
-	info.renderParticle_data.invMasa = 0.01;
+	//info.ac = gravity;	Se cambio para que tb utilizaran fuerzas
+	info.renderParticle_data.invMasa = 0.2;
 	info.damping = DAMPING;
 
 	info.color = Vector4(0.89, 0.09, 0.29, 1);
@@ -256,11 +256,9 @@ void ParticleSystem::generateSlinkySystem(vector<std::pair<ForceGenerator<Partic
 }
 
 void ParticleSystem::generateBuoyancySystem(vector<std::pair<ForceGenerator<Particle>*, Particle*>>& forceParticles, unordered_set<ForceGenerator<Particle>*>& forceGens) {
-	Particle* particle = new Particle(Vector3(0, 100, 0), Vector3(0, 0, 0), 0.0001, DAMPING, -1, 0, Vector3(8, 8, 8));
-	//Particle* particle2 = new Particle(Vector3(0, 90, 0), Vector3(0, 0, 0), 0.2, DAMPING, -1, 0, 4);
+	Particle* particle = new BoxParticle(Vector3(0, 100, 0), Vector3(0, 0, 0), 0.0001, DAMPING, -1, 0, Vector3(8, 8, 8));
 	forceGenerators[BuoyanceFg] = new BuoyancyForceGenerator("BuoyanceFg", 0, 30, WATER_DENSITY);
 	forceParticles.push_back({ forceGenerators[BuoyanceFg], particle });
-	//forceParticles.push_back({ forceGenerators[BuoyanceFg], particle2 });
 
 	forceGens.insert(forceGenerators[GravityFg]);
 }
@@ -467,9 +465,6 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 			stdDevVel.z += 0.1;
 			mangueraGaussianGen->setStdDevVel(stdDevVel);
 		}
-		break;
-	default:
-
 		break;
 	}
 }

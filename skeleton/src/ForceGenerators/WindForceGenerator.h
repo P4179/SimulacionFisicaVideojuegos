@@ -1,9 +1,6 @@
 #pragma once
 #include "ForceGenerator.h"
 #include <random>
-// numero PI
-#define _USE_MATH_DEFINES
-#include <math.h>
 
 class WindForceGenerator : public ForceGenerator<Particle> {
 protected:

@@ -1,11 +1,12 @@
 #include "BuoyancyForceGenerator.h"
+#include "../Particles/BoxParticle.h"
 
 BuoyancyForceGenerator::BuoyancyForceGenerator(string name, float liquidPosY, float liquidHeight, float density, double duration) :
 	ForceGenerator(name, duration), h0(liquidPosY + liquidHeight), density(density) {
 
 	// agua
 	// si se crea directamente, se producen errores muy raros
-	liquid = new Particle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(LIQUID_SIZE, liquidHeight, LIQUID_SIZE), COLOR);
+	liquid = new BoxParticle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(LIQUID_SIZE, liquidHeight, LIQUID_SIZE), COLOR);
 }
 
 BuoyancyForceGenerator::~BuoyancyForceGenerator() {
