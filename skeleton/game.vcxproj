@@ -272,6 +272,8 @@
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Particles\Firework.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
+    <ClCompile Include="src\Project\CollisionManager.cpp" />
+    <ClCompile Include="src\Project\DisplayText.cpp" />
     <ClCompile Include="src\RBStructure\RigidBodySystem.cpp" />
     <ClCompile Include="src\ShootManager.cpp" />
   </ItemGroup>
@@ -304,6 +306,11 @@
     <ClInclude Include="src\Particles\Firework.h" />
     <ClInclude Include="src\Particles\Particle.h" />
     <ClInclude Include="src\particle_info.h" />
+    <ClInclude Include="src\Project\CapsuleDynamicRB.h" />
+    <ClInclude Include="src\Project\Character.h" />
+    <ClInclude Include="src\Project\CollisionManager.h" />
+    <ClInclude Include="src\Project\DisplayText.h" />
+    <ClInclude Include="src\Project\Scene.h" />
     <ClInclude Include="src\RBStructure\RigidBodySystem.h" />
     <ClInclude Include="src\RigidBodies\BoxDynamicRB.h" />
     <ClInclude Include="src\RigidBodies\BoxStaticRB.h" />

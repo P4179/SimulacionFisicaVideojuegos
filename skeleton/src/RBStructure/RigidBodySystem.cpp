@@ -1,6 +1,7 @@
 #include "RigidBodySystem.h"
 #include "../Generators/UniformParticleGenerator.h"
 #include "../Generators/GaussianParticleGenerator.h"
+#include "../checkML.h"
 
 RigidBodySystem::RigidBodySystem(PxPhysics* gPhysics, PxScene* gScene) : gPhysics(gPhysics), gScene(gScene),
 RBGenerators(MAX_GENS), RBfGenerators(MAX_FGENS), floor(nullptr), rigidBodies() {
@@ -8,7 +9,7 @@ RBGenerators(MAX_GENS), RBfGenerators(MAX_FGENS), floor(nullptr), rigidBodies() 
 	registry = new ParticleForceRegistry<Particle>();
 
 	// se crean todas las fuerzas
-	explosionFg = new ExplosionForceGenerator<Particle>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 50, 0), 30, 20, 15, -1, true);
+	explosionFg = new ExplosionForceGenerator<Particle>(RB_F_GENS_NAMES.at(EXPLOSION_FG), Vector3(0, 50, 0), 3000, 20, 15, -1, true);
 	RBfGenerators.all[EXPLOSION_FG] = explosionFg;
 }
 

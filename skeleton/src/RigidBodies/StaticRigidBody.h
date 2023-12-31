@@ -33,4 +33,12 @@ public:
 	inline PxRigidActor* getActor() const {
 		return staticRigid;
 	}
+
+	Vector3 getPos() const {
+		return staticRigid->getGlobalPose().p;
+	}
+
+	// COLISIONES
+	virtual float getCeilingY() const = 0;
+	
 };

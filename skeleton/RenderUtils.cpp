@@ -18,10 +18,20 @@ extern void keyPress(unsigned char key, const PxTransform& camera);
 extern PxPhysics* gPhysics;
 extern PxMaterial* gMaterial;
 
+// CAMBIO
+extern void keyRelease(unsigned char key);
+
 // vector con todos los objetos que quiere renderizar
 // cuando se quiera hacer una operación a ese objeto de pintado,
 // hay que utilizar esta lista
 std::vector<const RenderItem*> gRenderItems;
+
+// CAMBIO
+// vector con todos los textos a mostrar
+std::vector<DisplayText*> displayTexts;
+
+// CAMBIO
+bool click = false;
 
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
@@ -53,9 +63,17 @@ namespace
 {
 	Camera*	sCamera;
 
+	std::pair<int, int> cursor;
+
 void motionCallback(int x, int y)
 {
 	sCamera->handleMotion(x, y);
+}
+
+// CAMBIO
+void keepCursor(int x, int y) {
+	cursor.first = x;
+	cursor.second = y;
 }
 
 void keyboardCallback(unsigned char key, int x, int y)
@@ -67,9 +85,17 @@ void keyboardCallback(unsigned char key, int x, int y)
 		keyPress(key, sCamera->getTransform());
 }
 
+// CAMBIO
+void keyboardReleaseCallback(unsigned char key, int x, int y) {
+	keyRelease(key);
+}
+
 void mouseCallback(int button, int state, int x, int y)
 {
 	sCamera->handleMouse(button, state, x, y);
+	if (state == GLUT_DOWN) {
+		click = !click;
+	}
 }
 
 void idleCallback()
@@ -130,6 +156,11 @@ void renderCallback()
 	//	renderActors(&actors[0], static_cast<PxU32>(actors.size()), true, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 	//}
 
+	for (auto displayT : displayTexts) {
+		glColor4f(displayT->getColor().x, displayT->getColor().y, displayT->getColor().z, displayT->getColor().w);
+		drawText(displayT->getText(), displayT->getPos().first, displayT->getPos().second, displayT->getFont());
+	}
+
 	finishRender();
 }
 
@@ -148,11 +179,23 @@ void renderLoop()
 	setupDefaultWindow("Simulacion Fisica Videojuegos");
 	setupDefaultRenderState();
 
+	// CAMBIO
+	// este callback se llama cuando se mueve el cursor dentro
+	// de la ventana sin pulsar el raton
+	glutPassiveMotionFunc(keepCursor);
+
 	glutIdleFunc(idleCallback);
 	glutDisplayFunc(renderCallback);
 	glutKeyboardFunc(keyboardCallback);
+
+	// CAMBIO
+	// se llama cuando se suelta una tecla
+	glutKeyboardUpFunc(keyboardReleaseCallback);
+
 	glutMouseFunc(mouseCallback);
+	// CAMBIO: se podria comentar
 	glutMotionFunc(motionCallback);
+
 	motionCallback(0,0);
 
 	atexit(exitCallback);
@@ -172,6 +215,19 @@ void DeregisterRenderItem(const RenderItem* _item)
 	gRenderItems.erase(it);
 }
 
+void RegisterDisplayText(DisplayText* displayText) {
+	auto it = find(displayTexts.begin(), displayTexts.end(), displayText);
+	if (it == displayTexts.end()) {
+		displayTexts.push_back(displayText);
+	}
+}
+void DeregisterDisplayText(DisplayText* displayText) {
+	auto it = find(displayTexts.begin(), displayTexts.end(), displayText);
+	if (it != displayTexts.end()) {
+		displayTexts.erase(it);
+	}
+}
+
 double GetLastTime()
 {
 	double t = double(CounterLast - CounterStart) / PCFreq;
@@ -181,6 +237,16 @@ double GetLastTime()
 Camera* GetCamera()
 {
 	return sCamera;
+}
+
+// CAMBIO
+std::pair<int, int> getCursor() {
+	return cursor;
+}
+
+// CAMBIO
+bool toggleClick() {
+	return click;
 }
 
 PxShape* CreateShape(const PxGeometry& geo, const PxMaterial* mat)

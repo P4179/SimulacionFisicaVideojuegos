@@ -58,6 +58,12 @@
     <ClCompile Include="src\RBStructure\RigidBodySystem.cpp">
       <Filter>SourceFiles\RBStructure</Filter>
     </ClCompile>
+    <ClCompile Include="src\Project\DisplayText.cpp">
+      <Filter>SourceFiles\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Project\CollisionManager.cpp">
+      <Filter>SourceFiles\Project</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -162,6 +168,21 @@
     <ClInclude Include="src\Particles\BoxParticle.h">
       <Filter>HeaderFiles\Particles</Filter>
     </ClInclude>
+    <ClInclude Include="src\Project\Scene.h">
+      <Filter>HeaderFiles\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Project\DisplayText.h">
+      <Filter>HeaderFiles\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Project\Character.h">
+      <Filter>HeaderFiles\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Project\CapsuleDynamicRB.h">
+      <Filter>HeaderFiles\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Project\CollisionManager.h">
+      <Filter>HeaderFiles\Project</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -202,6 +223,12 @@
     </Filter>
     <Filter Include="SourceFiles\RigidBodies">
       <UniqueIdentifier>{f79f8825-6ab1-4b14-9a00-f6ccbfbab73d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\Project">
+      <UniqueIdentifier>{0c0eab9b-e03d-4b02-b873-40b7eaf0e1c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourceFiles\Project">
+      <UniqueIdentifier>{b8a0b8cc-f1a2-417c-8dff-5d0a064929b8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

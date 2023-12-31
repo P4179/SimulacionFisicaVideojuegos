@@ -1,4 +1,5 @@
 #include "GravityForceGenerator.h"
+#include "../checkML.h"
 
 GravityForceGenerator::GravityForceGenerator(string name, const Vector3& gravity, double duration) :
 	ForceGenerator(name, duration), gravity(gravity) {}

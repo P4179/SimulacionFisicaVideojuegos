@@ -4,9 +4,16 @@
 #include "PxPhysicsAPI.h"
 #include "core.hpp"
 
+// CAMBIO
+#include "./src/Project/DisplayText.h"
+
 class RenderItem;
 void RegisterRenderItem(const RenderItem* _item);
 void DeregisterRenderItem(const RenderItem* _item);
+
+// CAMBIOS
+void RegisterDisplayText(DisplayText* text);
+void DeregisterDisplayText(DisplayText* text);
 
 class RenderItem
 {
@@ -61,6 +68,11 @@ public:
 
 double GetLastTime();
 Camera* GetCamera();
+
+// CAMBIOS
+std::pair<int, int> getCursor();
+bool toggleClick();
+
 
 physx::PxShape* CreateShape(const physx::PxGeometry& geo, const physx::PxMaterial* mat = nullptr);
 

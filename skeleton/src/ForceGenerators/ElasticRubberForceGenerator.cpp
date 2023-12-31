@@ -1,4 +1,5 @@
 #include "ElasticRubberForceGenerator.h"
+#include "../checkML.h"
 
 ElasticRubberForceGenerator::ElasticRubberForceGenerator(string name, double k, double restingLength, Particle* other, float duration) :
 	SpringForceGenerator(name, k, restingLength, other, duration) {}

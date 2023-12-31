@@ -9,6 +9,7 @@ private:
 	const Vector4 INFLUENCE_AREA_COLOR = Vector4(0.741, 0.741, 0.741, 0.639);
 	// m/s --> km/s (0.3432)
 	const float SOUND_AIR_SPEED = 343.2;
+	const float MAX_RADIUS = 100;
 
 	physx::PxTransform center;
 	RenderItem* render;
@@ -21,6 +22,7 @@ private:
 	bool show;
 	float elapsedTime;
 	bool explode;
+	bool expansion;
 
 	bool isInInfluenceArea(T* particle) {
 		float distExplosion = (particle->getPos() - center.p).magnitude();
@@ -29,11 +31,12 @@ private:
 	}
 
 public:
-	ExplosionForceGenerator(string name, Vector3 centerInfluenceArea, float radiusInfluenceArea, float explosionIntensity, float explosionFadingTime, float duration = -1.0, bool show = false) :
+	ExplosionForceGenerator(string name, Vector3 centerInfluenceArea, float radiusInfluenceArea, float explosionIntensity, 
+		float explosionFadingTime, float duration = -1.0, bool show = false, bool expansion = true) :
 		ForceGenerator(name, duration),
 		center(centerInfluenceArea.x, centerInfluenceArea.y, centerInfluenceArea.z),
 		radius(0), originalRadius(radiusInfluenceArea), explosionIntensity(explosionIntensity),
-		explosionFadingTime(explosionFadingTime), elapsedTime(0), explode(false) {
+		explosionFadingTime(explosionFadingTime), elapsedTime(0), explode(false), expansion(expansion), show(show) {
 
 		if (show) {
 			physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(originalRadius));
@@ -53,11 +56,17 @@ public:
 	virtual void updateForce(T* particle, double t) {
 		if (explode) {
 			elapsedTime += t;
-			radius = originalRadius + SOUND_AIR_SPEED * elapsedTime;
-			if (show) {
-				DeregisterRenderItem(render);
-				physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
-				render = new RenderItem(shape, &center, INFLUENCE_AREA_COLOR);
+			radius = originalRadius;
+			if (expansion) {
+				radius += SOUND_AIR_SPEED * elapsedTime;
+				if (radius > MAX_RADIUS) {
+					radius = MAX_RADIUS;
+				}
+				else if (show) {
+					DeregisterRenderItem(render);
+					physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
+					render = new RenderItem(shape, &center, INFLUENCE_AREA_COLOR);
+				}
 			}
 			// la partícula se encuentra dentro del area de influencia
 			if (isInInfluenceArea(particle)) {
@@ -65,7 +74,7 @@ public:
 				float r = dif.magnitude();
 				// a partir de 4 * explosionFadingTime, la explosion comienza a desaparecer
 				// exp se refiere a e^(...)
-				Vector3 force = (explosionIntensity / r * r) * dif * exp(-elapsedTime / explosionFadingTime);
+				Vector3 force = (explosionIntensity / (r * r)) * dif * exp(-elapsedTime / explosionFadingTime);
 				particle->addForce(force);
 			}
 		}

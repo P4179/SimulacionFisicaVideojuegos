@@ -1,7 +1,6 @@
 #include "Particles/Particle.h"
 #include "ListParticles.h"
 #include "checkML.h"
-#include <iostream>
 
 void ListParticles::removeExcess() {
 	if (listP.size() > maxParticles) {
@@ -38,6 +37,13 @@ void ListParticles::kill() {
 }
 
 void ListParticles::refresh() {
+	for (auto& p : listP) {
+		if (!p->isAlive()) {
+			registry->deleteParticleRegistry(p);
+			p->onDeath(this);
+		}
+	}
+
 	// eliminar partículas no vivas
 	listP.erase(std::remove_if(listP.begin(), listP.end(),
 		[this](Particle* particle) {
@@ -45,10 +51,6 @@ void ListParticles::refresh() {
 				return false;
 			}
 			else {
-				particle->onDeath(this);
-
-				registry->deleteParticleRegistry(particle);
-
 				delete particle;
 				return true;
 			}

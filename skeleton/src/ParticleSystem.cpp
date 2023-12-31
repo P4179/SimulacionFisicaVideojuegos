@@ -15,7 +15,7 @@ forceGenerators(MAX_FORCES, nullptr), selectedGen(NONE), springFg(nullptr) {
 	forceGenerators[GravityFg] = new GravityForceGenerator("GravityFg", gravity, -1);
 	forceGenerators[WindFg] = new WindForceGenerator("WindFg", { Vector3(10, 0, 0), Vector3(15, 0, 0), Vector3(20, 0, 0) }, Vector3(0, 30, 0), 10, -1, true, false);
 	forceGenerators[WhirlWindFg] = new WhirlwindForceGenerator("WhirlwindFg", Vector3(0, 0, 0), 800, 50, 50, 20, false, false);
-	explosionFg = new ExplosionForceGenerator<Particle>("ExplosionFg", Vector3(0, 50, 0), 20, 3000, 15, -1, false);
+	explosionFg = new ExplosionForceGenerator<Particle>("ExplosionFg", Vector3(0, 50, 0), 20, 300000, 15, -1, false);
 	forceGenerators[ExplosionFg] = explosionFg;
 
 	generateForceGens();

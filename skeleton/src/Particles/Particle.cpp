@@ -1,5 +1,6 @@
 #include "Particle.h"
 #include <iostream>
+#include "../checkML.h"
 
 void Particle::infoParticleType(ParticleType type, float& masaReal, float& vReal) {
 	switch (type) {
@@ -34,7 +35,8 @@ void Particle::calculateSimulatedPhysics(ParticleType type, Vector3 acReal, floa
 // PRACTICA 2
 // NO SE UTILIZA: INVERSO DE LA MASA
 Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius, Vector4 color, ParticleType type) :
-	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), radius(radius), color(color) {
+	pose(pos.x, pos.y, pos.z), vel(vel), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true), elapsedTime(0), radius(radius), color(color),
+	immersion(Out) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
 	commonConstructor(shape, color, vSimulada);
@@ -50,7 +52,7 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, flo
 // NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA
 Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius, Vector4 color) :
 	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
-	elapsedTime(0), force(Vector3(0)), radius(radius), color(color) {
+	elapsedTime(0), force(Vector3(0)), radius(radius), color(color), immersion(Out) {
 	// se necesita un radio
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(radius));
 	commonConstructor(shape, color, vSimulada);
@@ -60,7 +62,7 @@ Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, floa
 // NO SE UTILIZA: ACELERACION SIMULADA, MASA SIMULADA, RADIO
 Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, physx::PxGeometry* geometry, Vector4 color) :
 	pose(pos.x, pos.y, pos.z), vel(vel), invMasa(invMasa), damping(damping), lifeTime(lifeTime), renderItem(nullptr), alive(true),
-	elapsedTime(0), force(Vector3(0)), color(color) {
+	elapsedTime(0), force(Vector3(0)), color(color), immersion(Out) {
 
 	if (geometry != nullptr) {
 		physx::PxShape* shape = CreateShape(*geometry);
@@ -69,7 +71,9 @@ Particle::Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, floa
 }
 
 Particle::~Particle() {
-	DeregisterRenderItem(renderItem);
+	if (renderItem != nullptr) {
+		DeregisterRenderItem(renderItem);
+	}
 }
 
 // t está en segundos

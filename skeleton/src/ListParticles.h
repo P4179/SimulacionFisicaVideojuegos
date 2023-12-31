@@ -19,10 +19,11 @@ public:
 
 	template<typename T>
 	void add(list<Particle*> newListP, const T& forceGens) {
-		for (auto particle : newListP) {
+		for (auto& particle : newListP) {
 			// si la particula no se ha encontrado se mete
 			// sino, solo se le ponen las nuevas fuerzas
-			if (std::find(listP.begin(), listP.end(), particle) == listP.end()) {
+			auto it = std::find(listP.begin(), listP.end(), particle);
+			if (it == listP.end()) {
 				listP.push_back(particle);
 			}
 
@@ -32,6 +33,7 @@ public:
 		}
 	}
 
+	// YA NO SE USA, PORQUE ERA PARA METER PARTICULAS A LAS QUE NO LE AFECTARAN LAS FUERZAS
 	void add(list<Particle*> newListP);
 
 	void kill();

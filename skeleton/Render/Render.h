@@ -47,7 +47,7 @@
 #endif
 #include <string>
 
-extern std::string display_text;
+//extern std::string display_text;
 
 namespace Snippets
 {
@@ -58,9 +58,9 @@ void startRender(const physx::PxVec3& cameraEye, const physx::PxVec3& cameraDir,
 void renderShape(const physx::PxShape& shape, const physx::PxTransform& transform, const physx::PxVec4& color);
 void renderActors(physx::PxRigidActor** actors, const physx::PxU32 numActors, bool shadows = false, const physx::PxVec4 & color = physx::PxVec4(0.0f, 0.75f, 0.0f, 1.0f));
 void finishRender();
-void drawText(const std::string& text, int x, int y);
+void drawText(const std::string& text, int x, int y, void* font = GLUT_BITMAP_9_BY_15);
 }
 
 #define MAX_NUM_ACTOR_SHAPES 128
 
-#endif //PHYSX_SNIPPET_RENDER_H
+#endif PHYSX_SNIPPET_RENDER_H	// CAMBIO: estaba comentado

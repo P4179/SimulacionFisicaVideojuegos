@@ -2,6 +2,7 @@
 #include <PxPhysicsAPI.h>
 #include "../../RenderUtils.hpp"
 #include "../Particles/Particle.h"
+#include "../RigidBodies/StaticRigidBody.h"
 #include <iostream>
 
 using namespace physx;
@@ -15,8 +16,13 @@ protected:
 	// hereda de actor
 	PxRigidDynamic* dynamicRigid;
 
+	// COLISION
+	bool isCollisioning;
+	StaticRigidBody* colObject;
 
-	void commonParam(const Vector3& linearVel, const Vector3& angularVel, float damping, PxGeometry* geometry, PxMaterial* material, const Vector4& color) {
+
+	void commonParam(const Vector3& linearVel, const Vector3& angularVel, float damping, PxGeometry* geometry, 
+		PxMaterial* material, const Vector4& color, bool render) {
 		// fisicas y posicion del objeto estatico
 		dynamicRigid = gPhysics->createRigidDynamic(pose);
 		// velocidad con la que un objeto se desplaza un objeto a
@@ -34,16 +40,21 @@ protected:
 		// se pone el elem en la escena, pero luego hay que pintarlo aparte
 		gScene->addActor(*dynamicRigid);
 		// se pinta el objeto
-		renderItem = new RenderItem(shape, dynamicRigid, color);
+		if (render) {
+			renderItem = new RenderItem(shape, dynamicRigid, color);
+		}
+		else {
+			renderItem = nullptr;
+		}
 	}
 
 	DynamicRigidBody(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos,
 		const Vector3& linearVel, const Vector3& angularVel, float damping, float density, Vector4 color,
-		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1) :
+		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1, bool render = true) :
 		Particle(pos, {}, {}, damping, lifeTime, {}, nullptr, color),
-		gPhysics(gPhysics), gScene(gScene) {
+		gPhysics(gPhysics), gScene(gScene), isCollisioning(false), colObject(nullptr) {
 
-		commonParam(linearVel, angularVel, damping, geometry, material, color);
+		commonParam(linearVel, angularVel, damping, geometry, material, color, render);
 		// 1ª FORMA DE DEFINIR LA MASA
 		// se hace a traves de una densidad (kg/m^3)
 		// la masa se distribuye de forma uniforme
@@ -53,11 +64,11 @@ protected:
 
 	DynamicRigidBody(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos,
 		const Vector3& linearVel, const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color,
-		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1) :
+		PxGeometry* geometry, PxMaterial* material = nullptr, float lifeTime = -1, bool render = true) :
 		Particle(pos, {}, {}, damping, lifeTime, {}, nullptr, color),
 		gPhysics(gPhysics), gScene(gScene) {//, lifeTime(lifeTime), elapsedTime(0), alive(true) {
 
-		commonParam(linearVel, angularVel, damping, geometry, material, color);
+		commonParam(linearVel, angularVel, damping, geometry, material, color, render);
 		// 2ª FORMA DE DEFINIR LA MASA
 		// se hace a traves de un tensor de inercia
 		// un tensor de inercia describe como esta distribuida la masa de un objeto
@@ -71,6 +82,12 @@ protected:
 		*/
 		dynamicRigid->setMassSpaceInertiaTensor(massDistribution);
 	}
+
+	virtual void onEnter() {}
+
+	virtual void onColliding() {}
+
+	virtual void onExit() {}
 
 public:
 	virtual ~DynamicRigidBody() {
@@ -91,11 +108,39 @@ public:
 		return dynamicRigid;
 	}
 
+	inline float getMasa() const override {
+		return dynamicRigid->getMass();
+	}
+
+	// COLISIONES
+	virtual inline float getFloorY() const = 0;
+
+	void collision(StaticRigidBody* other) {
+		if (!isCollisioning && other != nullptr) {
+			//character->setIsOnFloor(true);
+			colObject = other;
+			isCollisioning = true;
+			onEnter();
+		}
+		else if (isCollisioning && other != nullptr) {
+			onColliding();
+		}
+		else if (isCollisioning && other == nullptr) {
+			//character->setIsOnFloor(false);
+			onExit();
+			colObject = nullptr;
+			isCollisioning = false;
+		}
+	}
+
 	void integrate(double t) override {
 		updateLifeTime(t);
 	}
 
-	// VIENTO PARA RIGID_BODY (falta definir areas para cada tipo)
+	// LA FLOTACION SOLO ESTA EN EL CUBO
+
+	// VIENTO PARA RIGID_BODY 
+	// (LUEGO, LA AREA ESTA DEFINIDA PARA CADA FORMA)
 	virtual inline Vector3 getVel() const override {
 		return dynamicRigid->getLinearVelocity();
 	}

@@ -13,9 +13,10 @@
 #include "../skeleton/src/ShootManager.h"
 #include "../skeleton/src/ParticleSystem.h"
 #include "../skeleton/src/RBStructure/RigidBodySystem.h"
+#include "../skeleton/src/Project/Scene.h"
 
 // SE PUEDE ESCRIBIR TEXTO PINTADO
-std::string display_text = "This is a test";
+//std::string display_text = "This is a test";
 
 using namespace physx;
 
@@ -37,6 +38,7 @@ ContactReportCallback gContactReportCallback;
 ShootManager* shoot = nullptr;
 ParticleSystem* particleSystem = nullptr;
 RigidBodySystem* RBSystem = nullptr;
+Scene* scene = nullptr;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -51,7 +53,7 @@ void initPhysics(bool interactive)
 	// método que crear la física del motor de físcia de Physics
 	// PxToleranceScale sirve para cambiar la escala de tam y velocidad en toda la simulacion
 	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
-	// material que se utiliza para todo
+	// material que se utiliza para todo (MATERIAL POR DEFECTO)
 	// coeficientes de rozamineto
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
@@ -73,8 +75,11 @@ void initPhysics(bool interactive)
 	//particleSystem = new ParticleSystem();
 
 	// no se elimina porque es un singleton y funciona con puntero inteligente
-	RBSystem = RigidBodySystem::init(gPhysics, gScene);
-	RBSystem->create();
+	//RBSystem = RigidBodySystem::init(gPhysics, gScene);
+	//RBSystem->create();
+
+	scene = Scene::init(gPhysics, gScene);
+	scene->create();
 }
 
 
@@ -101,6 +106,9 @@ void stepPhysics(bool interactive, double t)
 	if (RBSystem != nullptr) {
 		RBSystem->integrate(t);
 	}
+	if (scene != nullptr) {
+		scene->integrate(t);
+	}
 }
 
 // Function to clean data
@@ -117,6 +125,9 @@ void cleanupPhysics(bool interactive)
 	}
 	if (RBSystem != nullptr) {
 		delete RBSystem;
+	}
+	if (scene != nullptr) {
+		delete scene;
 	}
 
 	PX_UNUSED(interactive);
@@ -149,6 +160,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	if (RBSystem != nullptr) {
 		RBSystem->keyPressed(toupper(key));
 	}
+	if (scene != nullptr) {
+		scene->keyPressed(toupper(key));
+	}
 
 	/*
 	switch (toupper(key))
@@ -165,13 +179,23 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	*/
 }
 
+// CAMBIO
+void keyRelease(unsigned char key) {
+	if (scene != nullptr) {
+		scene->keyRelease(toupper(key));
+	}
+}
+
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {
-	PX_UNUSED(actor1);
-	PX_UNUSED(actor2);
+	//PX_UNUSED(actor1);
+	//PX_UNUSED(actor2);
 
-	if (RBSystem != nullptr) {
+	/*if (RBSystem != nullptr) {
 		RBSystem->onCollision(actor1, actor2);
+	}*/
+	if (scene != nullptr) {
+		scene->onCollision(actor1, actor2);
 	}
 }
 

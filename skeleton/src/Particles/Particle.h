@@ -1,9 +1,6 @@
 #pragma once
 #include "../../RenderUtils.hpp"
 #include <iostream>
-// numero PI
-#define _USE_MATH_DEFINES
-#include <math.h>
 
 class ListParticles;
 
@@ -19,6 +16,9 @@ Particle es la clase base y se trata de una esfera
 - Firework
 */
 class Particle {
+public:
+	enum Immersion { Full, Floating, Out };	// para la flotacion
+
 private:
 	float radius;
 
@@ -35,6 +35,10 @@ private:
 	// vector velocidad, que indica la dirección del tiro
 	// luego, tiene en cuenta la velocidad simulada
 	Vector3 vel;
+
+	// temporizador de la vida
+	float elapsedTime;
+
 
 	void infoParticleType(ParticleType type, float& masaReal, float& vReal);
 
@@ -79,12 +83,13 @@ protected:
 	// un tiempo de vida negativo quiere decir que la particula es infinita
 	float lifeTime;
 	bool alive;
-	float elapsedTime;
 
 	// PRACTICA 3 -> PARTICULA CUADRADA PARA LA FLOTACION (TIENE UN VOLUMEN Y UNA ALTURA)
 	// importa longitud/altura de la particula
 	//Vector3 size;
 	//float volume;
+
+	Immersion immersion;
 
 	// t está en segundos
 	void updateLifeTime(double t);
@@ -92,6 +97,7 @@ protected:
 	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, physx::PxGeometry* geometry, Vector4 color = Vector4(1, 0, 0, 1));
 
 public:
+
 	Particle(Vector3 pos, Vector3 vel, Vector3 acReal, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1), ParticleType type = Default);
 
 	Particle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, float radius = 2, Vector4 color = Vector4(1, 0, 0, 1));
@@ -120,20 +126,20 @@ public:
 		force += f;
 	}
 
-	// SOLO PARA LA PARTICULA RENDER
-	inline float getInvMasa() const {
-		if (invMasa < 1e-10) {
-			throw std::exception("Particle with infinite mass");
-		}
-		return invMasa;
-	}
-	inline float getMasa() {
+	virtual inline float getMasa() const {
 		// la letra 'e' significa que se trata de notación científica
 		// por ejemplo, 1e-10 es 1*10^(-10)
 		if (invMasa < 1e-10) {
 			throw std::exception("Particle with infinite mass");
 		}
 		return 1 / invMasa;
+	}
+	// SOLO PARA LA PARTICULA RENDER
+	inline float getInvMasa() const {
+		if (invMasa < 1e-10) {
+			throw std::exception("Particle with infinite mass");
+		}
+		return invMasa;
 	}
 	inline void aumentarMasa() {
 		invMasa = invMasa / 10;
@@ -147,16 +153,22 @@ public:
 		cout << "Inverso masa = " << invMasa << "\n";
 	}
 
-	// SE UTILIZAN PARA LA FLOTACION
+	// SE UTILIZAN PARA LA FLOTACION (IDEALMENTE SOLO SERIA PARA CUBOS)
 	virtual inline void disminuirTam() {}
 	virtual inline void aumentarTam() {}
+	inline void setImmersion(Immersion newImmersion) {
+		this->immersion = newImmersion;
+	}
+	inline Immersion getImmersion() const {
+		return immersion;
+	}
 	// IMPORTANTE REDEFINIR
 	virtual inline float getLength() const { return 0; }
 	virtual inline float getVolume() const { return 0; }
 
 	// SE UTILIZAN PARA EL VIENTO (REDEFINIR)
 	virtual inline float getArea() const {
-		return 4 * radius * M_PI;
+		return 4 * radius * physx::PxPi;
 	}
 	virtual inline Vector3 getVel() const {
 		return vel;

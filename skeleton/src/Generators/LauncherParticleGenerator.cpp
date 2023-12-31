@@ -1,4 +1,5 @@
 #include "LauncherParticleGenerator.h"
+#include "../checkML.h"
 
 LauncherParticleGen::LauncherParticleGen(string name) : ForceParticleGenerator(name, Vector3(), Vector3(), ParticleInfo(), double(), int()),
 forcesParticles() {}

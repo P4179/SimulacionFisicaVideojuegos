@@ -1,4 +1,5 @@
 #include "WindForceGenerator.h"
+#include "../checkML.h"
 
 bool WindForceGenerator::isInInfluenceArea(Particle* particle) {
 	// si la distancia entre la particula y la esfera es menor o igual

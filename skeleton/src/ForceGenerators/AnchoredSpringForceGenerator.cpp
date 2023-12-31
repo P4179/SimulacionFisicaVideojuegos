@@ -1,4 +1,5 @@
 #include "AnchoredSpringForceGenerator.h"
+#include "../checkML.h"
 
 AnchoredSpringForceGenerator::AnchoredSpringForceGenerator(string name, double k, double restingLength, Vector3 anchoredPos, double duration) :
 	SpringForceGenerator(name, k, restingLength, nullptr, duration), anchorPose(anchoredPos.x, anchoredPos.y, anchoredPos.z) {

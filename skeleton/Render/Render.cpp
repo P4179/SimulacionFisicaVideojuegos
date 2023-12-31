@@ -287,8 +287,8 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Display text
-	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
-	drawText(display_text, 0, 0);
+	//glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+	//drawText(display_text, 0, 0);
 
 	// Setup camera
 	glMatrixMode(GL_PROJECTION);
@@ -382,7 +382,7 @@ void finishRender()
 	glutSwapBuffers();
 }
 
-void drawText(const std::string& text, int x, int y)
+void drawText(const std::string& text, int x, int y, void* font)
 {
 	glMatrixMode(GL_PROJECTION);
 	double* matrix = new double[16];
@@ -398,7 +398,7 @@ void drawText(const std::string& text, int x, int y)
 	int length = text.length();
 
 	for (int i = 0; i < length; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
+		glutBitmapCharacter(font, (int)text[i]);
 	}
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);

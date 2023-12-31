@@ -18,6 +18,10 @@ public:
 		particles->add(generateParticles(), forceGens);
 	}
 
+	virtual void init(ListParticles* particles) {
+		particles->add(generateParticles(), forceGens);
+	}
+
 	inline bool containsForce(ForceGenerator<Particle>* force) {
 		return forceGens.find(force) != forceGens.end();
 	}

@@ -1,4 +1,5 @@
 #include "SpringForceGenerator.h"
+#include "../checkML.h"
 
 SpringForceGenerator::SpringForceGenerator(string name, double k, double restingLength, Particle* other, float duration) :
 	ForceGenerator(name, duration), k(k), restingLength(restingLength), other(other) {}

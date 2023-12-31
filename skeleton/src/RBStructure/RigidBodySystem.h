@@ -11,6 +11,7 @@
 #include "../ForceGenerators/ForceGenerator.h"
 #include "../ForceGenerators/ExplosionForceGenerator.h"
 #include "../ParticleForceRegistry.h"
+#include "../../RenderUtils.hpp"
 
 class ParticleGenerator;
 

@@ -1,12 +1,13 @@
 #include "BuoyancyForceGenerator.h"
 #include "../Particles/BoxParticle.h"
+#include "../checkML.h"
 
-BuoyancyForceGenerator::BuoyancyForceGenerator(string name, float liquidPosY, float liquidHeight, float density, double duration) :
+BuoyancyForceGenerator::BuoyancyForceGenerator(string name, float liquidPosY, float liquidHeight, float density, LiquidVisual visual, double duration) :
 	ForceGenerator(name, duration), h0(liquidPosY + liquidHeight), density(density) {
 
 	// agua
 	// si se crea directamente, se producen errores muy raros
-	liquid = new BoxParticle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(LIQUID_SIZE, liquidHeight, LIQUID_SIZE), COLOR);
+	liquid = new BoxParticle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(visual.size, liquidHeight, visual.size), visual.color);
 }
 
 BuoyancyForceGenerator::~BuoyancyForceGenerator() {
@@ -20,13 +21,16 @@ void BuoyancyForceGenerator::updateForce(Particle* particle, double t) {
 	float inmmersed;	// porcentaje de inmersion del cubo
 	// la particula no esta inmersa
 	if (h - length * 0.5 - h0 > 0) {
+		particle->setImmersion(Particle::Out);
 		inmmersed = 0.0;
 	}
 	// la particula esta inmersa completamente
 	else if (h + length * 0.5 - h0 < 0) {
+		particle->setImmersion(Particle::Floating);
 		inmmersed = 1.0;
 	}
 	else {
+		particle->setImmersion(Particle::Full);
 		inmmersed = (h0 - h) / length + 0.5;
 	}
 
