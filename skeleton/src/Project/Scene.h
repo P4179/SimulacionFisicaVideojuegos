@@ -31,7 +31,7 @@ class Scene : public Singleton<Scene> {
 	friend Singleton<Scene>;
 public:
 	// ACTIVAR/DESACTIVAR AREAS DE FUERZAS Y RENDER CAPSULA PERSONAJE
-	const bool DEBUG = false;
+	const bool DEBUG = true;
 
 private:
 	// se consigue un punto cada vez que se llega a una plataforma nueva

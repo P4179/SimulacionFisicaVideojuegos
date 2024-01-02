@@ -3,7 +3,7 @@
 #include "../checkML.h"
 
 BuoyancyForceGenerator::BuoyancyForceGenerator(string name, float liquidPosY, float liquidHeight, float density, LiquidVisual visual, double duration) :
-	ForceGenerator(name, duration), h0(liquidPosY + liquidHeight), density(density) {
+	ForceGenerator(name, duration), h0(liquidPosY + liquidHeight / 2), density(density) {
 
 	// agua
 	// si se crea directamente, se producen errores muy raros

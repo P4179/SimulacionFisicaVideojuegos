@@ -31,12 +31,10 @@ public:
 
 	// FLOTACION PARA CAPSULAS
 	inline float getLength() const override {
-		// hack: trucar la flotacion
-		return (height + radius * 2) / 3;
+		return height + radius * 2;
 	}
 	inline float getVolume() const override {
-		// hack: trucar la flotacion
-		return (radius * radius * height) / 3;
+		return radius * radius * height;
 	}
 
 	// VIENTO PARA CAPSULAS

@@ -8,7 +8,7 @@ private:
 
 public:
 	BoxParticle(Vector3 pos, Vector3 vel, float invMasa, double damping, float lifeTime, float vSimulada, Vector3 size, Vector4 color = Vector4(1, 0, 0, 1)) :
-		Particle(pos, vel, invMasa, damping, lifeTime, vSimulada, &physx::PxBoxGeometry(size), color), size(size), volume(size.x* size.y* size.z) {}
+		Particle(pos, vel, invMasa, damping, lifeTime, vSimulada, &physx::PxBoxGeometry(size / 2), color), size(size), volume(size.x* size.y* size.z) {}
 
 	// FLOTACION PARA CAJAS
 	virtual inline void disminuirTam() {

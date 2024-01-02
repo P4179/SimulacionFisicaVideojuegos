@@ -12,13 +12,13 @@ public:
 		PxMaterial* material = nullptr, float lifeTime = -1, bool render = true) :
 		DynamicRigidBody(gPhysics, gScene, pos, linearVel, angularVel, damping, density, color,
 			// se pasa dir de memoria para que se pueda pasar el hijo (virtual)
-			&PxBoxGeometry(size), material, lifeTime, render), size(size), volume(size.x* size.y* size.z) {}
+			&PxBoxGeometry(size / 2), material, lifeTime, render), size(size), volume(size.x* size.y* size.z) {}
 
 	BoxDynamicRB(PxPhysics* gPhysics, PxScene* gScene, const Vector3& pos, const Vector3& linearVel,
 		const Vector3& angularVel, float damping, Vector3 massDistribution, Vector4 color, Vector3 size,
 		PxMaterial* material = nullptr, float lifeTime = -1, bool render = true) :
 		DynamicRigidBody(gPhysics, gScene, pos, linearVel, angularVel, damping, massDistribution, color,
-			&PxBoxGeometry(size), material, lifeTime, render), size(size), volume(size.x* size.y* size.z) {}
+			&PxBoxGeometry(size / 2), material, lifeTime, render), size(size), volume(size.x* size.y* size.z) {}
 
 	// COLISONES
 	// para las detectar si el personaje esta en el suelo de las plataformas

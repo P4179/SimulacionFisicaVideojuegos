@@ -6,8 +6,8 @@
   <Comment CommentText="ADMINISTRA TODO LO RELATIVO A LAS PARTICULAS">
     <Position X="35.78" Y="6.869" Height="0.46" Width="1.837" />
   </Comment>
-  <Comment CommentText="FLECHAS VERDES --&gt; ASOCIACION FLECHAS BLANCAS --&gt; HERENCIA">
-    <Position X="40.118" Y="4.855" Height="0.527" Width="2.259" />
+  <Comment CommentText="FLECHAS VERDES --&gt; ASOCIACION FLECHAS GRISES --&gt; HERENCIA">
+    <Position X="40.175" Y="5.13" Height="0.527" Width="2.259" />
   </Comment>
   <Comment CommentText="GESTIONA LAS COLISIONES PARA DETECTAR CUANDO SE PRODUCE UNA, CUANDO SE SALE DE UNA O CUANDO SE PERMANECE EN UNA">
     <Position X="25.268" Y="6.684" Height="0.656" Width="3.048" />
@@ -61,14 +61,14 @@
       <FileName>src\Project\Scene.h</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="buoyanceFg" />
-      <Field Name="camera" />
       <Field Name="character" />
-      <Field Name="collisionManager" />
-      <Field Name="explosionFg" />
-      <Field Name="fireworkGen" />
+      <Field Name="buoyanceFg" />
       <Field Name="listParticles" />
       <Field Name="registry" />
+      <Field Name="explosionFg" />
+      <Field Name="fireworkGen" />
+      <Field Name="camera" />
+      <Field Name="collisionManager" />
     </ShowAsAssociation>
   </Class>
   <Class Name="BuoyancyForceGenerator">
@@ -146,6 +146,9 @@
       <HashCode>ACAAAAAAAAAAAAAAAAAAAIIAQAAAAAAAAQAAACiAAAA=</HashCode>
       <FileName>src\Project\CollisionManager.h</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="scene" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="ExplosionForceGenerator&lt;T&gt;">
     <Position X="47" Y="8.75" Width="3" />
@@ -257,13 +260,6 @@
   </Class>
   <Class Name="Particle" Collapsed="true">
     <Position X="34.75" Y="17" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="Particle::Immersion" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>src\Particles\Particle.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAgABUAgCQAESABoACIEAABARACIABCADUgUEAECABQ=</HashCode>
       <FileName>src\Particles\Particle.h</FileName>
@@ -297,8 +293,8 @@
         <Point X="37" Y="22.812" />
         <Point X="37.375" Y="22.812" />
         <Point X="37.375" Y="24.191" />
-        <Point X="40.518" Y="24.191" Type="JumpStart" />
-        <Point X="40.685" Y="24.191" Type="JumpEnd" />
+        <Point X="41.167" Y="24.191" Type="JumpStart" />
+        <Point X="41.333" Y="24.191" Type="JumpEnd" />
         <Point X="49.625" Y="24.191" />
         <Point X="49.625" Y="23.846" />
         <Point X="50" Y="23.846" />
@@ -307,6 +303,29 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAEAAAAAIAAAAAAAAAAAAAAAggAAAACADA=</HashCode>
       <FileName>src\RigidBodies\BoxDynamicRB.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BoxParticle" Collapsed="true">
+    <Position X="44.5" Y="12" Width="1.5" />
+    <InheritanceLine Type="Particle" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="35.688" Y="17" />
+        <Point X="35.688" Y="16.625" />
+        <Point X="39.25" Y="16.625" />
+        <Point X="39.25" Y="17.677" />
+        <Point X="41.167" Y="17.677" Type="JumpStart" />
+        <Point X="41.333" Y="17.677" Type="JumpEnd" />
+        <Point X="42.073" Y="17.677" Type="JumpStart" />
+        <Point X="42.24" Y="17.677" Type="JumpEnd" />
+        <Point X="44" Y="17.677" />
+        <Point X="44" Y="13.066" />
+        <Point X="45.25" Y="13.066" />
+        <Point X="45.25" Y="12.691" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAIAAAAAAAAAAQAAAAAgEAAACABQ=</HashCode>
+      <FileName>src\Particles\BoxParticle.h</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="ParticleInfo">
