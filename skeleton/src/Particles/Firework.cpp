@@ -5,8 +5,6 @@ void Firework::explode(ListParticles* particles) {
 	try {
 		FireworkGenerator* gen = FireworkGenerator::getRndGenerator();
 		gen->setOrigin(pose.p);
-		// las explosiones tienen un 0.9 de probabilidad de que ocurran
-		gen->setProbability(0.9);
 		gen->init(particles);
 	}
 	catch (exception e) {

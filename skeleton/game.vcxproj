@@ -267,13 +267,17 @@
     <ClCompile Include="src\ForceGenerators\WindForceGenerator.cpp" />
     <ClCompile Include="src\Generators\CircleGenerator.cpp" />
     <ClCompile Include="src\Generators\FireworkGenerator.cpp" />
+    <ClCompile Include="src\Generators\GaussianParticleGenerator.cpp" />
     <ClCompile Include="src\Generators\LauncherParticleGenerator.cpp" />
+    <ClCompile Include="src\Generators\UniformParticleGenerator.cpp" />
     <ClCompile Include="src\ListParticles.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Particles\Firework.cpp" />
     <ClCompile Include="src\Particles\Particle.cpp" />
+    <ClCompile Include="src\Project\Character.cpp" />
     <ClCompile Include="src\Project\CollisionManager.cpp" />
     <ClCompile Include="src\Project\DisplayText.cpp" />
+    <ClCompile Include="src\Project\Scene.cpp" />
     <ClCompile Include="src\RBStructure\RigidBodySystem.cpp" />
     <ClCompile Include="src\ShootManager.cpp" />
   </ItemGroup>
@@ -319,6 +323,9 @@
     <ClInclude Include="src\RigidBodies\StaticRigidBody.h" />
     <ClInclude Include="src\ShootManager.h" />
     <ClInclude Include="src\Singleton.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Project\UML_Proyecto.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

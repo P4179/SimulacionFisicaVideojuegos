@@ -399,7 +399,7 @@ void ParticleSystem::keyPressed(int __cdecl key) {
 		// activar explosion
 	case 'C':
 		if (isGenActive(ExplosionGen)) {
-			explosionFg->enableExplosion();
+			explosionFg->explode();
 		}
 		break;
 		// añadir/quitar gravedad

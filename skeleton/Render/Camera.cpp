@@ -117,6 +117,19 @@ PxVec3 Camera::getDir() const
 	return mDir; 
 }
 
+physx::PxVec3 Camera::getLeftDir() const {
+	PxQuat rotation(physx::PxPi / 2, physx::PxVec3(0, 1, 0));
+	auto leftDir = rotation.rotate(mDir);
+	return leftDir;
+}
+
+physx::PxVec3 Camera::getUpDir() const {
+	PxQuat rotation(physx::PxPi / 2, physx::PxVec3(1, 0, 0));
+	PxVec3 aux = mDir;
+	auto upDir = rotation.rotate(physx::PxVec3(mDir));
+	return upDir;
+}
+
 // CAMBIOS
 void Camera::setEye(const PxVec3& pos) {
 	mEye = pos;

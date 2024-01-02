@@ -48,6 +48,9 @@ public:
 	physx::PxVec3		getEye()	const;
 	physx::PxVec3		getDir()	const;
 	physx::PxTransform	getTransform() const;
+	// CAMBIOS
+	physx::PxVec3 getLeftDir() const;
+	physx::PxVec3 getUpDir() const;
 
 	// CAMBIOS
 	void setEye(const physx::PxVec3& pos);

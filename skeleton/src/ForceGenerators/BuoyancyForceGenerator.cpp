@@ -7,7 +7,7 @@ BuoyancyForceGenerator::BuoyancyForceGenerator(string name, float liquidPosY, fl
 
 	// agua
 	// si se crea directamente, se producen errores muy raros
-	liquid = new BoxParticle(Vector3(0, liquidPosY, 0), {}, {}, {}, {}, {}, Vector3(visual.size, liquidHeight, visual.size), visual.color);
+	liquid = new BoxParticle(Vector3(visual.x, liquidPosY, visual.z), {}, {}, {}, {}, {}, Vector3(visual.size, liquidHeight, visual.size), visual.color);
 }
 
 BuoyancyForceGenerator::~BuoyancyForceGenerator() {

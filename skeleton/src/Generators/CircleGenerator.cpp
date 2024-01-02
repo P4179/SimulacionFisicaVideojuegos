@@ -3,14 +3,8 @@
 
 CircleGenerator::CircleGenerator(string name, Vector3 mean_pos, ParticleInfo info, int num_particles, Vector3 stdDevVel, Vector3 dirSin, Vector3 dirCos, const unordered_set<ForceGenerator<Particle>*>& forceGens) :
 	FireworkGenerator(name, mean_pos, Vector3(0, 0, 0), info, num_particles, stdDevVel, Vector3(0, 0, 0), forceGens), dirSin(dirSin), dirCos(dirCos) {
-	// dos vectores son perpendiculares si el ángulo que forman es 90º
-	// el producto escalar de dos vectores es a·b = |a||b|cos(X)
-	// y el cos(90º) es 0, por lo tanto, su producto escalar es 0
-	// de forma que si el producto escalar de dos vectores es 0, quiere decir que son perpendiculares
-	int escalar = dirSin.x * dirCos.x + dirSin.y * dirCos.y + dirSin.z * dirCos.z;
-	if (escalar != 0) {
-		throw exception("Vectors are perpendicular");
-	}
+	
+	setDirs(dirSin, dirCos);
 }
 
 list<Particle*> CircleGenerator::generateParticles() {

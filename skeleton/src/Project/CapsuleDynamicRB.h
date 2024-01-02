@@ -25,7 +25,8 @@ public:
 	// COLISONES
 	// para las detectar si el personaje esta en el suelo de las plataformas
 	inline float getFloorY() const override {
-		return getPos().y - height / 2 - radius;
+		float posY = getPos().y;
+		return posY - (height / 2) - radius;
 	}
 
 	// FLOTACION PARA CAPSULAS

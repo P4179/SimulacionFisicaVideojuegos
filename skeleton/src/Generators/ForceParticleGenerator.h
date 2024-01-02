@@ -8,8 +8,9 @@ class ForceParticleGenerator : public ParticleGenerator {
 protected:
 	unordered_set<ForceGenerator<Particle>*> forceGens;
 
-	ForceParticleGenerator(string name, Vector3 meanPos, Vector3 meanVel, ParticleInfo info, double genProbability, int numParticles, const unordered_set<ForceGenerator<Particle>*>& forceGens = unordered_set<ForceGenerator<Particle>*>()) :
-		ParticleGenerator(name, meanPos, meanVel, info, genProbability, numParticles), forceGens(forceGens) {}
+	ForceParticleGenerator(string name, Vector3 meanPos, Vector3 meanVel, ParticleInfo info, double genProbability, int numParticles, 
+		const unordered_set<ForceGenerator<Particle>*>& forceGens = unordered_set<ForceGenerator<Particle>*>(), PxPhysics * gPhysics = nullptr, PxScene * gScene = nullptr) :
+		ParticleGenerator(name, meanPos, meanVel, info, genProbability, numParticles, gPhysics, gScene), forceGens(forceGens) {}
 public:
 
 	// para fuerzas locales

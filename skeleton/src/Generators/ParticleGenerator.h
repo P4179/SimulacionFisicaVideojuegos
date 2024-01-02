@@ -14,6 +14,10 @@ using namespace physx;
 
 // CLASE ABSTRACTA
 class ParticleGenerator {
+private:
+	PxPhysics* gPhysics;
+	PxScene* gScene;
+
 protected:
 	string name;
 	// posición inicial / origen (luego, se le suma una variabilidad)
@@ -38,9 +42,10 @@ protected:
 	// Se va a utilizar para calcular una x aleatoria que pasarle a la distribución
 	std::mt19937 _mt;
 
-	ParticleGenerator::ParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles) :
+	ParticleGenerator::ParticleGenerator(string name, Vector3 mean_pos, Vector3 mean_vel, ParticleInfo info, double generation_probability, int num_particles,
+		PxPhysics* gPhysics = nullptr, PxScene* gScene = nullptr) :
 		name(name), _mean_pos(mean_pos), _mean_vel(mean_vel), _info(info), _generation_probability(generation_probability),
-		_num_particles(num_particles), _u(uniform_real_distribution<double>(0.0, 1.0)) {
+		_num_particles(num_particles), _u(uniform_real_distribution<double>(0.0, 1.0)), gPhysics(gPhysics), gScene(gScene) {
 
 		// con random_device se genera un verdadero random, que se va a utilizar como 
 		// semilla para calcular luegos numeros pseudo aleatorios
@@ -53,16 +58,15 @@ protected:
 	}
 
 	DynamicRigidBody* createRigidBody(Vector3 pos, Vector3 vel) {
-		auto system = RigidBodySystem::get();
 		switch (_info.geometry) {
 		case PxGeometryType::eBOX:
 			switch (_info.rigidBody_data.massDef) {
 			case Density:
-				return new BoxDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+				return new BoxDynamicRB(gPhysics, gScene, pos, vel, Vector3(0, 0, 0), _info.damping,
 					_info.rigidBody_data.density_data.density, _info.color, _info.box_data.size, _info.rigidBody_data.material, _info.lifeTime);
 				break;
 			case InertiaTensor:
-				return new BoxDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+				return new BoxDynamicRB(gPhysics, gScene, pos, vel, Vector3(0, 0, 0), _info.damping,
 					_info.rigidBody_data.inertiaTensor_data.massDistribution, _info.color, _info.box_data.size, _info.rigidBody_data.material, _info.lifeTime);
 				break;
 			}
@@ -71,11 +75,11 @@ protected:
 		case PxGeometryType::eSPHERE:
 			switch (_info.rigidBody_data.massDef) {
 			case Density:
-				return new SphereDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+				return new SphereDynamicRB(gPhysics, gScene, pos, vel, Vector3(0, 0, 0), _info.damping,
 					_info.rigidBody_data.density_data.density, _info.color, _info.sphere_data.radius, _info.rigidBody_data.material, _info.lifeTime);
 				break;
 			case InertiaTensor:
-				return new SphereDynamicRB(system->getPhysics(), system->getScene(), pos, vel, Vector3(0, 0, 0), _info.damping,
+				return new SphereDynamicRB(gPhysics, gScene, pos, vel, Vector3(0, 0, 0), _info.damping,
 					_info.rigidBody_data.inertiaTensor_data.massDistribution, _info.color, _info.sphere_data.radius, _info.rigidBody_data.material, _info.lifeTime);
 				break;
 			}
@@ -96,10 +100,10 @@ protected:
 	}
 
 	virtual Particle* createParticle(Vector3 pos, Vector3 vel) {
-		if (_info.type == RenderParticle) {
+		if (gPhysics == nullptr && gScene == nullptr) {
 			return createParticleRender(pos, vel);
 		}
-		else if (_info.type == RigidBody) {
+		else {
 			return createRigidBody(pos, vel);
 		}
 	}

@@ -54,7 +54,7 @@ void initPhysics(bool interactive)
 	// PxToleranceScale sirve para cambiar la escala de tam y velocidad en toda la simulacion
 	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
 	// material que se utiliza para todo (MATERIAL POR DEFECTO)
-	// coeficientes de rozamineto
+	// coeficientes de rozamiento
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
@@ -163,20 +163,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	if (scene != nullptr) {
 		scene->keyPressed(toupper(key));
 	}
-
-	/*
-	switch (toupper(key))
-	{
-		//case 'B': break;
-		//case ' ':	break;
-	case ' ':
-	{
-		break;
-	}
-	default:
-		break;
-	}
-	*/
 }
 
 // CAMBIO

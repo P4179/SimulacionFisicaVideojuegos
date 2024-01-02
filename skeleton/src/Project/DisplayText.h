@@ -15,23 +15,23 @@ public:
 	DisplayText(const string& text, const Vector4& color, const std::pair<int, int>& pos, void* font) :
 		color(color), text(text), pos(pos), font(font) {}
 
-	string getText() const {
+	inline string getText() const {
 		return text;
 	}
 
-	Vector4 getColor() const {
+	inline Vector4 getColor() const {
 		return color;
 	}
 
-	std::pair<int, int> getPos() const {
+	inline std::pair<int, int> getPos() const {
 		return pos;
 	}
 
-	void* getFont() const {
+	inline void* getFont() const {
 		return font;
 	}
 
-	void setText(string newText) {
+	inline void setText(string newText) {
 		this->text = newText;
 	}
 

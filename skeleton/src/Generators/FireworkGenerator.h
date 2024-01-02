@@ -8,6 +8,7 @@ using namespace std;
 
 class FireworkGenerator : public GaussianParticleGenerator {
 private:
+	static const float EXPLOSION_PROBABILITY;
 	static vector<FireworkGenerator*> fireworks;
 
 protected:
@@ -19,6 +20,7 @@ public:
 	// el fireworkGenerator contiene los generadores que se pueden utilizar para crear más partículas
 	// cuando las partículas que ha creado mueran
 	static void addFireworkGen(FireworkGenerator* firework) {
+		firework->setProbability(EXPLOSION_PROBABILITY);
 		fireworks.push_back(firework);
 	}
 

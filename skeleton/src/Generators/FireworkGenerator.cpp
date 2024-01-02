@@ -5,6 +5,8 @@
 // importante inicializar el vector, sino se produce error
 vector<FireworkGenerator*> FireworkGenerator::fireworks = vector<FireworkGenerator*>(0, nullptr);
 
+const float FireworkGenerator::EXPLOSION_PROBABILITY = 0.8f;
+
 Particle* FireworkGenerator::createParticle(Vector3 pos, Vector3 vel) {
 	return new Firework(pos, vel, _info.renderParticle_data.invMasa, _info.damping, _info.lifeTime, _info.renderParticle_data.vSimulada, _info.sphere_data.radius, _info.color);
 }

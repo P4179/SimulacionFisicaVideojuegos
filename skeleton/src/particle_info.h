@@ -5,15 +5,11 @@ using namespace physx;
 
 enum MassDef { InvMasa, Density, InertiaTensor };
 
-enum MainType { RenderParticle, RigidBody };
-
 struct ParticleInfo {
 	// Comunes
 	float damping;
 	float lifeTime;
 	Vector4 color;
-
-	MainType type = RenderParticle;
 
 	struct {
 		float vSimulada;
@@ -22,7 +18,7 @@ struct ParticleInfo {
 	} renderParticle_data;
 
 	struct {
-		PxMaterial* material;
+		PxMaterial* material = nullptr;
 
 		// Como se calcula la masa
 		MassDef massDef;

@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="SCENE ES LA CLASE DONDE SE ENCUENTRA EL JUEGO. HAY UNA UNICA INSTANCIA.">
+    <Position X="39.945" Y="6.239" Height="0.465" Width="2.75" />
+  </Comment>
+  <Comment CommentText="ADMINISTRA TODO LO RELATIVO A LAS PARTICULAS">
+    <Position X="35.78" Y="6.869" Height="0.46" Width="1.837" />
+  </Comment>
+  <Comment CommentText="FLECHAS VERDES --&gt; ASOCIACION FLECHAS BLANCAS --&gt; HERENCIA">
+    <Position X="40.118" Y="4.855" Height="0.527" Width="2.259" />
+  </Comment>
+  <Comment CommentText="GESTIONA LAS COLISIONES PARA DETECTAR CUANDO SE PRODUCE UNA, CUANDO SE SALE DE UNA O CUANDO SE PERMANECE EN UNA">
+    <Position X="25.268" Y="6.684" Height="0.656" Width="3.048" />
+  </Comment>
+  <Comment CommentText="EL OBJETO CON EL QUE SE COLISIONA ES UN OBJETO ESTATICO">
+    <Position X="32.249" Y="21.824" Height="0.613" Width="1.7" />
+  </Comment>
+  <Comment CommentText="TIENE UN VECTOR DE FUERZAS, UNA LISTA DE GENERADORES, UN VECTOR DE PLATAFORMAS (BOX STATIC RB) Y UN VECTOR DE TEXTOS">
+    <Position X="40.04" Y="7.137" Height="0.838" Width="2.583" />
+  </Comment>
+  <Comment CommentText="SE TRATA DE UNA CAMARA/JUGADOR EN PRIMERA PERSONA">
+    <Position X="31.5" Y="28.116" Height="0.66" Width="1.7" />
+  </Comment>
+  <Comment CommentText="HAY 3 GENERADORES: LLUVIA UNIFORME, FUENTE UNIFORME Y NIEVE UNIFORME (BOX DYNAMIC RB)">
+    <Position X="52.225" Y="22.726" Height="0.671" Width="2.524" />
+  </Comment>
+  <Comment CommentText="STRUCT EN EL QUE SE INDICA LA INFORMACION DE COMO TIENE QUE CREAR LAS PARTICULAS UN GENERADOR">
+    <Position X="53.139" Y="17.208" Height="0.529" Width="3.738" />
+  </Comment>
+  <Comment CommentText="CLASE BASE GENERADOR DE PARTICULAS">
+    <Position X="51.297" Y="14.286" Height="0.374" Width="2.609" />
+  </Comment>
+  <Comment CommentText="CLASE QUE PERMITE INCORPORAR LA GENERADOR FUERZAS">
+    <Position X="51.229" Y="15.889" Height="0.348" Width="3.699" />
+  </Comment>
+  <Class Name="Scene">
+    <Position X="39.5" Y="10" Width="3.5" />
+    <Members>
+      <Field Name="DAMPING" Hidden="true" />
+      <Field Name="DEBUG" Hidden="true" />
+      <Field Name="EXPLOSION_TIMER" Hidden="true" />
+      <Field Name="FIREWORK_HEIGHT" Hidden="true" />
+      <Field Name="FIREWORK_OFFSET" Hidden="true" />
+      <Field Name="GRAVITY" Hidden="true" />
+      <Field Name="HALF_AREA" Hidden="true" />
+      <Field Name="MAX_COUNTER" Hidden="true" />
+      <Field Name="MAX_PARTICLES" Hidden="true" />
+      <Field Name="PLATFORM_SIZE" Hidden="true" />
+      <Field Name="RESET_TIMER" Hidden="true" />
+      <Field Name="WATER_DENSITY" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Enum Name="Scene::GEN" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Project\Scene.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>LAAIABDUgoAUwAGAiIgFAAQCQoAwAAEQAUBIAKowhwg=</HashCode>
+      <FileName>src\Project\Scene.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="buoyanceFg" />
+      <Field Name="camera" />
+      <Field Name="character" />
+      <Field Name="collisionManager" />
+      <Field Name="explosionFg" />
+      <Field Name="fireworkGen" />
+      <Field Name="listParticles" />
+      <Field Name="registry" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BuoyancyForceGenerator">
+    <Position X="44.25" Y="8.75" Width="2.25" />
+    <Members>
+      <Field Name="COLOR" Hidden="true" />
+      <Field Name="GRAVITY" Hidden="true" />
+      <Field Name="LIQUID_SIZE" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Struct Name="BuoyancyForceGenerator::LiquidVisual" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\ForceGenerators\BuoyancyForceGenerator.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAIACACAAAQAAAAAAAAAAAAQCAAAEAAAAAAAA=</HashCode>
+      <FileName>src\ForceGenerators\BuoyancyForceGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Singleton&lt;T&gt;" Collapsed="true">
+    <Position X="40.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAQAAAAABAAAMAAAAgAAAAAAA=</HashCode>
+      <FileName>src\Singleton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ForceGenerator&lt;T&gt;">
+    <Position X="48.5" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAAIAAQAACAAAAAEAAABAAAAEAQAAAAAEAAEAAAA=</HashCode>
+      <FileName>src\ForceGenerators\ForceGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Snippets::Camera">
+    <Position X="27.75" Y="27" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ACgCAQA4ASAABECAAAAAAAIAAAAAAAAQAAAACAAAAAA=</HashCode>
+      <FileName>Render\Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Character">
+    <Position X="34.25" Y="26" Width="2.75" />
+    <Members>
+      <Field Name="ACTION_COLLISION_ZONE" Hidden="true" />
+      <Field Name="ANTI_SLIDE_POWER" Hidden="true" />
+      <Field Name="AVOID_SLIDE_TIMER" Hidden="true" />
+      <Field Name="FALL_POWER" Hidden="true" />
+      <Field Name="FALL_TIMER" Hidden="true" />
+      <Field Name="INITIAL_FALL_POWER" Hidden="true" />
+      <Field Name="JUMP_POWER" Hidden="true" />
+      <Field Name="MOV_POWER" Hidden="true" />
+      <Field Name="OFFSET_CAMERA" Hidden="true" />
+      <Field Name="SHIFT_SMOOTHNESS" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Struct Name="Character::Movement" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Project\Character.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>DBAAAEAEkkAAAAOIUAEBBBIABAAkQGAAAUAAAACACAA=</HashCode>
+      <FileName>src\Project\Character.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="camera" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CollisionManager">
+    <Position X="25" Y="7.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAIIAQAAAAAAAAQAAACiAAAA=</HashCode>
+      <FileName>src\Project\CollisionManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ExplosionForceGenerator&lt;T&gt;">
+    <Position X="47" Y="8.75" Width="3" />
+    <Members>
+      <Field Name="INFLUENCE_AREA_COLOR" Hidden="true" />
+      <Field Name="SOUND_AIR_SPEED" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAwAAAgADwAAGAAACCCAAQAAAAAAAAABBAQAAARQAAA=</HashCode>
+      <FileName>src\ForceGenerators\ExplosionForceGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GravityForceGenerator" Collapsed="true">
+    <Position X="50.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAgAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\ForceGenerators\GravityForceGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WindForceGenerator" Collapsed="true">
+    <Position X="52.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAoCAAAABAAACAAggAgAABAAABAQAAABDAACAAAAAAA=</HashCode>
+      <FileName>src\ForceGenerators\WindForceGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CircleGenerator" Collapsed="true">
+    <Position X="46.25" Y="23.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAICAAAAAAAAAAAAAAAAAJAA=</HashCode>
+      <FileName>src\Generators\CircleGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FireworkGenerator">
+    <Position X="45.5" Y="20" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAgIAAAAAAAAAAAAAAAEAAAABAAAAAAAAAFBAA=</HashCode>
+      <FileName>src\Generators\FireworkGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GaussianParticleGenerator" Collapsed="true">
+    <Position X="46.25" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAQAAAAAgAgAAAAIAAAAAAAAAAAAEAAAAAAAg=</HashCode>
+      <FileName>src\Generators\GaussianParticleGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ForceParticleGenerator">
+    <Position X="46.75" Y="15.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AEAAAQAEAAAAAAAAAACAAQAAAAAAAAIAAAAAAQAEAAA=</HashCode>
+      <FileName>src\Generators\ForceParticleGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ParticleGenerator" Collapsed="true">
+    <Position X="48" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAQAACIIgAAAAJpAEAAJAAAIAUAAIAAAIkAAAEQBA=</HashCode>
+      <FileName>src\Generators\ParticleGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UniformParticleGenerator" Collapsed="true">
+    <Position X="49.5" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACCAAAAAAAAAAAAAQAACIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Generators\UniformParticleGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ListParticles">
+    <Position X="35" Y="7.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AACAAEAAAAAEAABAAAAAAAAAAAAAAgAAASAAAAACCAA=</HashCode>
+      <FileName>src\ListParticles.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="registry" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ParticleForceRegistry&lt;T1&gt;">
+    <Position X="29.25" Y="7.75" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AMAAAAAAAAAICIAAAAAAAAAAAAAAASAAAAAIAAAgAAA=</HashCode>
+      <FileName>src\ParticleForceRegistry.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BoxStaticRB" Collapsed="true">
+    <Position X="31.25" Y="26" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAIAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\RigidBodies\BoxStaticRB.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaticRigidBody">
+    <Position X="31" Y="22.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAIAEAAAAAAAAAAAgAIAIAAAAAAgQAAAAAAA=</HashCode>
+      <FileName>src\RigidBodies\StaticRigidBody.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DynamicRigidBody">
+    <Position X="34.25" Y="19" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAoQAgAIAAAAAAACABABAAAIEIAQAAAwBAAgCEIAA=</HashCode>
+      <FileName>src\RigidBodies\DynamicRigidBody.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="colObject" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Particle" Collapsed="true">
+    <Position X="34.75" Y="17" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Particle::Immersion" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Particles\Particle.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgABUAgCQAESABoACIEAABARACIABCADUgUEAECABQ=</HashCode>
+      <FileName>src\Particles\Particle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Firework">
+    <Position X="43.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAACAAAAAAAQACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Particles\Firework.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DisplayText">
+    <Position X="25.25" Y="27" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAIBAAAAAAAAAAAAAAAACICAAAAIAACIAAAAgAAAAAA=</HashCode>
+      <FileName>src\Project\DisplayText.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CapsuleDynamicRB" Collapsed="true">
+    <Position X="34.75" Y="24.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABCAAEAAQAAAAAAAAAAAAAAAAAAggAAAAAABA=</HashCode>
+      <FileName>src\Project\CapsuleDynamicRB.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BoxDynamicRB" Collapsed="true">
+    <Position X="50" Y="23.5" Width="1.5" />
+    <InheritanceLine Type="DynamicRigidBody" FixedFromPoint="true">
+      <Path>
+        <Point X="37" Y="22.812" />
+        <Point X="37.375" Y="22.812" />
+        <Point X="37.375" Y="24.191" />
+        <Point X="40.518" Y="24.191" Type="JumpStart" />
+        <Point X="40.685" Y="24.191" Type="JumpEnd" />
+        <Point X="49.625" Y="24.191" />
+        <Point X="49.625" Y="23.846" />
+        <Point X="50" Y="23.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAIAAAAAAAAAAAAAAAggAAAACADA=</HashCode>
+      <FileName>src\RigidBodies\BoxDynamicRB.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="ParticleInfo">
+    <Position X="52.5" Y="18.25" Width="3.25" />
+    <NestedTypes>
+      <Struct Name="ParticleInfo::__unnamed_struct_06af_1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\particle_info.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="ParticleInfo::__unnamed_struct_06af_2" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\particle_info.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="ParticleInfo::__unnamed_struct_06af_5" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\particle_info.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="ParticleInfo::__unnamed_struct_06af_6" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\particle_info.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACgAAAAAAIAQgAAAAIAAAAAAAAAAADAAAAAAAAAAAA=</HashCode>
+      <FileName>src\particle_info.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="MassDef">
+    <Position X="56" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAQAAAAAAAAAAAAAg=</HashCode>
+      <FileName>src\particle_info.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

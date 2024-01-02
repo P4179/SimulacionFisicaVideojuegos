@@ -4,6 +4,7 @@
 class BuoyancyForceGenerator : public ForceGenerator<Particle> {
 public:
 	struct LiquidVisual {
+		float x = 0, z = 0;
 		float size = 100;
 		Vector4 color = Vector4(0.212, 0.643, 0.9, 1);
 	};

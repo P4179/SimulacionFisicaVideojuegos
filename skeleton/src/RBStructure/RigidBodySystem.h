@@ -98,12 +98,4 @@ public:
 
 	// fuerzas globales
 	void add(list<Particle*> list);
-
-	inline PxPhysics* getPhysics() const {
-		return gPhysics;
-	}
-
-	inline PxScene* getScene() const {
-		return gScene;
-	}
 };

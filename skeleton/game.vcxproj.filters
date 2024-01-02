@@ -64,6 +64,18 @@
     <ClCompile Include="src\Project\CollisionManager.cpp">
       <Filter>SourceFiles\Project</Filter>
     </ClCompile>
+    <ClCompile Include="src\Generators\GaussianParticleGenerator.cpp">
+      <Filter>SourceFiles\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generators\UniformParticleGenerator.cpp">
+      <Filter>SourceFiles\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Project\Character.cpp">
+      <Filter>SourceFiles\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Project\Scene.cpp">
+      <Filter>SourceFiles\Project</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -230,5 +242,8 @@
     <Filter Include="SourceFiles\Project">
       <UniqueIdentifier>{b8a0b8cc-f1a2-417c-8dff-5d0a064929b8}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Project\UML_Proyecto.cd" />
   </ItemGroup>
 </Project>

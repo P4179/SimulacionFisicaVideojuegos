@@ -104,7 +104,6 @@ void RigidBodySystem::create() {
 
 	ParticleInfo info;
 	info.damping = DAMPING;
-	info.type = RigidBody;
 
 	// se crean todos los generadores
 	info.color = Vector4(0.204, 0.8, 0.82, 1);
@@ -122,7 +121,7 @@ void RigidBodySystem::create() {
 	info.rigidBody_data.material = gPhysics->createMaterial(0.2, 0.6, 2);
 
 	// pos original, velocidad original, info particula, probabilidad, numero particulas, variacion velocidad, variacion posicion
-	addGenerator(new UniformParticleGenerator(RB_GENS_NAMES.at(UNIFORM_GEN), Vector3(0, 150, 0), Vector3(0, -100, 0), info, 0.2, 2, Vector3(0, 10, 0), Vector3(80, 5, 80)),
+	addGenerator(new UniformParticleGenerator(RB_GENS_NAMES.at(UNIFORM_GEN), Vector3(0, 150, 0), Vector3(0, -100, 0), info, 0.2, 2, Vector3(0, 10, 0), Vector3(80, 5, 80), {}, gPhysics, gScene),
 		UNIFORM_GEN, true);
 
 
@@ -179,7 +178,7 @@ void RigidBodySystem::keyPressed(int __cdecl key) {
 	// habilitar/deshabilitar explosion
 	case 'V':
 		if (isForceActivated(EXPLOSION_FG)) {
-			explosionFg->enableExplosion();
+			explosionFg->explode();
 		}
 		break;
 	}

@@ -10,6 +10,7 @@ public:
 		StaticRigidBody(gPhysics, gScene, pos, color, CreateShape(PxBoxGeometry(size / 2), material)), size(size) { }
 
 	float getCeilingY() const override {
-		return getPos().y + (size.y / 2);
+		float posY = getPos().y;
+		return posY + (size.y / 2);
 	}
 };
