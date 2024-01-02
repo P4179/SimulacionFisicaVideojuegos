@@ -10,7 +10,7 @@ Carpetas bin y common https://ucomplutense-my.sharepoint.com/:u:/g/personal/dava
 ---
 
 ### Proyecto final
-<ins>INPUT</ins>
+<ins>Input</ins>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La cámara está en primera persona, de modo que sigue al puntero del ratón. El input es el siguiente:
 - Se utilizan las teclas **IJKL** para **desplazarse en todas las direcciones**. El jugador solo puede desplazarse en la tierra, pero no mientras está en el aire.
